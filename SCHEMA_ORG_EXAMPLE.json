@@ -1,0 +1,108 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@id": "https://heady.fm/song/the-beatles/here-comes-the-sun#webpage",
+      "@type": "WebPage",
+      "url": "https://heady.fm/song/the-beatles/here-comes-the-sun",
+      "name": "Here Comes the Sun by The Beatles | HEADY.FM",
+      "description": "Here Comes the Sun by The Beatles - Played 42 times on HEADY.FM. Listen to commercial-free indie rock radio.",
+      "mainEntity": {
+        "@id": "https://heady.fm/song/the-beatles/here-comes-the-sun#recording"
+      },
+      "publisher": {
+        "@id": "https://heady.fm#station"
+      },
+      "image": "https://heady.fm/album-art/abbey-road.jpg",
+      "datePublished": "1969-09-26"
+    },
+    {
+      "@id": "https://heady.fm/song/the-beatles/here-comes-the-sun#recording",
+      "@type": "MusicRecording",
+      "name": "Here Comes the Sun",
+      "url": "https://heady.fm/song/the-beatles/here-comes-the-sun",
+      "byArtist": {
+        "@id": "https://heady.fm/artist/the-beatles#artist"
+      },
+      "inAlbum": {
+        "@id": "https://heady.fm/album/abbey-road#album"
+      },
+      "description": "Here Comes the Sun by The Beatles - Played 42 times on HEADY.FM. Listen to commercial-free indie rock radio.",
+      "image": "https://heady.fm/album-art/abbey-road.jpg",
+      "duration": "PT3M5S",
+      "genre": "Rock",
+      "copyrightYear": "1969",
+      "datePublished": "1969-09-26",
+      "isrcCode": "USRC17607839",
+      "publisher": {
+        "@id": "https://heady.fm#station"
+      },
+      "sameAs": [
+        "https://open.spotify.com/track/4KxqghvqXo5pE7l0l2T2Q6",
+        "https://music.apple.com/us/album/here-comes-the-sun/1441133100?i=1441133276",
+        "https://www.youtube.com/watch?v=KQetemT1sWc",
+        "https://genius.com/The-beatles-here-comes-the-sun-lyrics",
+        "https://www.last.fm/music/The+Beatles/_/Here+Comes+the+Sun"
+      ],
+      "interactionStatistic": {
+        "@type": "InteractionCounter",
+        "interactionType": "https://schema.org/ListenAction",
+        "userInteractionCount": 42
+      }
+    },
+    {
+      "@id": "https://heady.fm/artist/the-beatles#artist",
+      "@type": "MusicGroup",
+      "name": "The Beatles",
+      "url": "https://heady.fm/artist/the-beatles",
+      "description": "The Beatles were an English rock band formed in Liverpool in 1960.",
+      "image": "https://heady.fm/artist-images/the-beatles.jpg"
+    },
+    {
+      "@id": "https://heady.fm/album/abbey-road#album",
+      "@type": "MusicAlbum",
+      "name": "Abbey Road",
+      "url": "https://heady.fm/album/abbey-road",
+      "image": "https://heady.fm/album-art/abbey-road.jpg",
+      "byArtist": {
+        "@id": "https://heady.fm/artist/the-beatles#artist"
+      },
+      "publisher": {
+        "@id": "https://heady.fm#station"
+      },
+      "datePublished": "1969-09-26"
+    },
+    {
+      "@id": "https://heady.fm#station",
+      "@type": "Organization",
+      "name": "HEADY.FM",
+      "url": "https://heady.fm",
+      "logo": "https://heady.fm/og-image.png",
+      "description": "Commercial-free indie rock radio station streaming underground alternative music, emerging artists, and deep cuts 24/7."
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://heady.fm"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "The Beatles",
+          "item": "https://heady.fm/artist/the-beatles"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Here Comes the Sun",
+          "item": "https://heady.fm/song/the-beatles/here-comes-the-sun"
+        }
+      ]
+    }
+  ]
+}
+

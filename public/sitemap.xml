@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <!-- Home Page -->
+  <url>
+    <loc>https://heady.fm</loc>
+    <lastmod>2025-10-10</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://heady.fm/og-image.png</image:loc>
+      <image:title>HEADY Extraterrestrial Radio</image:title>
+    </image:image>
+  </url>
+  
+  <!-- Shows Page -->
+  <url>
+    <loc>https://heady.fm/shows</loc>
+    <lastmod>2025-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- Mixtapes Page -->
+  <url>
+    <loc>https://heady.fm/mixtapes</loc>
+    <lastmod>2025-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- Meetups Page -->
+  <url>
+    <loc>https://heady.fm/meetups</loc>
+    <lastmod>2025-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- Community Page -->
+  <url>
+    <loc>https://heady.fm/community</loc>
+    <lastmod>2025-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <!-- Headyzine Page -->
+  <url>
+    <loc>https://heady.fm/headyzine</loc>
+    <lastmod>2025-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <!-- Archives Page -->
+  <url>
+    <loc>https://heady.fm/archives</loc>
+    <lastmod>2025-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <!-- Saved Songs Page -->
+  <url>
+    <loc>https://heady.fm/saved-songs</loc>
+    <lastmod>2025-10-10</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+</urlset>

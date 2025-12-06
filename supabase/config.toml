@@ -1,0 +1,28 @@
+project_id = "xpqwujjglvhadlgxotcv"
+
+[functions.fetch-genius-data]
+verify_jwt = false
+
+[functions.log-transmission]
+verify_jwt = false
+
+[functions.album-art]
+verify_jwt = false
+
+[functions.lastfm-album-art]
+verify_jwt = false
+
+[functions.generate-song-content]
+verify_jwt = false
+
+[functions.update-playlist]
+verify_jwt = false
+
+[functions.find-concerts]
+verify_jwt = false
+
+[functions.create-donation-checkout]
+verify_jwt = false
+
+[functions.fetch-lastfm-artist]
+verify_jwt = false
