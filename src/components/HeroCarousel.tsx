@@ -106,10 +106,11 @@ export const HeroCarousel = () => {
                 <div className="relative w-full h-full overflow-hidden group">
                   {/* Background Image with Parallax & Scale Effect */}
                   <div 
-                    className="absolute inset-0 bg-cover bg-center transition-all duration-[1500ms] ease-out scale-100 group-hover:scale-105"
+                    className="absolute inset-0 bg-cover bg-center transition-all ease-out scale-100 group-hover:scale-105"
                     style={{ 
                       backgroundImage: `url(${show.imageUrl})`,
                       transform: current === index ? 'scale(1)' : 'scale(1.1)',
+                      transitionDuration: '1500ms',
                     }}
                   />
                   
