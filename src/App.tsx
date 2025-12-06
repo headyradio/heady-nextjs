@@ -8,6 +8,7 @@ import { lazy, Suspense } from "react";
 import { AudioPlayerProvider } from "@/contexts/AudioPlayerContext";
 import { FloatingChatWidget } from "./components/FloatingChatWidget";
 import { SEO } from "./components/SEO";
+import { Analytics } from "@vercel/analytics/react";
 
 // Lazy load routes for code splitting (following ISR-like strategy)
 const Index = lazy(() => import("./pages/Index"));
@@ -87,6 +88,7 @@ const App = () => (
             </Suspense>
             <FloatingChatWidget />
           </BrowserRouter>
+          <Analytics />
         </AudioPlayerProvider>
       </TooltipProvider>
     </QueryClientProvider>
