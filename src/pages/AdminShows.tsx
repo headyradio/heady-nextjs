@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { Navigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 import { useUserRole } from "@/hooks/useUserRole";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import Navigation from "@/components/Navigation";
+import { AdminLayout } from "@/components/admin/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -11,11 +12,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowLeft, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 
 const AdminShows = () => {
+  const { user, loading: authLoading } = useAuth();
   const { isAdmin, isLoading: roleLoading } = useUserRole();
-  const navigate = useNavigate();
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [showForm, setShowForm] = useState(false);
@@ -34,11 +35,20 @@ const AdminShows = () => {
     status: "upcoming",
   });
 
-  useEffect(() => {
-    if (!roleLoading && !isAdmin) {
-      navigate("/");
-    }
-  }, [isAdmin, roleLoading, navigate]);
+  if (authLoading || roleLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="text-center space-y-4">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-primary mx-auto"></div>
+          <p className="text-muted-foreground font-medium">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user || !isAdmin) {
+    return <Navigate to="/admin/login" replace />;
+  }
 
   const { data: shows } = useQuery({
     queryKey: ["admin-shows"],
@@ -88,20 +98,15 @@ const AdminShows = () => {
     },
   });
 
-  if (roleLoading) return <div>Loading...</div>;
-  if (!isAdmin) return null;
-
   return (
-    <div className="min-h-screen bg-background">
-      <Navigation />
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-4">
-            <Button variant="ghost" onClick={() => navigate("/admin")}>
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Dashboard
-            </Button>
-            <h1 className="text-4xl font-bold">Manage Shows</h1>
+    <AdminLayout>
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold">Manage Shows</h1>
+            <p className="text-muted-foreground mt-2">
+              Create and edit show listings
+            </p>
           </div>
           <Button onClick={() => setShowForm(!showForm)}>
             <Plus className="h-4 w-4 mr-2" />
@@ -265,7 +270,7 @@ const AdminShows = () => {
           ))}
         </div>
       </div>
-    </div>
+    </AdminLayout>
   );
 };
 
