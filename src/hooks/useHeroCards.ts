@@ -27,11 +27,18 @@ export const useHeroCards = () => {
         .order('display_order', { ascending: true })
         .limit(10);
       
-      if (error) throw error;
+      if (error) {
+        // Don't throw - return empty array so fallback data is used
+        console.debug('Failed to fetch hero cards, using fallback:', error);
+        return [];
+      }
       return data as HeroCard[];
     },
     staleTime: 5 * 60 * 1000, // 5 minutes
     gcTime: 30 * 60 * 1000, // 30 minutes
+    retry: 1, // Only retry once
+    // Don't show loading state - always render immediately with fallback
+    placeholderData: [],
   });
 };
 

@@ -54,6 +54,7 @@ export const HeroCarousel = () => {
   );
 
   // Use Supabase data if available, otherwise fallback to hardcoded data
+  // Always show fallback data immediately, then update when Supabase data loads
   const shows = React.useMemo(() => {
     if (heroCards && heroCards.length > 0) {
       return heroCards.map(card => ({
@@ -69,6 +70,7 @@ export const HeroCarousel = () => {
         destination_type: card.destination_type || 'internal',
       }));
     }
+    // Always return fallback data so page renders immediately
     return FALLBACK_SHOWS;
   }, [heroCards]);
 
@@ -82,18 +84,7 @@ export const HeroCarousel = () => {
     });
   }, [api]);
 
-  // Don't render if loading and no fallback data
-  if (isLoading && !heroCards) {
-    return (
-      <div className="w-full h-[80vh] min-h-[600px] flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading hero cards...</p>
-        </div>
-      </div>
-    );
-  }
-
+  // Always render - use fallback data if Supabase data isn't ready yet
   if (!shows || shows.length === 0) {
     return null;
   }
