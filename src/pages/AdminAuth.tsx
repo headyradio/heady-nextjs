@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { useUserRole } from "@/hooks/useUserRole";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -20,16 +21,30 @@ export default function AdminAuth() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
-  const { user, signInWithPassword } = useAuth();
+  const { user, loading: authLoading, signInWithPassword } = useAuth();
+  const { isAdmin, isLoading: roleLoading } = useUserRole();
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  // Redirect if already logged in
+  // Redirect if already logged in as admin (wait for both auth and role checks)
   useEffect(() => {
-    if (user) {
-      navigate("/admin");
+    // Don't redirect while still loading
+    if (authLoading || roleLoading) return;
+    
+    // Only redirect if user is authenticated AND is an admin
+    if (user && isAdmin) {
+      setLoading(false); // Reset loading state before redirect
+      navigate("/admin", { replace: true });
+    } else if (user && !isAdmin && !authLoading && !roleLoading) {
+      // User is logged in but not an admin
+      setLoading(false);
+      toast({
+        title: "Access Denied",
+        description: "You do not have admin privileges. Please contact an administrator.",
+        variant: "destructive",
+      });
     }
-  }, [user, navigate]);
+  }, [user, isAdmin, authLoading, roleLoading, navigate, toast]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -58,14 +73,18 @@ export default function AdminAuth() {
         description: error.message,
         variant: "destructive",
       });
-    } else {
-      toast({
-        title: "Welcome back!",
-        description: "Logged in successfully",
-      });
+      setLoading(false);
+      return;
     }
 
-    setLoading(false);
+    // Success - the useEffect will handle redirect after role check
+    toast({
+      title: "Welcome back!",
+      description: "Logged in successfully",
+    });
+    
+    // Don't set loading to false immediately - let the redirect happen
+    // The useEffect will handle navigation once role is confirmed
   };
 
   return (
@@ -93,6 +112,15 @@ export default function AdminAuth() {
             </CardDescription>
           </CardHeader>
           <CardContent className="pt-2">
+            {/* Show loading state while checking auth/role */}
+            {(authLoading || roleLoading || (loading && user)) ? (
+              <div className="flex flex-col items-center justify-center py-8 space-y-4">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                <p className="text-sm text-muted-foreground font-medium">
+                  {loading && user ? "Verifying access..." : "Loading..."}
+                </p>
+              </div>
+            ) : (
             <form onSubmit={handleLogin} className="space-y-5">
               <div className="space-y-2">
                 <Label htmlFor="email" className="text-sm font-bold">
@@ -165,6 +193,7 @@ export default function AdminAuth() {
                 </Link>
               </div>
             </form>
+            )}
           </CardContent>
         </Card>
       </main>

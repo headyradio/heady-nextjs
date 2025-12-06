@@ -10,15 +10,24 @@ const Admin = () => {
   const { isAdmin, isLoading: roleLoading } = useUserRole();
   const navigate = useNavigate();
 
+  // Show loading state while checking auth and role
   if (authLoading || roleLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">Loading...</div>
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="text-center space-y-4">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-primary mx-auto"></div>
+          <p className="text-muted-foreground font-medium">Loading...</p>
+        </div>
       </div>
     );
   }
 
-  if (!user || !isAdmin) {
+  // Redirect to login if not authenticated or not admin
+  if (!user) {
+    return <Navigate to="/admin/login" replace />;
+  }
+
+  if (!isAdmin) {
     return <Navigate to="/admin/login" replace />;
   }
 
