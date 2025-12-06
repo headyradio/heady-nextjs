@@ -3,7 +3,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useUserRole } from "@/hooks/useUserRole";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { FileText, Calendar, Music, Tags, FolderOpen, Image } from "lucide-react";
+import { FileText, Calendar, Music, Tags, FolderOpen } from "lucide-react";
 
 const Admin = () => {
   const { user, loading: authLoading } = useAuth();
@@ -77,19 +77,6 @@ const Admin = () => {
               <div className="text-2xl font-bold">Manage Mixtapes</div>
               <p className="text-xs text-muted-foreground">
                 Curate mixtape collections
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate("/admin/hero-cards")}>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Hero Cards</CardTitle>
-              <Image className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">Manage Hero</div>
-              <p className="text-xs text-muted-foreground">
-                Edit homepage carousel cards
               </p>
             </CardContent>
           </Card>

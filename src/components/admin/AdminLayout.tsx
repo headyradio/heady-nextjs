@@ -11,8 +11,7 @@ import {
   Home,
   LogOut,
   Users,
-  Newspaper,
-  Image
+  Newspaper
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
@@ -40,10 +39,11 @@ export function AdminLayout({ children }: AdminLayoutProps) {
 
   const navItems = [
     { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
-    { href: "/admin/hero-cards", label: "Hero Cards", icon: Image },
-    { href: "/admin/headyzine", label: "Blog Posts", icon: FileText },
+    { href: "/admin/posts", label: "Blog Posts", icon: FileText },
     { href: "/admin/shows", label: "Shows", icon: Calendar },
     { href: "/admin/mixtapes", label: "Mixtapes", icon: Music },
+    { href: "/meetups", label: "Meetups", icon: Users },
+    { href: "/headyzine", label: "HEADYZINE", icon: Newspaper },
   ];
 
   return (

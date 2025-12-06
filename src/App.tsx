@@ -28,7 +28,6 @@ const AdminAuth = lazy(() => import("./pages/AdminAuth"));
 const AdminHeadyzine = lazy(() => import("./pages/AdminHeadyzine"));
 const AdminShows = lazy(() => import("./pages/AdminShows"));
 const AdminMixtapes = lazy(() => import("./pages/AdminMixtapes"));
-const AdminHeroCards = lazy(() => import("./pages/AdminHeroCards"));
 const DonationSuccess = lazy(() => import("./pages/DonationSuccess"));
 const DonationCancelled = lazy(() => import("./pages/DonationCancelled"));
 const NotFound = lazy(() => import("./pages/NotFound"));
@@ -79,7 +78,6 @@ const App = () => (
                 <Route path="/admin/headyzine" element={<AdminHeadyzine />} />
                 <Route path="/admin/shows" element={<AdminShows />} />
                 <Route path="/admin/mixtapes" element={<AdminMixtapes />} />
-                <Route path="/admin/hero-cards" element={<AdminHeroCards />} />
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/saved-songs" element={<SavedSongs />} />
