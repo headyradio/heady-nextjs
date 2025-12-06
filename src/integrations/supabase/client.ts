@@ -8,10 +8,29 @@ const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";
 
-export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+// Validate environment variables before creating client
+// This prevents white screen if env vars are missing
+if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
+  console.error(
+    '⚠️ Supabase environment variables are missing!\n' +
+    'Please set VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY in your environment.\n' +
+    'The app will continue to load, but Supabase features will not work.'
+  );
+}
+
+// Create client with fallback to prevent crashes
+// Use placeholder values if env vars are missing so createClient doesn't throw
+const safeUrl = SUPABASE_URL || 'https://placeholder.supabase.co';
+const safeKey = SUPABASE_PUBLISHABLE_KEY || 'placeholder-key';
+
+export const supabase = createClient<Database>(safeUrl, safeKey, {
   auth: {
-    storage: localStorage,
+    storage: typeof window !== 'undefined' ? localStorage : undefined,
     persistSession: true,
     autoRefreshToken: true,
   }
 });
+
+// If env vars are missing, mark the client as invalid
+// Components can check this before making requests
+export const isSupabaseConfigured = !!(SUPABASE_URL && SUPABASE_PUBLISHABLE_KEY);
