@@ -127,8 +127,12 @@ const ArtistPage = () => {
             ) : lastfmData?.image_url ? (
               <img 
                 src={lastfmData.image_url} 
-                alt={artistDetails.artist}
+                alt={`${artistDetails.artist} artist photo`}
                 className="w-full h-full object-cover rounded-lg shadow-2xl"
+                loading="lazy"
+                decoding="async"
+                width="256"
+                height="256"
                 onError={(e) => {
                   console.error('Image failed to load:', lastfmData.image_url);
                   e.currentTarget.style.display = 'none';

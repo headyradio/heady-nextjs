@@ -21,17 +21,23 @@ export const RelatedArtistCard = ({ name, playCount, source }: RelatedArtistCard
   const { data: lastfmData } = useLastfmArtistData(name);
 
   return (
-    <Link to={`/artist/${encodeURIComponent(name)}`} className="group">
+    <Link 
+      to={`/artist/${encodeURIComponent(name)}`} 
+      className="group"
+      aria-label={`View artist page for ${name}`}
+    >
       <Card className="p-4 hover:shadow-lg transition-all hover:scale-105">
         <div className="aspect-square rounded-lg mb-3 overflow-hidden bg-gradient-to-br from-primary/20 to-primary/5">
           {lastfmData?.image_url ? (
             <img 
               src={lastfmData.image_url} 
-              alt={name}
+              alt={`${name} artist photo`}
               className="w-full h-full object-cover"
+              loading="lazy"
+              decoding="async"
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center">
+            <div className="w-full h-full flex items-center justify-center" aria-hidden="true">
               <Users className="w-12 h-12 text-primary/40" />
             </div>
           )}

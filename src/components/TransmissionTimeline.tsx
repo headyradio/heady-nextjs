@@ -65,7 +65,11 @@ export const TransmissionTimeline = ({ transmissions }: TransmissionTimelineProp
               {/* Track Info */}
               <div className="flex-1 min-w-0">
                 <div className="flex items-start justify-between gap-4 mb-2">
-                  <Link to={songPageUrl} className="hover:text-primary transition-colors cursor-pointer">
+                  <Link 
+                    to={songPageUrl} 
+                    className="hover:text-primary transition-colors cursor-pointer"
+                    aria-label={`View song page for ${transmission.title} by ${transmission.artist}`}
+                  >
                     <h3 className="font-black text-xl leading-tight">
                       {transmission.title}
                     </h3>
@@ -86,8 +90,9 @@ export const TransmissionTimeline = ({ transmissions }: TransmissionTimelineProp
 
                 <Link 
                   to={artistPageUrl} 
-                  className="text-lg font-bold opacity-70 mb-3 hover:text-primary hover:underline transition-colors cursor-pointer inline-block"
+                  className="text-lg font-bold opacity-80 mb-3 hover:text-primary hover:underline transition-colors cursor-pointer inline-block"
                   onClick={(e) => e.stopPropagation()}
+                  aria-label={`View artist page for ${transmission.artist}`}
                 >
                   {transmission.artist}
                 </Link>

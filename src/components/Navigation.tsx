@@ -52,16 +52,17 @@ const Navigation = () => {
               onClick={audioPlayer.togglePlay}
               size="icon"
               variant="default"
+              aria-label={audioPlayer.isPlaying ? "Pause audio stream" : "Play audio stream"}
               className="relative overflow-hidden w-14 h-14 rounded-full"
               disabled={audioPlayer.isBuffering}
             >
               {audioPlayer.isPlaying ? (
-                <Pause className="h-6 w-6" />
+                <Pause className="h-6 w-6" aria-hidden="true" />
               ) : (
-                <Play className="h-6 w-6" />
+                <Play className="h-6 w-6" aria-hidden="true" />
               )}
               {audioPlayer.connectionStatus === 'streaming' && (
-                <div className="absolute inset-0 bg-primary/20 animate-pulse rounded-full" />
+                <div className="absolute inset-0 bg-primary/20 animate-pulse rounded-full" aria-hidden="true" />
               )}
             </Button>
 
@@ -97,7 +98,7 @@ const Navigation = () => {
                   <div className="text-sm font-bold text-white truncate">
                     {nowPlaying.title}
                   </div>
-                  <div className="text-xs text-white/80 truncate">
+                  <div className="text-xs text-white truncate" style={{ opacity: 0.9 }}>
                     {nowPlaying.artist}
                   </div>
                 </div>
@@ -118,8 +119,9 @@ const Navigation = () => {
                     size="sm"
                     className="text-white hover:bg-white/20 ml-2"
                     variant="ghost"
+                    aria-label="Jump to live broadcast"
                   >
-                    <Radio className="h-4 w-4 mr-1" />
+                    <Radio className="h-4 w-4 mr-1" aria-hidden="true" />
                     Jump to Live
                   </Button>
                 )}
@@ -133,12 +135,14 @@ const Navigation = () => {
                 size="icon"
                 onClick={audioPlayer.toggleMute}
                 onMouseEnter={() => setVolumeOpen(true)}
+                aria-label={audioPlayer.isMuted || audioPlayer.volume === 0 ? "Unmute audio" : "Mute audio"}
+                aria-expanded={volumeOpen}
                 className="text-white hover:bg-white/20"
               >
                 {audioPlayer.isMuted || audioPlayer.volume === 0 ? (
-                  <VolumeX className="h-5 w-5" />
+                  <VolumeX className="h-5 w-5" aria-hidden="true" />
                 ) : (
-                  <Volume2 className="h-5 w-5" />
+                  <Volume2 className="h-5 w-5" aria-hidden="true" />
                 )}
               </Button>
               
@@ -171,11 +175,12 @@ const Navigation = () => {
                 const event = new CustomEvent('open-live-chat');
                 window.dispatchEvent(event);
               }}
+              aria-label={isLive ? "Open live chat - Live now" : "Open live chat"}
             >
-              <Radio className="h-4 w-4" />
+              <Radio className="h-4 w-4" aria-hidden="true" />
               Live Chat
               {isLive && (
-                <span className="relative flex h-2 w-2">
+                <span className="relative flex h-2 w-2" aria-label="Live indicator">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
                 </span>
@@ -183,7 +188,7 @@ const Navigation = () => {
             </Button>
 
             {/* Shows Link */}
-            <Link to="/shows">
+            <Link to="/shows" aria-label="View scheduled shows and events">
               <Button
                 variant="ghost"
                 size="sm"
@@ -202,8 +207,9 @@ const Navigation = () => {
                 const supportSection = document.getElementById('support-section');
                 supportSection?.scrollIntoView({ behavior: 'smooth' });
               }}
+              aria-label="Support HEADY.FM - Scroll to support section"
             >
-              <Heart className="h-4 w-4 mr-2" />
+              <Heart className="h-4 w-4 mr-2" aria-hidden="true" />
               Support
             </Button>
 
@@ -282,8 +288,10 @@ const Navigation = () => {
               size="icon"
               className="md:hidden text-white hover:bg-white/20"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label={mobileMenuOpen ? "Close mobile menu" : "Open mobile menu"}
+              aria-expanded={mobileMenuOpen}
             >
-              {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              {mobileMenuOpen ? <X className="h-6 w-6" aria-hidden="true" /> : <Menu className="h-6 w-6" aria-hidden="true" />}
             </Button>
           </div>
         </div>
@@ -386,7 +394,7 @@ const Navigation = () => {
                     )}
                   </div>
                   <div className="text-sm font-bold text-white">{nowPlaying.title}</div>
-                  <div className="text-xs text-white/80">{nowPlaying.artist}</div>
+                  <div className="text-xs text-white" style={{ opacity: 0.9 }}>{nowPlaying.artist}</div>
                 </div>
               </div>
             )}

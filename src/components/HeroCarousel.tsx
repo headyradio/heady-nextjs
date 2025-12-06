@@ -112,6 +112,8 @@ export const HeroCarousel = () => {
                       transform: current === index ? 'scale(1)' : 'scale(1.1)',
                       transitionDuration: '1500ms',
                     }}
+                    role="img"
+                    aria-label={`Background image for ${show.title}`}
                   />
                   
                   {/* Animated Overlay */}
@@ -155,11 +157,12 @@ export const HeroCarousel = () => {
 
                       {/* Description with Fade */}
                       <p 
-                        className="text-xl md:text-2xl text-white/90 mb-6 leading-relaxed drop-shadow-lg max-w-2xl transition-all duration-700 ease-out"
+                        className="text-xl md:text-2xl text-white mb-6 leading-relaxed drop-shadow-lg max-w-2xl transition-all duration-700 ease-out"
                         style={{
                           opacity: current === index ? 1 : 0,
                           transform: current === index ? 'translateY(0)' : 'translateY(20px)',
                           transitionDelay: current === index ? '400ms' : '0ms',
+                          textShadow: '0 2px 8px rgba(0,0,0,0.8)',
                         }}
                       >
                         {show.description}
@@ -208,9 +211,9 @@ export const HeroCarousel = () => {
                         }}
                       >
                         {index === 2 ? (
-                          <a href="/#support-section">Support Us</a>
+                          <a href="/#support-section" aria-label="Support HEADY.FM - Scroll to support section">Support Us</a>
                         ) : (
-                          <Link to="/shows">Learn More</Link>
+                          <Link to="/shows" aria-label={`Learn more about ${show.title}`}>Learn More</Link>
                         )}
                       </Button>
                     </div>
@@ -225,25 +228,30 @@ export const HeroCarousel = () => {
             onClick={() => api?.scrollPrev()}
             size="sm"
             variant="ghost"
+            aria-label="Previous slide"
             className="absolute bottom-40 md:bottom-44 right-4 md:right-8 bg-white/20 backdrop-blur-sm border-2 border-white/40 hover:bg-white/30 text-white transition-all duration-300 hover:scale-110 hover:border-white/60 z-10 h-10 w-10"
           >
-            <ChevronUp className="h-4 w-4" />
+            <ChevronUp className="h-4 w-4" aria-hidden="true" />
           </Button>
           <Button
             onClick={() => api?.scrollNext()}
             size="sm"
             variant="ghost"
+            aria-label="Next slide"
             className="absolute bottom-16 md:bottom-20 right-4 md:right-8 bg-white/20 backdrop-blur-sm border-2 border-white/40 hover:bg-white/30 text-white transition-all duration-300 hover:scale-110 hover:border-white/60 z-10 h-10 w-10"
           >
-            <ChevronDown className="h-4 w-4" />
+            <ChevronDown className="h-4 w-4" aria-hidden="true" />
           </Button>
           
           {/* Progress Indicators */}
-          <div className="absolute bottom-16 md:bottom-20 left-1/2 -translate-x-1/2 flex gap-2">
-            {FEATURED_SHOWS.map((_, index) => (
+          <div className="absolute bottom-16 md:bottom-20 left-1/2 -translate-x-1/2 flex gap-2" role="tablist" aria-label="Carousel slides">
+            {FEATURED_SHOWS.map((show, index) => (
               <button
                 key={index}
                 onClick={() => api?.scrollTo(index)}
+                aria-label={`Go to slide ${index + 1}: ${show.title}`}
+                aria-selected={current === index}
+                role="tab"
                 className="relative w-12 h-1 bg-white/30 rounded-full overflow-hidden transition-all duration-300 hover:bg-white/50"
               >
                 <div 
@@ -262,12 +270,13 @@ export const HeroCarousel = () => {
             onClick={toggleAutoplay}
             size="sm"
             variant="ghost"
+            aria-label={isPlaying ? "Pause carousel autoplay" : "Resume carousel autoplay"}
             className="absolute bottom-28 md:bottom-32 right-4 md:right-8 bg-white/20 backdrop-blur-sm border-2 border-white/40 hover:bg-white/30 text-white transition-all duration-300 hover:scale-110 h-10 w-10"
           >
             {isPlaying ? (
-              <Pause className="h-4 w-4 animate-pulse" />
+              <Pause className="h-4 w-4 animate-pulse" aria-hidden="true" />
             ) : (
-              <Play className="h-4 w-4" />
+              <Play className="h-4 w-4" aria-hidden="true" />
             )}
           </Button>
         </Carousel>

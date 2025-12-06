@@ -160,6 +160,8 @@ export const AlbumArtImage = ({
           src={headyFallback}
           alt="HEADY Radio"
           className={className}
+          loading="lazy"
+          decoding="async"
         />
       </div>
     );
@@ -175,6 +177,8 @@ export const AlbumArtImage = ({
       className={className}
       crossOrigin="anonymous"
       loading="lazy"
+      decoding="async"
+      fetchPriority="auto"
       onError={() => {
         console.log('Image load error, showing fallback');
         setShowFallback(true);

@@ -58,9 +58,10 @@ export const SongHeroSection = ({
             <Link 
               to={`/artist/${encodeURIComponent(artist)}`}
               className="text-2xl text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-2"
+              aria-label={`View artist page for ${artist}`}
             >
               {artist}
-              <ExternalLink className="w-5 h-5" />
+              <ExternalLink className="w-5 h-5" aria-hidden="true" />
             </Link>
             {album && (
               <p className="text-lg text-muted-foreground mt-2">
@@ -90,12 +91,22 @@ export const SongHeroSection = ({
               albumArtUrl={albumArtUrl}
             />
             <Button variant="outline" asChild>
-              <a href={youtubeUrl} target="_blank" rel="noopener noreferrer">
+              <a 
+                href={youtubeUrl} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                aria-label={`Search for ${title} by ${artist} on YouTube`}
+              >
                 YouTube
               </a>
             </Button>
             <Button variant="outline" asChild>
-              <a href={spotifyUrl} target="_blank" rel="noopener noreferrer">
+              <a 
+                href={spotifyUrl} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                aria-label={`Search for ${title} by ${artist} on Spotify`}
+              >
                 Spotify
               </a>
             </Button>

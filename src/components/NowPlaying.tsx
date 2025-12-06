@@ -96,13 +96,14 @@ export const NowPlaying = ({ transmission, isLive = false }: NowPlayingProps) =>
                   onClick={audioPlayer.togglePlay}
                   size="lg"
                   variant="default"
+                  aria-label={audioPlayer.isPlaying ? "Pause audio stream" : "Play audio stream"}
                   className="w-20 h-20 rounded-full shadow-2xl hover:scale-110 transition-transform"
                   disabled={audioPlayer.isBuffering}
                 >
                   {audioPlayer.isPlaying ? (
-                    <Pause className="h-10 w-10" />
+                    <Pause className="h-10 w-10" aria-hidden="true" />
                   ) : (
-                    <Play className="h-10 w-10" />
+                    <Play className="h-10 w-10" aria-hidden="true" />
                   )}
                 </Button>
               </div>
@@ -112,19 +113,20 @@ export const NowPlaying = ({ transmission, isLive = false }: NowPlayingProps) =>
                 <button
                   onClick={audioPlayer.togglePlay}
                   disabled={audioPlayer.isBuffering}
+                  aria-label={audioPlayer.isPlaying ? "Pause audio stream" : "Play audio stream"}
                   className="w-28 h-28 rounded-full bg-background/20 backdrop-blur-md border-4 border-primary/80 hover:border-primary flex items-center justify-center shadow-2xl transition-all active:scale-95 disabled:opacity-90"
                 >
                   {audioPlayer.isBuffering || (audioPlayer.connectionStatus === 'connecting' && !audioPlayer.isPlaying) ? (
                     <div className="flex flex-col items-center justify-center gap-2">
-                      <div className="animate-spin rounded-full h-12 w-12 border-4 border-white/30 border-t-white drop-shadow-lg" />
+                      <div className="animate-spin rounded-full h-12 w-12 border-4 border-white/30 border-t-white drop-shadow-lg" aria-hidden="true" />
                       <span className="text-[10px] text-white font-bold drop-shadow-lg uppercase tracking-wide">
                         {audioPlayer.connectionStatus === 'connecting' ? 'Loading...' : 'Buffering...'}
                       </span>
                     </div>
                   ) : audioPlayer.isPlaying ? (
-                    <Pause className="h-14 w-14 text-white drop-shadow-lg" />
+                    <Pause className="h-14 w-14 text-white drop-shadow-lg" aria-hidden="true" />
                   ) : (
-                    <Play className="h-14 w-14 text-white drop-shadow-lg ml-1" />
+                    <Play className="h-14 w-14 text-white drop-shadow-lg ml-1" aria-hidden="true" />
                   )}
                 </button>
               </div>
@@ -199,14 +201,17 @@ export const NowPlaying = ({ transmission, isLive = false }: NowPlayingProps) =>
                 href={youtubeUrl}
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label={`Search for ${transmission.title} by ${transmission.artist} on YouTube`}
                 className="p-3 hover:opacity-70 transition-opacity active:scale-95"
-                title="Search on YouTube"
               >
                 <img 
                   src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg"
-                  alt="YouTube"
+                  alt=""
                   className="w-10 h-10"
                   loading="lazy"
+                  width="40"
+                  height="40"
+                  aria-hidden="true"
                 />
               </a>
               
@@ -214,14 +219,17 @@ export const NowPlaying = ({ transmission, isLive = false }: NowPlayingProps) =>
                 href={spotifyUrl}
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label={`Search for ${transmission.title} by ${transmission.artist} on Spotify`}
                 className="p-3 hover:opacity-70 transition-opacity active:scale-95"
-                title="Search on Spotify"
               >
                 <img 
                   src="https://upload.wikimedia.org/wikipedia/commons/8/84/Spotify_icon.svg"
-                  alt="Spotify"
+                  alt=""
                   className="w-10 h-10"
                   loading="lazy"
+                  width="40"
+                  height="40"
+                  aria-hidden="true"
                 />
               </a>
             </div>
@@ -241,28 +249,34 @@ export const NowPlaying = ({ transmission, isLive = false }: NowPlayingProps) =>
                 href={youtubeUrl}
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label={`Search for ${transmission.title} by ${transmission.artist} on YouTube`}
                 className="p-3 hover:opacity-70 transition-opacity"
-                title="Search on YouTube"
               >
                 <img 
                   src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg"
-                  alt="YouTube"
+                  alt=""
                   className="w-8 h-8"
                   loading="lazy"
+                  width="32"
+                  height="32"
+                  aria-hidden="true"
                 />
               </a>
               <a
                 href={spotifyUrl}
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label={`Search for ${transmission.title} by ${transmission.artist} on Spotify`}
                 className="p-3 hover:opacity-70 transition-opacity"
-                title="Search on Spotify"
               >
                 <img 
                   src="https://upload.wikimedia.org/wikipedia/commons/8/84/Spotify_icon.svg"
-                  alt="Spotify"
+                  alt=""
                   className="w-8 h-8"
                   loading="lazy"
+                  width="32"
+                  height="32"
+                  aria-hidden="true"
                 />
               </a>
             </div>
@@ -275,8 +289,9 @@ export const NowPlaying = ({ transmission, isLive = false }: NowPlayingProps) =>
                   size="lg"
                   className="w-full md:w-auto font-bold"
                   variant="default"
+                  aria-label="Jump to live broadcast - Resume listening to current live stream"
                 >
-                  <Radio className="h-5 w-5 mr-2" />
+                  <Radio className="h-5 w-5 mr-2" aria-hidden="true" />
                   Jump to Live Broadcast
                 </Button>
                 <p className="text-xs opacity-60 mt-2 text-center md:text-left">

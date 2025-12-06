@@ -44,8 +44,12 @@ export const AboutTheArtist = ({ artistName, geniusData, aiContent, headyStats }
             <div className="float-right ml-4 mb-4 w-48 h-48">
               <img 
                 src={lastfmData.image_url} 
-                alt={artistName}
+                alt={`${artistName} artist photo`}
                 className="w-full h-full object-cover rounded-lg shadow-lg"
+                loading="lazy"
+                decoding="async"
+                width="192"
+                height="192"
               />
             </div>
           )}
