@@ -6,17 +6,17 @@ interface AudioPlayerState {
   isMuted: boolean;
   error: string | null;
   isBuffering: boolean;
-  connectionStatus: 'idle' | 'connecting' | 'streaming' | 'paused' | 'error';
+  connectionStatus: 'idle' | 'connecting' | 'streaming' | 'error';
   hasUserInteracted: boolean;
 }
 
 interface AudioPlayerContextValue extends AudioPlayerState {
   play: () => Promise<void>;
   pause: () => void;
+  stop: () => void;
   togglePlay: () => void;
   setVolume: (volume: number) => void;
   toggleMute: () => void;
-  jumpToLive: () => void;
 }
 
 const AudioPlayerContext = React.createContext<AudioPlayerContextValue | undefined>(undefined);
@@ -104,7 +104,7 @@ export const AudioPlayerProvider = ({ children }: { children: React.ReactNode })
           ...prev, 
           error: null, 
           isBuffering: false, 
-          connectionStatus: prev.isPlaying ? 'streaming' : 'paused' 
+          connectionStatus: prev.isPlaying ? 'streaming' : 'idle' 
         }));
         reconnectAttemptsRef.current = 0;
         hasLoadedRef.current = true;
@@ -124,7 +124,7 @@ export const AudioPlayerProvider = ({ children }: { children: React.ReactNode })
 
       const handlePause = () => {
         if (audioRef.current && !audioRef.current.ended) {
-          setState(prev => ({ ...prev, isPlaying: false, connectionStatus: 'paused', isBuffering: false }));
+          setState(prev => ({ ...prev, isPlaying: false, connectionStatus: 'idle', isBuffering: false }));
         }
       };
 
@@ -176,8 +176,15 @@ export const AudioPlayerProvider = ({ children }: { children: React.ReactNode })
     };
   }, []);
 
+  const ensureStreamSource = () => {
+    if (audioRef.current && !audioRef.current.src) {
+      audioRef.current.src = STREAM_URL;
+    }
+  };
+
   const play = async () => {
     if (!audioRef.current) return;
+    ensureStreamSource();
     
     try {
       console.log('Play initiated - setting connecting state');
@@ -226,21 +233,30 @@ export const AudioPlayerProvider = ({ children }: { children: React.ReactNode })
     }
   };
 
-  const pause = () => {
+  const stop = () => {
     if (!audioRef.current) return;
+    // Fully stop and unload stream
     audioRef.current.pause();
-    setState(prev => ({ 
-      ...prev, 
-      isPlaying: false, 
-      connectionStatus: 'paused', 
-      isBuffering: false, 
-      hasUserInteracted: true 
+    audioRef.current.removeAttribute('src');
+    audioRef.current.load();
+    hasLoadedRef.current = false;
+    setState(prev => ({
+      ...prev,
+      isPlaying: false,
+      connectionStatus: 'idle',
+      isBuffering: false,
+      error: null,
+      hasUserInteracted: true,
     }));
+  };
+
+  const pause = () => {
+    stop();
   };
 
   const togglePlay = () => {
     if (state.isPlaying) {
-      pause();
+      stop();
     } else {
       play();
     }
@@ -260,41 +276,14 @@ export const AudioPlayerProvider = ({ children }: { children: React.ReactNode })
     setState(prev => ({ ...prev, isMuted: newMutedState }));
   };
 
-  const jumpToLive = () => {
-    if (!audioRef.current) return;
-    
-    // Store current settings
-    const currentVolume = audioRef.current.volume;
-    const currentMuted = audioRef.current.muted;
-    
-    // Stop current playback
-    audioRef.current.pause();
-    
-    // Force reload stream source (syncs to live broadcast)
-    // This is the only place we intentionally call load() for "jump to live"
-    audioRef.current.load();
-    hasLoadedRef.current = true;
-    
-    // Restore settings
-    audioRef.current.volume = currentVolume;
-    audioRef.current.muted = currentMuted;
-    
-    // Start playing
-    setState(prev => ({ ...prev, connectionStatus: 'connecting', isBuffering: true, hasUserInteracted: true }));
-    audioRef.current.play().catch(err => {
-      console.error('Failed to jump to live:', err);
-      setState(prev => ({ ...prev, error: 'Failed to start playback', connectionStatus: 'error', isBuffering: false }));
-    });
-  };
-
   const value: AudioPlayerContextValue = {
     ...state,
     play,
     pause,
+    stop,
     togglePlay,
     setVolume,
     toggleMute,
-    jumpToLive,
   };
 
   return (

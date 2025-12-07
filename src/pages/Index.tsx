@@ -378,7 +378,7 @@ const Index = () => {
       {/* Desktop: Main Content with Hot Songs and Transmission History */}
       <main className="container mx-auto px-4 pb-8 lg:pb-12 hidden md:block">
         {/* HEADY HOT 40 Section */}
-        <section className="mt-8 md:mt-16">
+        <section id="hot-40-section" className="mt-8 md:mt-16">
           {/* Section Header */}
           <div className="mb-6 md:mb-8">
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-black uppercase tracking-tight">
@@ -455,7 +455,7 @@ const Index = () => {
         </section>
 
         {/* Transmission History Section */}
-        <section className="mt-16 md:mt-24">
+        <section id="transmission-history" className="mt-16 md:mt-24">
           {/* Section Header */}
           <div className="mb-6 md:mb-8 flex items-center justify-between">
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-black uppercase tracking-tight">

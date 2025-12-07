@@ -1,4 +1,4 @@
-import { Clock, Play, Pause, Radio } from 'lucide-react';
+import { Clock, Play, Square } from 'lucide-react';
 import { Transmission } from '@/hooks/useRadioBoss';
 import { formatDistanceToNow } from 'date-fns';
 import { AlbumArtImage } from './AlbumArtImage';
@@ -96,14 +96,14 @@ export const NowPlaying = ({ transmission, isLive = false }: NowPlayingProps) =>
                   onClick={audioPlayer.togglePlay}
                   size="lg"
                   variant="default"
-                  aria-label={audioPlayer.isPlaying ? "Pause audio stream" : "Play audio stream"}
+                  aria-label={audioPlayer.isPlaying ? "Stop audio stream" : "Play audio stream"}
                   className="w-20 h-20 rounded-full shadow-2xl hover:scale-110 transition-transform"
                   disabled={audioPlayer.isBuffering}
                 >
                   {audioPlayer.isPlaying ? (
-                    <Pause className="h-10 w-10" aria-hidden="true" />
+                    <Square className="h-10 w-10 text-white fill-white" aria-hidden="true" />
                   ) : (
-                    <Play className="h-10 w-10" aria-hidden="true" />
+                    <Play className="h-10 w-10 text-white fill-white" aria-hidden="true" />
                   )}
                 </Button>
               </div>
@@ -113,7 +113,7 @@ export const NowPlaying = ({ transmission, isLive = false }: NowPlayingProps) =>
                 <button
                   onClick={audioPlayer.togglePlay}
                   disabled={audioPlayer.isBuffering}
-                  aria-label={audioPlayer.isPlaying ? "Pause audio stream" : "Play audio stream"}
+                  aria-label={audioPlayer.isPlaying ? "Stop audio stream" : "Play audio stream"}
                   className="w-28 h-28 rounded-full bg-background/20 backdrop-blur-md border-4 border-primary/80 hover:border-primary flex items-center justify-center shadow-2xl transition-all active:scale-95 disabled:opacity-90"
                 >
                   {audioPlayer.isBuffering || (audioPlayer.connectionStatus === 'connecting' && !audioPlayer.isPlaying) ? (
@@ -124,9 +124,9 @@ export const NowPlaying = ({ transmission, isLive = false }: NowPlayingProps) =>
                       </span>
                     </div>
                   ) : audioPlayer.isPlaying ? (
-                    <Pause className="h-14 w-14 text-white drop-shadow-lg" aria-hidden="true" />
+                    <Square className="h-14 w-14 text-white fill-white drop-shadow-lg" aria-hidden="true" />
                   ) : (
-                    <Play className="h-14 w-14 text-white drop-shadow-lg ml-1" aria-hidden="true" />
+                    <Play className="h-14 w-14 text-white fill-white drop-shadow-lg ml-1" aria-hidden="true" />
                   )}
                 </button>
               </div>
@@ -135,22 +135,15 @@ export const NowPlaying = ({ transmission, isLive = false }: NowPlayingProps) =>
 
           {/* Track Info - Mobile App Style */}
           <div className="flex flex-col justify-center px-4 md:px-0">
-            {/* Live/Paused indicator - Centered above track info */}
+            {/* Live indicator - Always show live */}
             <div className="flex justify-center md:justify-start mb-4 md:mb-6">
-              {audioPlayer.isPlaying ? (
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-500/20 border-2 border-green-500">
-                  <span className="relative flex h-2.5 w-2.5">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
-                  </span>
-                  <span className="text-green-500 font-black text-xs uppercase tracking-wider">LIVE</span>
-                </div>
-              ) : (
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-500/20 border-2 border-orange-500">
-                  <Pause className="h-3 w-3 text-orange-500" />
-                  <span className="text-orange-500 font-black text-xs uppercase tracking-wider">PAUSED</span>
-                </div>
-              )}
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-500/20 border-2 border-green-500">
+                <span className="relative flex h-2.5 w-2.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
+                </span>
+                <span className="text-green-500 font-black text-xs uppercase tracking-wider">LIVE</span>
+              </div>
             </div>
 
             {/* Mobile: Centered Track Info */}
@@ -280,25 +273,6 @@ export const NowPlaying = ({ transmission, isLive = false }: NowPlayingProps) =>
                 />
               </a>
             </div>
-
-            {/* Jump to Live Button - Shows when paused */}
-            {!audioPlayer.isPlaying && (
-              <div className="mb-4 md:mb-6">
-                <Button
-                  onClick={audioPlayer.jumpToLive}
-                  size="lg"
-                  className="w-full md:w-auto font-bold"
-                  variant="default"
-                  aria-label="Jump to live broadcast - Resume listening to current live stream"
-                >
-                  <Radio className="h-5 w-5 mr-2" aria-hidden="true" />
-                  Jump to Live Broadcast
-                </Button>
-                <p className="text-xs opacity-60 mt-2 text-center md:text-left">
-                  Resume listening to the current live broadcast
-                </p>
-              </div>
-            )}
 
             {/* Tags */}
             <div className="flex flex-wrap gap-2 md:gap-3 justify-center md:justify-start">

@@ -6,7 +6,7 @@ interface AudioPlayerState {
   isMuted: boolean;
   error: string | null;
   isBuffering: boolean;
-  connectionStatus: 'idle' | 'connecting' | 'streaming' | 'paused' | 'error';
+  connectionStatus: 'idle' | 'connecting' | 'streaming' | 'error';
   hasUserInteracted: boolean;
 }
 
@@ -67,7 +67,7 @@ export const useAudioPlayer = (streamUrl: string) => {
       };
 
       const handleCanPlay = () => {
-        setState(prev => ({ ...prev, error: null, isBuffering: false, connectionStatus: prev.isPlaying ? 'streaming' : 'paused' }));
+        setState(prev => ({ ...prev, error: null, isBuffering: false, connectionStatus: prev.isPlaying ? 'streaming' : 'idle' }));
         reconnectAttemptsRef.current = 0;
       };
 
@@ -78,7 +78,7 @@ export const useAudioPlayer = (streamUrl: string) => {
 
       const handlePause = () => {
         if (audioRef.current && !audioRef.current.ended) {
-          setState(prev => ({ ...prev, isPlaying: false, connectionStatus: 'paused', isBuffering: false }));
+          setState(prev => ({ ...prev, isPlaying: false, connectionStatus: 'idle', isBuffering: false }));
         }
       };
 
@@ -135,15 +135,19 @@ export const useAudioPlayer = (streamUrl: string) => {
     };
   }, [streamUrl]);
 
+  const ensureStreamSource = () => {
+    if (audioRef.current && !audioRef.current.src) {
+      audioRef.current.src = streamUrl;
+    }
+  };
+
   const play = async () => {
     if (!audioRef.current) return;
+    ensureStreamSource();
     
     try {
       setState(prev => ({ ...prev, connectionStatus: 'connecting', isBuffering: true, hasUserInteracted: true }));
-      
-      // Ensure the audio is loaded with the latest stream data
-      audioRef.current.load();
-      
+
       // Use a promise to handle play with better error recovery
       const playPromise = audioRef.current.play();
       
@@ -168,15 +172,17 @@ export const useAudioPlayer = (streamUrl: string) => {
     }
   };
 
-  const pause = () => {
+  const stop = () => {
     if (!audioRef.current) return;
     audioRef.current.pause();
-    setState(prev => ({ ...prev, isPlaying: false, connectionStatus: 'paused', isBuffering: false, hasUserInteracted: true }));
+    audioRef.current.removeAttribute('src');
+    audioRef.current.load();
+    setState(prev => ({ ...prev, isPlaying: false, connectionStatus: 'idle', isBuffering: false, hasUserInteracted: true, error: null }));
   };
 
   const togglePlay = () => {
     if (state.isPlaying) {
-      pause();
+      stop();
     } else {
       play();
     }
@@ -199,7 +205,8 @@ export const useAudioPlayer = (streamUrl: string) => {
   return {
     ...state,
     play,
-    pause,
+    pause: stop,
+    stop,
     togglePlay,
     setVolume,
     toggleMute,

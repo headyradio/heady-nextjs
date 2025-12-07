@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Play, Pause, Volume2, VolumeX, Menu, X, Heart, User, LogOut, Radio } from 'lucide-react';
+import { Play, Square, Volume2, VolumeX, Menu, X, Heart, User, LogOut, Radio } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { useGlobalAudioPlayer } from '@/contexts/AudioPlayerContext';
@@ -34,6 +34,13 @@ const Navigation = () => {
     navigate('/');
   };
 
+  const scrollToId = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   return (
     <nav className="sticky top-0 z-50 w-full border-b-4 border-secondary shadow-lg" style={{ backgroundColor: '#4a148c' }}>
       <div className="container mx-auto px-4">
@@ -47,19 +54,19 @@ const Navigation = () => {
 
           {/* Center: Audio Player & Track Info (Desktop) */}
           <div className="hidden md:flex flex-1 items-center justify-center gap-4 max-w-2xl">
-            {/* Circular Play Button */}
+            {/* Circular Play/Stop Button */}
             <Button
               onClick={audioPlayer.togglePlay}
               size="icon"
               variant="default"
-              aria-label={audioPlayer.isPlaying ? "Pause audio stream" : "Play audio stream"}
+              aria-label={audioPlayer.isPlaying ? "Stop audio stream" : "Play audio stream"}
               className="relative overflow-hidden w-14 h-14 rounded-full"
               disabled={audioPlayer.isBuffering}
             >
               {audioPlayer.isPlaying ? (
-                <Pause className="h-6 w-6" aria-hidden="true" />
+                <Square className="h-6 w-6 text-white fill-white" aria-hidden="true" />
               ) : (
-                <Play className="h-6 w-6" aria-hidden="true" />
+                <Play className="h-6 w-6 text-white fill-white" aria-hidden="true" />
               )}
               {audioPlayer.connectionStatus === 'streaming' && (
                 <div className="absolute inset-0 bg-primary/20 animate-pulse rounded-full" aria-hidden="true" />
@@ -80,20 +87,13 @@ const Navigation = () => {
                 />
                 <div className="min-w-0 flex-1">
                   <div className="mb-1">
-                    {audioPlayer.isPlaying ? (
-                      <div className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full bg-green-500/20 border border-green-500">
-                        <span className="relative flex h-2 w-2">
-                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
-                          <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                        </span>
-                        <span className="text-green-500 font-bold text-[10px] uppercase tracking-wider">LIVE</span>
-                      </div>
-                    ) : (
-                      <div className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full bg-orange-500/20 border border-orange-500">
-                        <Pause className="h-2 w-2 text-orange-500" />
-                        <span className="text-orange-500 font-bold text-[10px] uppercase tracking-wider">PAUSED</span>
-                      </div>
-                    )}
+                    <div className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full bg-green-500/20 border border-green-500">
+                      <span className="relative flex h-2 w-2">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                      </span>
+                      <span className="text-green-500 font-bold text-[10px] uppercase tracking-wider">LIVE</span>
+                    </div>
                   </div>
                   <div className="text-sm font-bold text-white truncate">
                     {nowPlaying.title}
@@ -112,19 +112,6 @@ const Navigation = () => {
                   size="icon"
                 />
                 
-                {/* Jump to Live Button */}
-                {!audioPlayer.isPlaying && (
-                  <Button
-                    onClick={audioPlayer.jumpToLive}
-                    size="sm"
-                    className="text-white hover:bg-white/20 ml-2"
-                    variant="ghost"
-                    aria-label="Jump to live broadcast"
-                  >
-                    <Radio className="h-4 w-4 mr-1" aria-hidden="true" />
-                    Jump to Live
-                  </Button>
-                )}
               </div>
             )}
 
@@ -164,66 +151,26 @@ const Navigation = () => {
             </div>
           </div>
 
-          {/* Right: Status & Menu */}
-          <div className="flex items-center gap-4">
-            {/* Live Chat Button */}
-            <Button
-              variant="ghost"
-              size="sm"
-              className="hidden lg:flex text-white hover:bg-white/20 gap-2"
-              onClick={() => {
-                const event = new CustomEvent('open-live-chat');
-                window.dispatchEvent(event);
-              }}
-              aria-label={isLive ? "Open live chat - Live now" : "Open live chat"}
-            >
-              <Radio className="h-4 w-4" aria-hidden="true" />
-              Live Chat
-              {isLive && (
-                <span className="relative flex h-2 w-2" aria-label="Live indicator">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                </span>
-              )}
-            </Button>
-
-            {/* Shows Link */}
-            <Link to="/shows" aria-label="View scheduled shows and events">
-              <Button
-                variant="ghost"
-                size="sm"
-                className="hidden lg:flex text-white hover:bg-white/20"
-              >
-                Shows
-              </Button>
-            </Link>
-
-            {/* Support Link */}
-            <Button
-              variant="ghost"
-              size="sm"
-              className="hidden lg:flex text-white hover:bg-white/20"
-              onClick={() => {
-                const supportSection = document.getElementById('support-section');
-                supportSection?.scrollIntoView({ behavior: 'smooth' });
-              }}
-              aria-label="Support HEADY.FM - Scroll to support section"
-            >
-              <Heart className="h-4 w-4 mr-2" aria-hidden="true" />
-              Support
-            </Button>
-
+          {/* Right: Status & Menu (desktop cleaned) */}
+          <div className="flex items-center gap-4 ml-auto">
             {/* User Menu / Auth */}
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="rounded-full hover:bg-white/20">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="hidden lg:inline-flex items-center gap-3 rounded-full hover:bg-white/20 px-3 py-2"
+                  >
                     <Avatar className="h-9 w-9 ring-2 ring-white/30">
                       <AvatarImage src={profile?.avatar_url || ''} />
                       <AvatarFallback className="bg-primary text-primary-foreground font-bold">
                         <User className="h-5 w-5" />
                       </AvatarFallback>
                     </Avatar>
+                    <span className="text-white font-semibold truncate max-w-[140px]">
+                      {profile?.display_name || profile?.username || 'User'}
+                    </span>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent 
@@ -296,6 +243,58 @@ const Navigation = () => {
           </div>
         </div>
 
+        {/* Secondary desktop nav (inspired by KEXP) */}
+        <div className="hidden md:flex items-center gap-6 h-12 text-white border-t border-white/20 mt-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="px-3 font-semibold hover:bg-white/10"
+            onClick={() => scrollToId('transmission-history')}
+            aria-label="Jump to Transmission History"
+          >
+            Playlist
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="px-3 font-semibold hover:bg-white/10"
+            onClick={() => scrollToId('hot-40-section')}
+            aria-label="Jump to HEADY HOT 40"
+          >
+            HOT 40 🔥
+          </Button>
+          <Link to="/shows" aria-label="Go to Shows page" className="leading-none">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="px-3 font-semibold hover:bg-white/10"
+            >
+              Shows
+            </Button>
+          </Link>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="px-3 font-semibold hover:bg-white/10"
+            onClick={() => scrollToId('support-section')}
+            aria-label="Jump to Support section"
+          >
+            Support
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="px-3 font-semibold hover:bg-white/10"
+            onClick={() => {
+              const event = new CustomEvent('open-live-chat');
+              window.dispatchEvent(event);
+            }}
+            aria-label="Open live chat"
+          >
+            Live Chat
+          </Button>
+        </div>
+
         {/* Mobile Menu */}
         {mobileMenuOpen && (
           <div className="md:hidden py-4 border-t-2 border-white/30 space-y-4">
@@ -354,8 +353,8 @@ const Navigation = () => {
             >
               {audioPlayer.isPlaying ? (
                 <>
-                  <Pause className="h-5 w-5 mr-2" />
-                  Pause Live Stream
+                  <Square className="h-5 w-5 mr-2" />
+                  Stop Stream
                 </>
               ) : (
                 <>
@@ -378,37 +377,18 @@ const Navigation = () => {
                 />
                 <div className="flex-1 min-w-0">
                   <div className="mb-2">
-                    {audioPlayer.isPlaying ? (
-                      <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-500/20 border border-green-500">
-                        <span className="relative flex h-2.5 w-2.5">
-                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
-                          <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
-                        </span>
-                        <span className="text-green-500 font-bold text-xs uppercase tracking-wider">LIVE</span>
-                      </div>
-                    ) : (
-                      <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-orange-500/20 border border-orange-500">
-                        <Pause className="h-2.5 w-2.5 text-orange-500" />
-                        <span className="text-orange-500 font-bold text-xs uppercase tracking-wider">PAUSED</span>
-                      </div>
-                    )}
+                    <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-500/20 border border-green-500">
+                      <span className="relative flex h-2.5 w-2.5">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
+                      </span>
+                      <span className="text-green-500 font-bold text-xs uppercase tracking-wider">LIVE</span>
+                    </div>
                   </div>
                   <div className="text-sm font-bold text-white">{nowPlaying.title}</div>
                   <div className="text-xs text-white" style={{ opacity: 0.9 }}>{nowPlaying.artist}</div>
                 </div>
               </div>
-            )}
-
-            {!audioPlayer.isPlaying && (
-              <Button
-                onClick={audioPlayer.jumpToLive}
-                size="lg"
-                variant="default"
-                className="w-full"
-              >
-                <Radio className="h-5 w-5 mr-2" />
-                Jump to Live Broadcast
-              </Button>
             )}
           </div>
         )}
