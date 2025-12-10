@@ -11,6 +11,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useProfile } from '@/hooks/useProfile';
 import { useRadioBoss } from '@/hooks/useRadioBoss';
+import { Skeleton } from '@/components/ui/skeleton';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,21 +30,6 @@ const Navigation = () => {
   const { profile } = useProfile(user?.id);
   const navigate = useNavigate();
   const location = useLocation();
-  const track = nowPlaying ?? {
-    title: 'Extraterrestrial Radio',
-    artist: 'HEADY.FM',
-    album: null,
-    album_art_url: '/fallback-album-art.png',
-    artwork_id: null,
-  };
-  const fallbackAlbumArt = '/fallback-album-art.png';
-  const fallbackTrack = {
-    title: 'Extraterrestrial Radio',
-    artist: 'HEADY.FM',
-    album: null,
-    album_art_url: fallbackAlbumArt,
-    artwork_id: null,
-  };
 
   const handleSignOut = async () => {
     await signOut();
@@ -100,34 +86,34 @@ const Navigation = () => {
             </Button>
 
             {/* Current Track */}
-            <div className="flex-1 min-w-0 border-l-2 border-white/30 pl-6 flex items-center gap-3">
-              <AlbumArtImage
-                key={`nav-${track.title}-${track.artist}`}
-                url={track.album_art_url}
-                artworkId={track.artwork_id}
-                artist={track.artist}
-                title={track.title}
-                alt={`${track.title} album art`}
-                className="w-12 h-12 rounded-md flex-shrink-0"
-              />
-              <div className="min-w-0 flex-1">
-                <div className="mb-1">
-                  <div className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full bg-green-500/20 border border-green-500">
-                    <span className="relative flex h-2 w-2">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                    </span>
-                    <span className="text-green-500 font-bold text-[10px] uppercase tracking-wider">LIVE</span>
+            {nowPlaying ? (
+              <div className="flex-1 min-w-0 border-l-2 border-white/30 pl-6 flex items-center gap-3">
+                <AlbumArtImage
+                  key={`nav-${nowPlaying.title}-${nowPlaying.artist}`}
+                  url={nowPlaying.album_art_url}
+                  artworkId={nowPlaying.artwork_id}
+                  artist={nowPlaying.artist}
+                  title={nowPlaying.title}
+                  alt={`${nowPlaying.title} album art`}
+                  className="w-12 h-12 rounded-md flex-shrink-0"
+                />
+                <div className="min-w-0 flex-1">
+                  <div className="mb-1">
+                    <div className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full bg-green-500/20 border border-green-500">
+                      <span className="relative flex h-2 w-2">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                      </span>
+                      <span className="text-green-500 font-bold text-[10px] uppercase tracking-wider">LIVE</span>
+                    </div>
+                  </div>
+                  <div className="text-sm font-bold text-white truncate">
+                    {nowPlaying.title}
+                  </div>
+                  <div className="text-xs text-white truncate" style={{ opacity: 0.9 }}>
+                    {nowPlaying.artist}
                   </div>
                 </div>
-                <div className="text-sm font-bold text-white truncate">
-                  {track.title}
-                </div>
-                <div className="text-xs text-white truncate" style={{ opacity: 0.9 }}>
-                  {track.artist}
-                </div>
-              </div>
-              {nowPlaying && (
                 <SaveSongButton
                   artist={nowPlaying.artist}
                   title={nowPlaying.title}
@@ -137,9 +123,29 @@ const Navigation = () => {
                   variant="ghost"
                   size="icon"
                 />
-              )}
-              
-            </div>
+                
+              </div>
+            ) : (
+              <div className="flex-1 min-w-0 border-l-2 border-white/30 pl-6 flex items-center gap-3">
+                <div className="w-12 h-12 rounded-md bg-white/10 animate-pulse flex-shrink-0" aria-hidden="true" />
+                <div className="min-w-0 flex-1">
+                  <div className="mb-1">
+                    <div className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full bg-white/15 border border-white/20">
+                      <span className="relative flex h-2 w-2">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-50"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+                      </span>
+                      <span className="text-white/80 font-bold text-[10px] uppercase tracking-wider">Loading</span>
+                    </div>
+                  </div>
+                  <div className="space-y-1.5">
+                    <Skeleton className="h-4 w-40 bg-white/20" />
+                    <Skeleton className="h-3 w-28 bg-white/20" />
+                  </div>
+                </div>
+                <div className="w-9 h-9 rounded-full bg-white/10 animate-pulse" aria-hidden="true" />
+              </div>
+            )}
 
             {/* Volume Control */}
             <div className="relative">
@@ -390,30 +396,47 @@ const Navigation = () => {
               )}
             </Button>
 
-            <div className="p-4 bg-white/10 rounded-xl flex items-center gap-3">
-              <AlbumArtImage
-                key={`nav-mobile-${track.title}-${track.artist}`}
-                url={track.album_art_url}
-                artworkId={track.artwork_id}
-                artist={track.artist}
-                title={track.title}
-                alt={`${track.title} album art`}
-                className="w-16 h-16 rounded-md flex-shrink-0"
-              />
-              <div className="flex-1 min-w-0">
-                <div className="mb-2">
-                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-500/20 border border-green-500">
-                    <span className="relative flex h-2.5 w-2.5">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
-                    </span>
-                    <span className="text-green-500 font-bold text-xs uppercase tracking-wider">LIVE</span>
+            {nowPlaying ? (
+              <div className="p-4 bg-white/10 rounded-xl flex items-center gap-3">
+                <AlbumArtImage
+                  key={`nav-mobile-${nowPlaying.title}-${nowPlaying.artist}`}
+                  url={nowPlaying.album_art_url}
+                  artworkId={nowPlaying.artwork_id}
+                  artist={nowPlaying.artist}
+                  title={nowPlaying.title}
+                  alt={`${nowPlaying.title} album art`}
+                  className="w-16 h-16 rounded-md flex-shrink-0"
+                />
+                <div className="flex-1 min-w-0">
+                  <div className="mb-2">
+                    <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-500/20 border border-green-500">
+                      <span className="relative flex h-2.5 w-2.5">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
+                      </span>
+                      <span className="text-green-500 font-bold text-xs uppercase tracking-wider">LIVE</span>
+                    </div>
                   </div>
+                  <div className="text-sm font-bold text-white">{nowPlaying.title}</div>
+                  <div className="text-xs text-white" style={{ opacity: 0.9 }}>{nowPlaying.artist}</div>
                 </div>
-                <div className="text-sm font-bold text-white">{track.title}</div>
-                <div className="text-xs text-white" style={{ opacity: 0.9 }}>{track.artist}</div>
               </div>
-            </div>
+            ) : (
+              <div className="p-4 bg-white/10 rounded-xl flex items-center gap-3">
+                <div className="w-16 h-16 rounded-md bg-white/10 animate-pulse flex-shrink-0" aria-hidden="true" />
+                <div className="flex-1 min-w-0 space-y-2">
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/15 border border-white/20 w-fit">
+                    <span className="relative flex h-2.5 w-2.5">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-50"></span>
+                      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-white"></span>
+                    </span>
+                    <span className="text-white/80 font-bold text-xs uppercase tracking-wider">Loading</span>
+                  </div>
+                  <Skeleton className="h-4 w-40 bg-white/20" />
+                  <Skeleton className="h-3 w-28 bg-white/20" />
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
