@@ -9,27 +9,30 @@ export const FeaturesSection = () => {
   const features = [
     {
       icon: Radio,
-      title: 'NO COMMERCIALS, EVER',
-      description: 'Thank you to our generous supporters — we can operate without ads.',
-      cta: false,
-    },
-    {
-      icon: Bookmark,
-      title: 'NO SUBSCRIPTION FEE',
-      description: 'We don’t charge any monthly fees for our stream.',
+      title: 'Tune In, Trip Out.',
+      description:
+        'One continuous stream. Indie, rock, electronica, classics — always on, always ad-free. For focus, flow, or just zoning out. No decisions required.',
       cta: false,
     },
     {
       icon: BotOff,
-      title: 'EXPERTLY CURATED BY HUMANS, NOT ROBOTS',
-      description: 'Real humans, real curation. Hear what your algorithm hides and get beyond bot-built playlists.',
+      title: 'Made By People, Not Algorithms.',
+      description:
+        'Every track is chosen by humans, not an algorithm. Hear the artists and songs that never make it into your usual feeds.',
+      cta: false,
+    },
+    {
+      icon: Bookmark,
+      title: 'Free. Forever.',
+      description:
+        'No subscription. No trial. No hidden limits. Just press play.',
       cta: false,
     },
     {
       icon: Compass,
-      title: 'Top Recommendation by TuneIn',
+      title: 'Recognized Worldwide.',
       description:
-        'TuneIn ranks HEADY among top indie stations worldwide, alongside legendary broadcasters KCRW, KEXP, and Triple J.',
+        'On TuneIn’s featured Indie stations, HEADY sits alongside KCRW, KEXP, and Triple J, some of the most respected indie stations in the world.',
       cta: false,
     },
   ];
@@ -40,10 +43,10 @@ export const FeaturesSection = () => {
         {/* Header */}
         <div className="text-center mb-12 lg:mb-16">
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-tight mb-4" style={{ color: '#4a148c' }}>
-            THE BEST FU**KING INDIE ROCK STATION IN THE WORLD
+            EXPERIENCE THE MIND-ALTERING EFFECTS OF EXTRATERRESTRIAL RADIO
           </h2>
           <p className="text-lg md:text-xl text-muted-foreground max-w-4xl mx-auto font-medium">
-            Experience the mind altering effects of Extraterrestrial Radio. Stream commercial-free music 24/7 on HEADY.FM. Discover underground music, your favorite tracks, emerging artists, and deep cuts without interruptions.
+            Stream commercial-free music 24/7 on HEADY.FM. Discover underground music, your favorite tracks, emerging artists, and deep cuts without interruptions.
           </p>
         </div>
 
