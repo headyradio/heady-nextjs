@@ -21,7 +21,8 @@ interface Show {
   time: string;
   day: string;
   genre: string[];
-  imageUrl: string;
+  imageUrl: string;      // fallback (PNG)
+  webpUrl?: string;      // preferred modern format hosted in /public/assets
 }
 
 const FEATURED_SHOWS: Show[] = [
@@ -34,6 +35,7 @@ const FEATURED_SHOWS: Show[] = [
     day: 'Fridays',
     genre: ['Electronic', 'House', 'Deep House'],
     imageUrl: rouxbaisImage,
+    webpUrl: '/assets/card1-rouxbais.webp',
   },
   {
     id: '2',
@@ -44,6 +46,7 @@ const FEATURED_SHOWS: Show[] = [
     day: 'Fridays',
     genre: ['Electronic', 'House', 'Tech House'],
     imageUrl: daleImage,
+    webpUrl: '/assets/card2-dale.webp',
   },
   {
     id: '3',
@@ -54,6 +57,7 @@ const FEATURED_SHOWS: Show[] = [
     day: '',
     genre: ['Ad-Free Radio', 'Community Supported'],
     imageUrl: adFreeHeadyImage,
+    webpUrl: '/assets/card3-heady.webp',
   },
 ];
 
@@ -104,17 +108,25 @@ export const HeroCarousel = () => {
             {FEATURED_SHOWS.map((show, index) => (
               <CarouselItem key={show.id} className="pt-0 h-[80vh] min-h-[600px]">
                 <div className="relative w-full h-full overflow-hidden group">
-                  {/* Background Image with Parallax & Scale Effect */}
-                  <div 
-                    className="absolute inset-0 bg-cover bg-center transition-all ease-out scale-100 group-hover:scale-105"
-                    style={{ 
-                      backgroundImage: `url(${show.imageUrl})`,
-                      transform: current === index ? 'scale(1)' : 'scale(1.1)',
-                      transitionDuration: '1500ms',
-                    }}
-                    role="img"
-                    aria-label={`Background image for ${show.title}`}
-                  />
+                  {/* Hero art as real image (lazy on non-first slide) */}
+                  <picture className="absolute inset-0">
+                    {show.webpUrl && (
+                      <source srcSet={show.webpUrl} type="image/webp" />
+                    )}
+                    <img
+                      src={show.imageUrl}
+                      alt={`Background image for ${show.title}`}
+                      loading={index === 0 ? 'eager' : 'lazy'}
+                      fetchPriority={index === 0 ? 'high' : 'auto'}
+                      decoding="async"
+                      className="w-full h-full object-cover transition-all ease-out group-hover:scale-105"
+                      style={{
+                        transform: current === index ? 'scale(1)' : 'scale(1.1)',
+                        transitionDuration: '1500ms',
+                      }}
+                      sizes="(max-width: 768px) 100vw, (max-width: 1280px) 75vw, 1200px"
+                    />
+                  </picture>
                   
                   {/* Animated Overlay */}
                   <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80 transition-opacity duration-700" 
