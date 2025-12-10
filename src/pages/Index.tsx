@@ -125,7 +125,7 @@ const Index = () => {
           <ScrollArea className="h-[calc(100vh-180px)]">
             <div className="px-4 py-6">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-2xl font-black uppercase tracking-tight">Transmission History</h2>
+              <h2 className="text-2xl font-black uppercase tracking-tight">PLAYLIST</h2>
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -459,7 +459,7 @@ const Index = () => {
           {/* Section Header */}
           <div className="mb-6 md:mb-8 flex items-center justify-between">
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-black uppercase tracking-tight">
-              Transmission History
+              PLAYLIST
             </h2>
             <TooltipProvider>
               <Tooltip>

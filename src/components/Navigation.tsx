@@ -6,7 +6,7 @@ import { useGlobalAudioPlayer } from '@/contexts/AudioPlayerContext';
 import { AlbumArtImage } from '@/components/AlbumArtImage';
 import SaveSongButton from '@/components/SaveSongButton';
 import headyLogo from '@/assets/heady-logo.svg';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useProfile } from '@/hooks/useProfile';
@@ -28,6 +28,22 @@ const Navigation = () => {
   const { user, signOut } = useAuth();
   const { profile } = useProfile(user?.id);
   const navigate = useNavigate();
+  const location = useLocation();
+  const track = nowPlaying ?? {
+    title: 'Extraterrestrial Radio',
+    artist: 'HEADY.FM',
+    album: null,
+    album_art_url: '/fallback-album-art.png',
+    artwork_id: null,
+  };
+  const fallbackAlbumArt = '/fallback-album-art.png';
+  const fallbackTrack = {
+    title: 'Extraterrestrial Radio',
+    artist: 'HEADY.FM',
+    album: null,
+    album_art_url: fallbackAlbumArt,
+    artwork_id: null,
+  };
 
   const handleSignOut = async () => {
     await signOut();
@@ -39,6 +55,15 @@ const Navigation = () => {
     if (el) {
       el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
+  };
+
+  const goToSection = (id: string) => {
+    if (location.pathname !== '/') {
+      navigate('/');
+      setTimeout(() => scrollToId(id), 300);
+      return;
+    }
+    scrollToId(id);
   };
 
   return (
@@ -60,7 +85,8 @@ const Navigation = () => {
               size="icon"
               variant="default"
               aria-label={audioPlayer.isPlaying ? "Stop audio stream" : "Play audio stream"}
-              className="relative overflow-hidden w-14 h-14 rounded-full"
+              className="relative overflow-hidden w-14 h-14 rounded-full border-2 shadow-lg hover:opacity-90 transition"
+              style={{ backgroundColor: '#288b5a', borderColor: '#288b5a' }}
               disabled={audioPlayer.isBuffering}
             >
               {audioPlayer.isPlaying ? (
@@ -69,39 +95,39 @@ const Navigation = () => {
                 <Play className="h-6 w-6 text-white fill-white" aria-hidden="true" />
               )}
               {audioPlayer.connectionStatus === 'streaming' && (
-                <div className="absolute inset-0 bg-primary/20 animate-pulse rounded-full" aria-hidden="true" />
+                <div className="absolute inset-0 bg-[rgba(40,139,90,0.24)] animate-pulse rounded-full" aria-hidden="true" />
               )}
             </Button>
 
             {/* Current Track */}
-            {nowPlaying && (
-              <div className="flex-1 min-w-0 border-l-2 border-white/30 pl-6 flex items-center gap-3">
-                <AlbumArtImage
-                  key={`nav-${nowPlaying.title}-${nowPlaying.artist}`}
-                  url={nowPlaying.album_art_url}
-                  artworkId={nowPlaying.artwork_id}
-                  artist={nowPlaying.artist}
-                  title={nowPlaying.title}
-                  alt={`${nowPlaying.title} album art`}
-                  className="w-12 h-12 rounded-md flex-shrink-0"
-                />
-                <div className="min-w-0 flex-1">
-                  <div className="mb-1">
-                    <div className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full bg-green-500/20 border border-green-500">
-                      <span className="relative flex h-2 w-2">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                      </span>
-                      <span className="text-green-500 font-bold text-[10px] uppercase tracking-wider">LIVE</span>
-                    </div>
-                  </div>
-                  <div className="text-sm font-bold text-white truncate">
-                    {nowPlaying.title}
-                  </div>
-                  <div className="text-xs text-white truncate" style={{ opacity: 0.9 }}>
-                    {nowPlaying.artist}
+            <div className="flex-1 min-w-0 border-l-2 border-white/30 pl-6 flex items-center gap-3">
+              <AlbumArtImage
+                key={`nav-${track.title}-${track.artist}`}
+                url={track.album_art_url}
+                artworkId={track.artwork_id}
+                artist={track.artist}
+                title={track.title}
+                alt={`${track.title} album art`}
+                className="w-12 h-12 rounded-md flex-shrink-0"
+              />
+              <div className="min-w-0 flex-1">
+                <div className="mb-1">
+                  <div className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full bg-green-500/20 border border-green-500">
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                    </span>
+                    <span className="text-green-500 font-bold text-[10px] uppercase tracking-wider">LIVE</span>
                   </div>
                 </div>
+                <div className="text-sm font-bold text-white truncate">
+                  {track.title}
+                </div>
+                <div className="text-xs text-white truncate" style={{ opacity: 0.9 }}>
+                  {track.artist}
+                </div>
+              </div>
+              {nowPlaying && (
                 <SaveSongButton
                   artist={nowPlaying.artist}
                   title={nowPlaying.title}
@@ -111,9 +137,9 @@ const Navigation = () => {
                   variant="ghost"
                   size="icon"
                 />
-                
-              </div>
-            )}
+              )}
+              
+            </div>
 
             {/* Volume Control */}
             <div className="relative">
@@ -249,7 +275,7 @@ const Navigation = () => {
             variant="ghost"
             size="sm"
             className="px-3 font-semibold hover:bg-white/10"
-            onClick={() => scrollToId('transmission-history')}
+            onClick={() => goToSection('transmission-history')}
             aria-label="Jump to Transmission History"
           >
             Playlist
@@ -258,7 +284,7 @@ const Navigation = () => {
             variant="ghost"
             size="sm"
             className="px-3 font-semibold hover:bg-white/10"
-            onClick={() => scrollToId('hot-40-section')}
+            onClick={() => goToSection('hot-40-section')}
             aria-label="Jump to HEADY HOT 40"
           >
             HOT 40 🔥
@@ -276,7 +302,7 @@ const Navigation = () => {
             variant="ghost"
             size="sm"
             className="px-3 font-semibold hover:bg-white/10"
-            onClick={() => scrollToId('support-section')}
+            onClick={() => goToSection('support-section')}
             aria-label="Jump to Support section"
           >
             Support
@@ -364,32 +390,30 @@ const Navigation = () => {
               )}
             </Button>
 
-            {nowPlaying && (
-              <div className="p-4 bg-white/10 rounded-xl flex items-center gap-3">
-                <AlbumArtImage
-                  key={`nav-mobile-${nowPlaying.title}-${nowPlaying.artist}`}
-                  url={nowPlaying.album_art_url}
-                  artworkId={nowPlaying.artwork_id}
-                  artist={nowPlaying.artist}
-                  title={nowPlaying.title}
-                  alt={`${nowPlaying.title} album art`}
-                  className="w-16 h-16 rounded-md flex-shrink-0"
-                />
-                <div className="flex-1 min-w-0">
-                  <div className="mb-2">
-                    <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-500/20 border border-green-500">
-                      <span className="relative flex h-2.5 w-2.5">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
-                      </span>
-                      <span className="text-green-500 font-bold text-xs uppercase tracking-wider">LIVE</span>
-                    </div>
+            <div className="p-4 bg-white/10 rounded-xl flex items-center gap-3">
+              <AlbumArtImage
+                key={`nav-mobile-${track.title}-${track.artist}`}
+                url={track.album_art_url}
+                artworkId={track.artwork_id}
+                artist={track.artist}
+                title={track.title}
+                alt={`${track.title} album art`}
+                className="w-16 h-16 rounded-md flex-shrink-0"
+              />
+              <div className="flex-1 min-w-0">
+                <div className="mb-2">
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-500/20 border border-green-500">
+                    <span className="relative flex h-2.5 w-2.5">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
+                    </span>
+                    <span className="text-green-500 font-bold text-xs uppercase tracking-wider">LIVE</span>
                   </div>
-                  <div className="text-sm font-bold text-white">{nowPlaying.title}</div>
-                  <div className="text-xs text-white" style={{ opacity: 0.9 }}>{nowPlaying.artist}</div>
                 </div>
+                <div className="text-sm font-bold text-white">{track.title}</div>
+                <div className="text-xs text-white" style={{ opacity: 0.9 }}>{track.artist}</div>
               </div>
-            )}
+            </div>
           </div>
         )}
       </div>

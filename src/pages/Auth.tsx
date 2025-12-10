@@ -62,18 +62,25 @@ const Auth = () => {
       
       <main className="container mx-auto px-4 py-16 flex items-center justify-center min-h-[calc(100vh-5rem)]">
         <Card className="w-full max-w-md border-bold shadow-2xl">
-          <CardHeader className="space-y-1 bg-gradient-sunrise rounded-t-xl">
-            <CardTitle className="text-3xl font-black text-center uppercase tracking-tight">
-              Welcome to HEADY Radio
+          <CardHeader
+            className="space-y-2 rounded-t-xl px-6 py-6"
+            style={{ backgroundColor: '#4a148c' }}
+          >
+            <CardTitle className="text-3xl font-black text-center uppercase tracking-tight text-white">
+              My HEADY
             </CardTitle>
-            <CardDescription className="text-center text-foreground/80 font-semibold">
+            <p className="text-lg font-semibold text-center text-white/90">Sign in</p>
+            <CardDescription className="text-center text-white/80 font-semibold">
               {emailSent 
                 ? 'Check your email for the magic link'
-                : 'Enter your email to receive a magic link'
+                : 'Enter your email to receive a magic link. You do not need to create a password.'
               }
             </CardDescription>
           </CardHeader>
-          <CardContent className="p-6 md:p-8">
+          <CardContent className="p-6 md:p-8 space-y-4">
+            <p className="text-sm text-center text-muted-foreground">
+              Save tracks so you can add them to your playlist later and participate in chat by signing into My HEADY.
+            </p>
             {!emailSent ? (
               <form onSubmit={handleMagicLink} className="space-y-6">
                 <div className="space-y-2">
@@ -142,6 +149,9 @@ const Auth = () => {
                 </Button>
               </div>
             )}
+            <p className="text-xs text-center text-muted-foreground">
+              We only save your email address, avatar and display name.
+            </p>
           </CardContent>
         </Card>
       </main>
