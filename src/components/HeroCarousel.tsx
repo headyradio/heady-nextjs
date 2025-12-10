@@ -225,7 +225,7 @@ export const HeroCarousel = () => {
                         {index === 2 ? (
                           <a href="/#support-section" aria-label="Support HEADY.FM - Scroll to support section">Support Us</a>
                         ) : (
-                          <Link to="/shows" aria-label={`Learn more about ${show.title}`}>Learn More</Link>
+                          <Link to="/shows" aria-label="Browse all shows">Browse all shows</Link>
                         )}
                       </Button>
                     </div>
