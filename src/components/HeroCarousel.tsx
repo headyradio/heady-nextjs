@@ -27,6 +27,17 @@ interface Show {
 
 const FEATURED_SHOWS: Show[] = [
   {
+    id: '3',
+    title: 'Celebrating 3 Years of Extraterrestrial Radio',
+    description: 'Thank you to our loyal listeners for three fantastic years. Please consider supporting us to continue our mission of playing the universe\'s best indie rock and beyond.',
+    djName: 'HEADY.FM',
+    time: '',
+    day: '',
+    genre: ['Ad-Free Radio', 'Community Supported'],
+    imageUrl: adFreeHeadyImage,
+    webpUrl: '/assets/card3-heady.webp',
+  },
+  {
     id: '1',
     title: 'Night Treats',
     description: 'Late night electronic music journey featuring deep house, progressive house, tech house, and experimental beats.',
@@ -47,17 +58,6 @@ const FEATURED_SHOWS: Show[] = [
     genre: ['Electronic', 'House', 'Tech House'],
     imageUrl: daleImage,
     webpUrl: '/assets/card2-dale.webp',
-  },
-  {
-    id: '3',
-    title: 'Celebrating 3 Years of Extraterrestrial Radio',
-    description: 'Thank you to our loyal listeners for three fantastic years. Please consider supporting us to continue our mission of playing the universe\'s best indie rock and beyond.',
-    djName: 'HEADY.FM',
-    time: '',
-    day: '',
-    genre: ['Ad-Free Radio', 'Community Supported'],
-    imageUrl: adFreeHeadyImage,
-    webpUrl: '/assets/card3-heady.webp',
   },
 ];
 
@@ -222,7 +222,7 @@ export const HeroCarousel = () => {
                           transition: 'all 700ms ease-out',
                         }}
                       >
-                        {index === 2 ? (
+                        {index === 0 ? (
                           <a href="/#support-section" aria-label="Support HEADY.FM - Scroll to support section">Support Us</a>
                         ) : (
                           <Link to="/shows" aria-label="Browse all shows">Browse all shows</Link>

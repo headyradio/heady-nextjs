@@ -180,7 +180,7 @@ export const NowPlaying = ({ transmission, isLive = false }: NowPlayingProps) =>
             </div>
 
             {/* Mobile: Music Service Logos with Save Button */}
-            <div className="md:hidden flex items-center justify-center gap-4 mb-4">
+            <div className="flex md:hidden items-center justify-center gap-4 mb-4">
               <SaveSongButton
                 artist={transmission.artist}
                 title={transmission.title}

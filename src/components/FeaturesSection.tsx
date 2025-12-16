@@ -11,7 +11,7 @@ export const FeaturesSection = () => {
       icon: Radio,
       title: 'Tune In, Trip Out.',
       description:
-        'One continuous stream. Indie, rock, electronica, classics — always on, always ad-free. For focus, flow, or just zoning out. No decisions required.',
+        'One continuous stream. Indie, rock, electronica, classics — always on, always ad-free. For focus, flow, or just zoning out.',
       cta: false,
     },
     {
