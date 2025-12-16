@@ -30,6 +30,8 @@ const AdminShows = lazy(() => import("./pages/AdminShows"));
 const AdminMixtapes = lazy(() => import("./pages/AdminMixtapes"));
 const DonationSuccess = lazy(() => import("./pages/DonationSuccess"));
 const DonationCancelled = lazy(() => import("./pages/DonationCancelled"));
+const Hot40 = lazy(() => import("./pages/Hot40"));
+const PlaylistPage = lazy(() => import("./pages/PlaylistPage"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 // Optimized QueryClient configuration aligned with ISR-like caching strategy
@@ -81,6 +83,8 @@ const App = () => (
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/saved-songs" element={<SavedSongs />} />
+                <Route path="/hot-40" element={<Hot40 />} />
+                <Route path="/playlist" element={<PlaylistPage />} />
                 <Route path="/donation-success" element={<DonationSuccess />} />
                 <Route path="/donation-cancelled" element={<DonationCancelled />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

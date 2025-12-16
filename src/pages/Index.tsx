@@ -19,6 +19,7 @@ import { TransmissionCard } from '@/components/TransmissionCard';
 import { TransmissionCardSkeleton } from '@/components/TransmissionCardSkeleton';
 import { TransmissionSearch } from '@/components/TransmissionSearch';
 import { TransmissionDateTimeFilter } from '@/components/TransmissionDateTimeFilter';
+import { SongCarousel } from '@/components/SongCarousel';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@/components/ui/tooltip';
@@ -39,14 +40,17 @@ const Index = () => {
   const [hotSongsDisplayLimit, setHotSongsDisplayLimit] = useState(10);
   const [isLoadingMoreHot, setIsLoadingMoreHot] = useState(false);
   
+  // Data hooks - capped at 20 for initial load as per plan
   const { data: historyData, isLoading: historyLoading, isFetching, refetch } = useTransmissionHistory({
-    limit: displayLimit,
-    searchQuery,
-    selectedDate,
-    selectedHour,
+    limit: 20, 
+    searchQuery: '',
+    selectedDate: 'all',
+    selectedHour: 'all',
   });
 
-  const { data: hotSongsData, isLoading: hotSongsLoading } = useHotSongs(40);
+  const { data: hotSongsData, isLoading: hotSongsLoading } = useHotSongs(20);
+
+  // ... rest of the component ...
 
   // Update browser tab title with currently playing song
   useEffect(() => {
@@ -377,159 +381,31 @@ const Index = () => {
 
       {/* Desktop: Main Content with Hot Songs and Transmission History */}
       <main className="container mx-auto px-4 pb-8 lg:pb-12 hidden md:block">
-        {/* HEADY HOT 40 Section */}
+        {/* HEADY HOT 40 Section - Desktop Carousel */}
         <section id="hot-40-section" className="mt-8 md:mt-16">
-          {/* Section Header */}
-          <div className="mb-6 md:mb-8">
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-black uppercase tracking-tight">
-              HEADY HOT 40 🔥
-            </h2>
-            <p className="mt-2 text-lg opacity-70">Top tracks from the last 7 days</p>
-          </div>
-
-          {/* Content */}
-          {hotSongsLoading ? (
-            <div className="space-y-4">
-              <div className="flex items-center justify-center gap-2 text-primary">
-                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
-                <span className="font-bold">Loading hot tracks...</span>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {Array.from({ length: 10 }).map((_, i) => (
-                  <TransmissionCardSkeleton key={i} />
-                ))}
-              </div>
-            </div>
-          ) : hotSongsData && hotSongsData.length > 0 ? (
-            <>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
-                {hotSongsData.slice(0, hotSongsDisplayLimit).map((song, index) => (
-                  <div key={song.id} className="relative">
-                    <div className="absolute -top-2 -left-2 z-10 bg-primary text-primary-foreground font-black text-sm px-3 py-1 rounded-full border-2 border-background shadow-lg">
-                      #{index + 1}
-                    </div>
-                    <TransmissionCard transmission={song} index={index} />
-                  </div>
-                ))}
-              </div>
-              
-              {/* Loading More Skeletons */}
-              {isLoadingMoreHot && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 mt-4 md:mt-6 animate-fade-in">
-                  {Array.from({ length: 10 }).map((_, i) => (
-                    <TransmissionCardSkeleton key={`loading-hot-${i}`} />
-                  ))}
-                </div>
-              )}
-              
-              {/* Load More Button */}
-              {hotSongsDisplayLimit < 40 && hotSongsData.length > hotSongsDisplayLimit && (
-                <div className="mt-6 md:mt-8 text-center animate-fade-in">
-                  <Button
-                    onClick={handleLoadMoreHot}
-                    size="lg"
-                    variant="outline"
-                    className="font-bold px-8 group hover-scale"
-                    disabled={isLoadingMoreHot}
-                  >
-                    {isLoadingMoreHot ? (
-                      <>
-                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-current mr-2"></div>
-                        Loading...
-                      </>
-                    ) : (
-                      <>
-                        Load More Hot Tracks
-                        <span className="ml-2 transition-transform group-hover:translate-y-0.5">↓</span>
-                      </>
-                    )}
-                  </Button>
-                </div>
-              )}
-            </>
-          ) : (
-            <div className="border-bold rounded-xl p-12 text-center bg-card">
-              <p className="text-lg opacity-60">No hot tracks available yet</p>
-            </div>
-          )}
+          <SongCarousel
+            title="HEADY HOT 40 🔥"
+            subtitle="Top tracks from the last 7 days"
+            items={hotSongsData || []}
+            isLoading={hotSongsLoading}
+            viewAllLink="/hot-40"
+            viewAllText="Browse Full Chart"
+            numbered={true}
+            limit={20}
+          />
         </section>
 
-        {/* Transmission History Section */}
+        {/* Transmission History Section - Desktop Carousel */}
         <section id="transmission-history" className="mt-16 md:mt-24">
-          {/* Section Header */}
-          <div className="mb-6 md:mb-8 flex items-center justify-between">
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-black uppercase tracking-tight">
-              PLAYLIST
-            </h2>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    onClick={() => refetch()}
-                    variant="outline"
-                    size="sm"
-                    disabled={isFetching}
-                    className="font-bold"
-                  >
-                    <RefreshCw className={`h-4 w-4 mr-2 ${isFetching ? 'animate-spin' : ''}`} />
-                    Refresh
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent className="max-w-xs">
-                  <p className="text-sm">
-                    Not seeing recent updates? Your browser may be displaying cached data. Click the refresh button to load the latest transmission log.
-                  </p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </div>
-
-          {/* Filters */}
-          <div className="mb-4 md:mb-6 flex flex-col gap-3 md:gap-4">
-            <div className="w-full">
-              <TransmissionSearch 
-                value={searchQuery} 
-                onChange={setSearchQuery}
-              />
-            </div>
-            <TransmissionDateTimeFilter
-              selectedDate={selectedDate}
-              selectedHour={selectedHour}
-              onDateChange={setSelectedDate}
-              onHourChange={setSelectedHour}
-            />
-          </div>
-
-          {/* Content */}
-          {historyLoading && !transmissions.length ? (
-            <div className="space-y-4">
-              <div className="flex items-center justify-center gap-2 text-primary">
-                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
-                <span className="font-bold">Loading transmissions...</span>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {Array.from({ length: 12 }).map((_, i) => (
-                  <TransmissionCardSkeleton key={i} />
-                ))}
-              </div>
-            </div>
-          ) : transmissions.length > 0 ? (
-              <TransmissionLog 
-                transmissions={transmissions}
-                displayLimit={displayLimit}
-                isLoadingMore={isLoadingMore}
-                isFetching={isFetching}
-                handleLoadMore={handleLoadMore}
-              />
-          ) : (
-            <div className="border-bold rounded-xl p-12 text-center bg-card">
-              <p className="text-lg opacity-60">
-                {searchQuery || selectedDate !== 'all' || selectedHour !== 'all' 
-                  ? 'No tracks found matching your filters' 
-                  : 'No transmission history yet'}
-              </p>
-            </div>
-          )}
+          <SongCarousel
+            title="PLAYLIST"
+            subtitle="Recently played tracks"
+            items={transmissions}
+            isLoading={historyLoading}
+            viewAllLink="/playlist"
+            viewAllText="Browse Full History"
+            limit={20}
+          />
         </section>
       </main>
 

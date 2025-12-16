@@ -277,24 +277,24 @@ const Navigation = () => {
 
         {/* Secondary desktop nav (inspired by KEXP) */}
         <div className="hidden md:flex items-center gap-6 h-12 text-white border-t border-white/20 mt-2">
-          <Button
-            variant="ghost"
-            size="sm"
-            className="px-3 font-semibold hover:bg-white/10"
-            onClick={() => goToSection('transmission-history')}
-            aria-label="Jump to Transmission History"
-          >
-            Playlist
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="px-3 font-semibold hover:bg-white/10"
-            onClick={() => goToSection('hot-40-section')}
-            aria-label="Jump to HEADY HOT 40"
-          >
-            HOT 40 🔥
-          </Button>
+          <Link to="/playlist" aria-label="Go to Playlist">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="px-3 font-semibold hover:bg-white/10"
+            >
+              Playlist
+            </Button>
+          </Link>
+          <Link to="/hot-40" aria-label="Go to HEADY HOT 40">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="px-3 font-semibold hover:bg-white/10"
+            >
+              HOT 40 🔥
+            </Button>
+          </Link>
           <Link to="/shows" aria-label="Go to Shows page" className="leading-none">
             <Button
               variant="ghost"
