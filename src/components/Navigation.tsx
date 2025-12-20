@@ -206,12 +206,12 @@ const Navigation = () => {
 
       {/* Now Playing Ticker Bar - Desktop */}
       <div className="hidden md:block bg-[#2d1b4e] border-t border-white/10">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center h-11 gap-4">
+        <div className="container mx-auto">
+          <div className="flex items-center h-11">
             {/* Play/Stop Button */}
             <Button
               onClick={audioPlayer.togglePlay}
-              className="h-11 px-6 rounded-none bg-green-500 hover:bg-green-600 text-white flex-shrink-0 border-r border-white/10"
+              className="h-11 px-6 rounded-none bg-[#2d5016] hover:bg-[#3a6b1f] text-white flex-shrink-0 border-r border-white/10"
               disabled={audioPlayer.isBuffering}
             >
               {audioPlayer.isPlaying ? (
@@ -221,16 +221,18 @@ const Navigation = () => {
               )}
             </Button>
 
-            {/* LIVE Badge */}
-            <div className="flex items-center gap-2 pr-4 border-r border-white/20">
-              <div className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full bg-green-500/20 border border-green-500">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                </span>
-                <span className="text-green-500 font-bold text-[10px] uppercase tracking-wider">LIVE</span>
+            {/* Container for rest of content with padding */}
+            <div className="flex items-center flex-1 px-4 gap-4">
+              {/* LIVE Badge */}
+              <div className="flex items-center gap-2 pr-4 border-r border-white/20">
+                <div className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full bg-green-500/20 border border-green-500">
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                  </span>
+                  <span className="text-green-500 font-bold text-[10px] uppercase tracking-wider">LIVE</span>
+                </div>
               </div>
-            </div>
 
             {/* Now Playing Info */}
             {nowPlaying ? (
@@ -318,6 +320,7 @@ const Navigation = () => {
                   />
                 </div>
               )}
+            </div>
             </div>
           </div>
         </div>
