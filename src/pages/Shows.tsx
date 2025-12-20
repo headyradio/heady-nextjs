@@ -3,16 +3,14 @@ import { SEO } from "@/components/SEO";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Clock, Radio } from "lucide-react";
-import rouxbaisImage from "@/assets/rouxbais.png";
-import daleImage from "@/assets/dale.png";
 
 const Shows = () => {
   const nightTreatsShow = {
     title: "Night Treats",
     description: "Late night electronic music journey featuring deep house, progressive house, tech house, and experimental beats.",
     djs: [
-      { name: "Rouxbais", image: rouxbaisImage },
-      { name: "Dale", image: daleImage }
+      { name: "Rouxbais", image: "/assets/card1-rouxbais.webp" },
+      { name: "Dale", image: "/assets/card2-dale.webp" }
     ],
     airTime: "Friday at 10:00 PM ET",
     replays: [

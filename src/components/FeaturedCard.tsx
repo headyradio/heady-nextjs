@@ -1,8 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Calendar, Clock, User, Headphones } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import rouxbaisImage from '@/assets/rouxbais.png';
-import daleImage from '@/assets/dale.png';
 
 export const FeaturedCard = () => {
   return (

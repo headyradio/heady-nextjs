@@ -25,8 +25,6 @@ import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@/components/ui/tooltip';
 import { RefreshCw } from 'lucide-react';
-import rouxbaisImage from '@/assets/rouxbais.png';
-import daleImage from '@/assets/dale.png';
 
 const Index = () => {
   const [mobileTab, setMobileTab] = useState<'player' | 'history' | 'hot40' | 'shows' | 'support'>('player');
@@ -299,17 +297,23 @@ const Index = () => {
                     <div className="flex gap-4">
                       <div className="flex items-center gap-3">
                         <img 
-                          src={rouxbaisImage} 
+                          src="/assets/card1-rouxbais.webp" 
                           alt="Rouxbais"
                           className="w-16 h-16 rounded-full object-cover border-2 border-primary/20"
+                          loading="lazy"
+                          width="64"
+                          height="64"
                         />
                         <p className="font-bold text-white">Rouxbais</p>
                       </div>
                       <div className="flex items-center gap-3">
                         <img 
-                          src={daleImage} 
+                          src="/assets/card2-dale.webp" 
                           alt="Dale"
                           className="w-16 h-16 rounded-full object-cover border-2 border-primary/20"
+                          loading="lazy"
+                          width="64"
+                          height="64"
                         />
                         <p className="font-bold text-white">Dale</p>
                       </div>

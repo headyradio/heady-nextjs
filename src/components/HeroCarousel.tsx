@@ -9,9 +9,6 @@ import {
 } from '@/components/ui/carousel';
 import Autoplay from 'embla-carousel-autoplay';
 import { Link } from 'react-router-dom';
-import rouxbaisImage from '@/assets/rouxbais.png';
-import daleImage from '@/assets/dale.png';
-import adFreeHeadyImage from '@/assets/ad-free-heady.png';
 
 interface Show {
   id: string;
@@ -21,8 +18,7 @@ interface Show {
   time: string;
   day: string;
   genre: string[];
-  imageUrl: string;      // fallback (PNG)
-  webpUrl?: string;      // preferred modern format hosted in /public/assets
+  imageUrl: string;      // WebP path in /public/assets
 }
 
 const FEATURED_SHOWS: Show[] = [
@@ -34,8 +30,7 @@ const FEATURED_SHOWS: Show[] = [
     time: '',
     day: '',
     genre: ['Ad-Free Radio', 'Community Supported'],
-    imageUrl: adFreeHeadyImage,
-    webpUrl: '/assets/card3-heady.webp',
+    imageUrl: '/assets/card3-heady.webp',
   },
   {
     id: '1',
@@ -45,8 +40,7 @@ const FEATURED_SHOWS: Show[] = [
     time: '10:00 PM ET',
     day: 'Fridays',
     genre: ['Electronic', 'House', 'Deep House'],
-    imageUrl: rouxbaisImage,
-    webpUrl: '/assets/card1-rouxbais.webp',
+    imageUrl: '/assets/card1-rouxbais.webp',
   },
   {
     id: '2',
@@ -56,8 +50,7 @@ const FEATURED_SHOWS: Show[] = [
     time: '10:00 PM ET',
     day: 'Fridays',
     genre: ['Electronic', 'House', 'Tech House'],
-    imageUrl: daleImage,
-    webpUrl: '/assets/card2-dale.webp',
+    imageUrl: '/assets/card2-dale.webp',
   },
 ];
 
@@ -110,9 +103,7 @@ export const HeroCarousel = () => {
                 <div className="relative w-full h-full overflow-hidden group">
                   {/* Hero art as real image (lazy on non-first slide) */}
                   <picture className="absolute inset-0">
-                    {show.webpUrl && (
-                      <source srcSet={show.webpUrl} type="image/webp" />
-                    )}
+                    <source srcSet={show.imageUrl} type="image/webp" />
                     <img
                       src={show.imageUrl}
                       alt={`Background image for ${show.title}`}

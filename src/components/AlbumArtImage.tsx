@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Play } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
-import headyFallback from '@/assets/heady-fallback.png';
 
 interface AlbumArtImageProps {
   url?: string | null;
@@ -157,11 +156,13 @@ export const AlbumArtImage = ({
     return (
       <div className={fallbackClassName}>
         <img
-          src={headyFallback}
+          src="/assets/card3-heady.webp"
           alt="HEADY Radio"
           className={className}
           loading="lazy"
           decoding="async"
+          width="300"
+          height="300"
         />
       </div>
     );
