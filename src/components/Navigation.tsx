@@ -110,25 +110,6 @@ const Navigation = () => {
 
             {/* Right: Actions */}
             <div className="flex items-center gap-2">
-              {/* Listen Live Button - Desktop */}
-              <Button
-                onClick={audioPlayer.togglePlay}
-                className="hidden md:inline-flex items-center gap-2 bg-transparent border border-white/30 hover:bg-white/10 text-white font-medium px-4 h-9"
-                disabled={audioPlayer.isBuffering}
-              >
-                {audioPlayer.isPlaying ? (
-                  <>
-                    <Square className="h-4 w-4 fill-current" />
-                    <span className="text-sm">Stop</span>
-                  </>
-                ) : (
-                  <>
-                    <Play className="h-4 w-4 fill-current" />
-                    <span className="text-sm">Listen Live</span>
-                  </>
-                )}
-              </Button>
-
               {/* Support Button - Desktop */}
               <Button
                 onClick={() => setSupportDialogOpen(true)}
@@ -227,6 +208,20 @@ const Navigation = () => {
       <div className="hidden md:block bg-[#2d1b4e] border-t border-white/10">
         <div className="container mx-auto px-4">
           <div className="flex items-center h-11 gap-4">
+            {/* Play/Stop Button */}
+            <Button
+              onClick={audioPlayer.togglePlay}
+              size="icon"
+              className="h-8 w-8 rounded-full bg-green-500 hover:bg-green-600 text-white flex-shrink-0"
+              disabled={audioPlayer.isBuffering}
+            >
+              {audioPlayer.isPlaying ? (
+                <Square className="h-4 w-4 fill-current" />
+              ) : (
+                <Play className="h-4 w-4 fill-current ml-0.5" />
+              )}
+            </Button>
+
             {/* LIVE Badge */}
             <div className="flex items-center gap-2 pr-4 border-r border-white/20">
               <div className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full bg-green-500/20 border border-green-500">
