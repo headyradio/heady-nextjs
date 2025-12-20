@@ -12,6 +12,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useProfile } from '@/hooks/useProfile';
 import { useRadioBoss } from '@/hooks/useRadioBoss';
 import { Skeleton } from '@/components/ui/skeleton';
+import { SupportSidebar } from '@/components/SupportSidebar';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,11 +20,18 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 
 const Navigation = () => {
   const { nowPlaying, isLive } = useRadioBoss();
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
   const [volumeOpen, setVolumeOpen] = React.useState(false);
+  const [supportDialogOpen, setSupportDialogOpen] = React.useState(false);
   
   const audioPlayer = useGlobalAudioPlayer();
   const { user, signOut } = useAuth();
@@ -265,7 +273,7 @@ const Navigation = () => {
                   size="sm"
                   className="hidden sm:flex text-white hover:bg-white/20"
                 >
-                  Sign In
+                  Sign In / Sign Up
                 </Button>
               </Link>
             )}
@@ -318,8 +326,8 @@ const Navigation = () => {
             variant="ghost"
             size="sm"
             className="px-3 font-semibold hover:bg-white/10"
-            onClick={() => goToSection('support-section')}
-            aria-label="Jump to Support section"
+            onClick={() => setSupportDialogOpen(true)}
+            aria-label="Open support dialog"
           >
             Support
           </Button>
@@ -382,7 +390,7 @@ const Navigation = () => {
             ) : (
               <Link to="/auth" onClick={() => setMobileMenuOpen(false)}>
                 <Button variant="outline" size="lg" className="w-full">
-                  Sign In
+                  Sign In / Sign Up
                 </Button>
               </Link>
             )}
@@ -450,6 +458,16 @@ const Navigation = () => {
           </div>
         )}
       </div>
+
+      {/* Support Dialog */}
+      <Dialog open={supportDialogOpen} onOpenChange={setSupportDialogOpen}>
+        <DialogContent className="sm:max-w-md bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 border-white/20">
+          <DialogHeader>
+            <DialogTitle className="sr-only">Support HEADY.FM</DialogTitle>
+          </DialogHeader>
+          <SupportSidebar />
+        </DialogContent>
+      </Dialog>
     </nav>
   );
 };
