@@ -1,9 +1,7 @@
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { User, ExternalLink, Sparkles, Instagram, Twitter, Facebook, Radio, Calendar } from "lucide-react";
+import { User, ExternalLink, Instagram, Twitter, Facebook, Radio, Calendar, TrendingUp, Music } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useLastfmArtistData } from "@/hooks/useLastfmArtistData";
+import { useCombinedArtistData } from "@/hooks/useCombinedArtistData";
 
 interface AboutTheArtistProps {
   artistName: string;
@@ -29,158 +27,189 @@ interface AboutTheArtistProps {
 }
 
 export const AboutTheArtist = ({ artistName, geniusData, aiContent, headyStats }: AboutTheArtistProps) => {
-  const { data: lastfmData } = useLastfmArtistData(artistName);
-  const description = geniusData?.description?.plain || aiContent;
+  const artistData = useCombinedArtistData(artistName);
+  const description = artistData.bio || geniusData?.description?.plain || aiContent;
   const isFromGenius = Boolean(geniusData?.description?.plain);
+  const artistImage = artistData.image;
 
   return (
     <div className="space-y-6">
-      <h2 className="text-3xl font-bold">About the Artist</h2>
+      <div className="flex items-center gap-3">
+        <div className="p-2 rounded-xl bg-white/5 border border-white/10">
+          <User className="w-5 h-5 text-primary" />
+        </div>
+        <h2 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tight">About the Artist</h2>
+      </div>
 
-      <div className="grid md:grid-cols-[1fr_300px] gap-6">
-        {/* Artist Bio */}
-        <Card className="p-6">
-          {lastfmData?.image_url && (
-            <div className="float-right ml-4 mb-4 w-48 h-48">
-              <img 
-                src={lastfmData.image_url} 
-                alt={`${artistName} artist photo`}
-                className="w-full h-full object-cover rounded-lg shadow-lg"
-                loading="lazy"
-                decoding="async"
-                width="192"
-                height="192"
-              />
+      <div className="grid md:grid-cols-[1fr_280px] gap-6">
+        {/* Artist Bio Card */}
+        <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 relative overflow-hidden">
+          {/* Artist Image from MusicBrainz */}
+          {artistImage && (
+            <div className="float-right ml-4 mb-4">
+              <div className="w-32 h-32 md:w-40 md:h-40 rounded-xl overflow-hidden ring-2 ring-white/10 shadow-xl">
+                <img 
+                  src={artistImage} 
+                  alt={`${artistName} artist photo`}
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                  decoding="async"
+                  width="160"
+                  height="160"
+                />
+              </div>
             </div>
           )}
           
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-xl font-semibold flex items-center gap-2">
-              <User className="w-5 h-5" />
+            <h3 className="text-xl font-bold text-white flex items-center gap-2">
               {geniusData?.name || artistName}
             </h3>
-            <Badge variant="secondary" className="gap-1">
-              {isFromGenius ? (
-                <>
-                  <ExternalLink className="w-3 h-3" />
-                  Genius
-                </>
-              ) : (
-                <>
-                  <Sparkles className="w-3 h-3" />
-                  AI Generated
-                </>
-              )}
-            </Badge>
+            {isFromGenius && (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-white/70 text-xs border border-white/10">
+                <ExternalLink className="w-3 h-3" />
+                Genius
+              </span>
+            )}
           </div>
 
           {geniusData?.alternate_names && geniusData.alternate_names.length > 0 && (
             <div className="mb-4">
-              <p className="text-sm text-muted-foreground mb-2">Also known as:</p>
+              <p className="text-xs text-white/50 uppercase tracking-wider mb-2">Also known as</p>
               <div className="flex flex-wrap gap-2">
                 {geniusData.alternate_names.map((name, index) => (
-                  <Badge key={index} variant="outline">{name}</Badge>
+                  <span key={index} className="px-2 py-1 rounded-full bg-white/10 text-white/70 text-xs border border-white/10">
+                    {name}
+                  </span>
                 ))}
               </div>
             </div>
           )}
 
           {description && (
-            <div className="prose prose-sm dark:prose-invert max-w-none mb-4">
-              <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
-                {description}
+            <div className="prose prose-sm prose-invert max-w-none mb-4">
+              <p className="text-white/70 leading-relaxed whitespace-pre-line">
+                {(() => {
+                  const cleanBio = description
+                    .replace(/<a[^>]*>.*?<\/a>/gi, '')
+                    .replace(/<[^>]+>/g, '')
+                    .replace(/\s+/g, ' ')
+                    .trim();
+                  return cleanBio.length > 600 ? `${cleanBio.substring(0, 600)}...` : cleanBio;
+                })()}
               </p>
             </div>
           )}
 
           {/* Social Media Links */}
           {geniusData && (geniusData.instagram_name || geniusData.twitter_name || geniusData.facebook_name) && (
-            <div className="flex flex-wrap gap-2 mb-4">
+            <div className="flex flex-wrap gap-2 mb-4 pt-4 border-t border-white/10">
               {geniusData.instagram_name && (
-                <Button variant="outline" size="sm" asChild>
-                  <a href={`https://instagram.com/${geniusData.instagram_name}`} target="_blank" rel="noopener noreferrer">
-                    <Instagram className="w-4 h-4 mr-2" />
-                    Instagram
-                  </a>
-                </Button>
+                <a 
+                  href={`https://instagram.com/${geniusData.instagram_name}`} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-white text-sm hover:from-purple-500/30 hover:to-pink-500/30 transition-colors border border-white/10"
+                  aria-label={`Follow ${artistName} on Instagram`}
+                >
+                  <Instagram className="w-4 h-4" />
+                  Instagram
+                </a>
               )}
               {geniusData.twitter_name && (
-                <Button variant="outline" size="sm" asChild>
-                  <a href={`https://twitter.com/${geniusData.twitter_name}`} target="_blank" rel="noopener noreferrer">
-                    <Twitter className="w-4 h-4 mr-2" />
-                    Twitter
-                  </a>
-                </Button>
+                <a 
+                  href={`https://twitter.com/${geniusData.twitter_name}`} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-white/10 text-white text-sm hover:bg-white/20 transition-colors border border-white/10"
+                  aria-label={`Follow ${artistName} on Twitter`}
+                >
+                  <Twitter className="w-4 h-4" />
+                  Twitter
+                </a>
               )}
               {geniusData.facebook_name && (
-                <Button variant="outline" size="sm" asChild>
-                  <a href={`https://facebook.com/${geniusData.facebook_name}`} target="_blank" rel="noopener noreferrer">
-                    <Facebook className="w-4 h-4 mr-2" />
-                    Facebook
-                  </a>
-                </Button>
+                <a 
+                  href={`https://facebook.com/${geniusData.facebook_name}`} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-blue-500/20 text-white text-sm hover:bg-blue-500/30 transition-colors border border-white/10"
+                  aria-label={`Follow ${artistName} on Facebook`}
+                >
+                  <Facebook className="w-4 h-4" />
+                  Facebook
+                </a>
               )}
             </div>
           )}
 
-          {isFromGenius && geniusData?.url && (
-            <a
-              href={geniusData.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-sm text-primary hover:underline"
-            >
-              View full profile on Genius
-              <ExternalLink className="w-4 h-4" />
-            </a>
-          )}
+          <div className="flex flex-wrap gap-3">
+            {isFromGenius && geniusData?.url && (
+              <a
+                href={geniusData.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-sm text-primary hover:text-primary/80 font-medium"
+              >
+                View on Genius
+                <ExternalLink className="w-4 h-4" />
+              </a>
+            )}
+            
+            <Link to={`/artist/${encodeURIComponent(artistName)}`}>
+              <Button 
+                variant="outline" 
+                className="bg-white/10 border-white/20 text-white hover:bg-white/20 hover:text-white"
+              >
+                View Full Artist Page
+              </Button>
+            </Link>
+          </div>
+        </div>
 
-          <Link to={`/artist/${encodeURIComponent(artistName)}`}>
-            <Button className="w-full mt-4" variant="outline">
-              View Full Artist Page
-            </Button>
-          </Link>
-        </Card>
-
-        {/* HEADY Stats */}
-        <Card className="p-6">
-          <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
-            <Radio className="w-5 h-5" />
+        {/* HEADY Stats Card */}
+        <div className="bg-gradient-to-br from-primary/20 via-purple-900/30 to-pink-900/20 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
+          <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
+            <Radio className="w-4 h-4 text-primary" />
             HEADY.FM Stats
           </h3>
 
-          <div className="space-y-4">
-            <div>
-              <p className="text-3xl font-bold text-primary">{headyStats.totalPlays}</p>
-              <p className="text-sm text-muted-foreground">Total Plays</p>
+          <div className="space-y-6">
+            <div className="text-center p-4 rounded-xl bg-white/5 border border-white/10">
+              <TrendingUp className="w-6 h-6 text-primary mx-auto mb-2" />
+              <p className="text-3xl font-black text-white">{headyStats.totalPlays}</p>
+              <p className="text-xs text-white/50 uppercase tracking-wider">Total Plays</p>
             </div>
 
-            <div>
-              <p className="text-3xl font-bold text-primary">{headyStats.uniqueSongs}</p>
-              <p className="text-sm text-muted-foreground">Unique Songs</p>
+            <div className="text-center p-4 rounded-xl bg-white/5 border border-white/10">
+              <Music className="w-6 h-6 text-primary mx-auto mb-2" />
+              <p className="text-3xl font-black text-white">{headyStats.uniqueSongs}</p>
+              <p className="text-xs text-white/50 uppercase tracking-wider">Unique Songs</p>
             </div>
 
-            {headyStats.firstPlayed && (
-              <div className="pt-4 border-t">
-                <div className="flex items-center gap-2 mb-1">
-                  <Calendar className="w-4 h-4 text-muted-foreground" />
-                  <p className="text-sm text-muted-foreground">First Played</p>
+            <div className="space-y-3 pt-4 border-t border-white/10">
+              {headyStats.firstPlayed && (
+                <div className="flex items-center gap-3">
+                  <Calendar className="w-4 h-4 text-white/50" />
+                  <div>
+                    <p className="text-xs text-white/50">First Played</p>
+                    <p className="text-sm font-medium text-white">{new Date(headyStats.firstPlayed).toLocaleDateString()}</p>
+                  </div>
                 </div>
-                <p className="font-medium">{new Date(headyStats.firstPlayed).toLocaleDateString()}</p>
-              </div>
-            )}
+              )}
 
-            {headyStats.lastPlayed && (
-              <div>
-                <div className="flex items-center gap-2 mb-1">
-                  <Calendar className="w-4 h-4 text-muted-foreground" />
-                  <p className="text-sm text-muted-foreground">Last Played</p>
+              {headyStats.lastPlayed && (
+                <div className="flex items-center gap-3">
+                  <Calendar className="w-4 h-4 text-white/50" />
+                  <div>
+                    <p className="text-xs text-white/50">Last Played</p>
+                    <p className="text-sm font-medium text-white">{new Date(headyStats.lastPlayed).toLocaleDateString()}</p>
+                  </div>
                 </div>
-                <p className="font-medium">{new Date(headyStats.lastPlayed).toLocaleDateString()}</p>
-              </div>
-            )}
+              )}
+            </div>
           </div>
-        </Card>
+        </div>
       </div>
     </div>
   );

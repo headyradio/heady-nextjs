@@ -2,20 +2,18 @@ import { useParams } from "react-router-dom";
 import { useSongDetails, useSongContent } from "@/hooks/useSongDetails";
 import { useGeniusSongData } from "@/hooks/useGeniusSongData";
 import { useGeniusArtistData } from "@/hooks/useGeniusArtistData";
-import { useRelatedArtists } from "@/hooks/useRelatedArtists";
 import { useArtistTopSongs } from "@/hooks/useArtistTopSongs";
 import { useArtistDetails } from "@/hooks/useArtistDetails";
 import Navigation from "@/components/Navigation";
 import { SongHeroSection } from "@/components/SongHeroSection";
 import { AboutTheTrack } from "@/components/AboutTheTrack";
 import { AboutTheArtist } from "@/components/AboutTheArtist";
-import { RelatedArtists } from "@/components/RelatedArtists";
 import { MoreFromArtist } from "@/components/MoreFromArtist";
 import { PlayHistoryTimeline } from "@/components/PlayHistoryTimeline";
 import { SongComments } from "@/components/SongComments";
 import { SEO } from "@/components/SEO";
 import { generateMusicKnowledgeGraph, generateBreadcrumbList, convertDurationToISO8601 } from "@/lib/schemaOrgMusicGraph";
-import { getSpotifySearchUrl, getAppleMusicSearchUrl, getYouTubeSearchUrl, getGeniusUrl, getLastfmUrl } from "@/lib/musicServiceLinks";
+import { getSpotifySearchUrl, getYouTubeSearchUrl, getGeniusUrl, getLastfmUrl } from "@/lib/musicServiceLinks";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 
@@ -28,23 +26,16 @@ const SongPage = () => {
   const geniusArtistData = useGeniusArtistData(artist);
   const artistDetails = useArtistDetails(artist);
   
-  const relatedArtists = useRelatedArtists(
-    artist,
-    geniusSongData.data?.featured_artists,
-    geniusSongData.data?.producer_artists,
-    geniusSongData.data?.writer_artists
-  );
-  
   const artistTopSongs = useArtistTopSongs(artist, title, 10);
 
   if (songDetails.isLoading) {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-black">
         <Navigation />
         <div className="container mx-auto px-4 py-8">
-          <Skeleton className="h-8 w-64 mb-8" />
-          <Skeleton className="h-96 w-full mb-8" />
-          <Skeleton className="h-64 w-full mb-8" />
+          <Skeleton className="h-8 w-64 mb-8 bg-white/10" />
+          <Skeleton className="h-96 w-full mb-8 bg-white/10" />
+          <Skeleton className="h-64 w-full mb-8 bg-white/10" />
         </div>
       </div>
     );
@@ -52,14 +43,25 @@ const SongPage = () => {
 
   if (!songDetails.data || songDetails.data.transmissions.length === 0) {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-black">
         <Navigation />
-        <div className="container mx-auto px-4 py-8">
-          <div className="text-center py-16">
-            <h1 className="text-2xl font-bold mb-4">Song Not Found</h1>
-            <p className="text-muted-foreground">
+        <div className="container mx-auto px-4 py-16">
+          <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-12 text-center max-w-lg mx-auto">
+            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary/20 to-purple-500/20 flex items-center justify-center mx-auto mb-6">
+              <svg className="w-10 h-10 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+              </svg>
+            </div>
+            <h1 className="text-2xl font-black text-white mb-3 uppercase tracking-tight">Song Not Found</h1>
+            <p className="text-white/60 mb-6">
               This song hasn't been played on HEADY.FM yet.
             </p>
+            <a 
+              href="/" 
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold transition-all hover:scale-105"
+            >
+              Return Home
+            </a>
           </div>
         </div>
       </div>
@@ -104,7 +106,6 @@ const SongPage = () => {
     albumName: latestTransmission.album || geniusSongData.data?.album?.name || undefined,
     albumImage: geniusSongData.data?.album?.cover_art_url || undefined,
     spotifyUrl: getSpotifySearchUrl(artist, title),
-    appleMusicUrl: getAppleMusicSearchUrl(artist, title),
     youtubeUrl: getYouTubeSearchUrl(artist, title),
     geniusUrl: geniusSongData.data?.url || getGeniusUrl(artist, title),
     lastfmUrl: getLastfmUrl(artist, title),
@@ -130,7 +131,7 @@ const SongPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-black">
       <SEO
         title={`${title} by ${artist}`}
         description={songDescription}
@@ -141,42 +142,50 @@ const SongPage = () => {
         structuredData={structuredData}
       />
       <Navigation />
-      <div className="container mx-auto px-4 py-8 space-y-12">
-        {/* SEO H1 */}
-        <h1 className="sr-only">{title} by {artist} - HEADY.FM</h1>
-        
-        {/* Breadcrumb Navigation */}
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/">Home</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink href={`/artist/${encodeURIComponent(artist)}`}>
-                {artist}
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>{title}</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
+      
+      {/* SEO H1 */}
+      <h1 className="sr-only">{title} by {artist} - HEADY.FM</h1>
+      
+      {/* Breadcrumb Navigation - with purple gradient background */}
+      <div className="bg-gradient-to-b from-[#4a148c] to-purple-900/60">
+        <div className="container mx-auto px-4 pt-6 pb-4">
+          <Breadcrumb>
+            <BreadcrumbList className="text-white/60">
+              <BreadcrumbItem>
+                <BreadcrumbLink href="/" className="text-white/60 hover:text-white">Home</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator className="text-white/40" />
+              <BreadcrumbItem>
+                <BreadcrumbLink href={`/artist/${encodeURIComponent(artist)}`} className="text-white/60 hover:text-white">
+                  {artist}
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator className="text-white/40" />
+              <BreadcrumbItem>
+                <BreadcrumbPage className="text-white">{title}</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+        </div>
+      </div>
 
-        {/* Hero Section */}
-        <SongHeroSection
-          title={title}
-          artist={artist}
-          album={latestTransmission.album}
-          artworkId={latestTransmission.artwork_id}
-          albumArtUrl={latestTransmission.album_art_url}
-          playCount={playCount}
-          uniqueDJs={uniqueDJs}
-          lastPlayed={lastPlayed}
-          genres={latestTransmission.genre ? [latestTransmission.genre] : undefined}
-          createdAt={latestTransmission.created_at}
-        />
+      {/* Hero Section */}
+      <SongHeroSection
+        title={title}
+        artist={artist}
+        album={latestTransmission.album}
+        year={latestTransmission.year}
+        artworkId={latestTransmission.artwork_id}
+        albumArtUrl={latestTransmission.album_art_url}
+        playCount={playCount}
+        uniqueDJs={uniqueDJs}
+        lastPlayed={lastPlayed}
+        genres={latestTransmission.genre ? [latestTransmission.genre] : undefined}
+        createdAt={latestTransmission.created_at}
+      />
+      
+      {/* Content Sections */}
+      <div className="container mx-auto px-4 py-12 space-y-12">
 
         {/* About the Track */}
         <AboutTheTrack
@@ -193,12 +202,6 @@ const SongPage = () => {
           headyStats={headyArtistStats}
         />
 
-        {/* Related Artists */}
-        <RelatedArtists
-          artists={relatedArtists.data || []}
-          isLoading={relatedArtists.isLoading}
-        />
-
         {/* More from Artist */}
         <MoreFromArtist
           artistName={artist}
@@ -206,20 +209,20 @@ const SongPage = () => {
           isLoading={artistTopSongs.isLoading}
         />
 
-        {/* Play History Timeline */}
-        <PlayHistoryTimeline transmissions={transmissions} />
+        {/* Play History Timeline - Last 5 plays only */}
+        <PlayHistoryTimeline transmissions={transmissions.slice(0, 5)} />
 
         {/* Comments Section */}
         <div className="space-y-6">
-          <h2 className="text-3xl font-bold">Community</h2>
+          <h2 className="text-3xl font-bold text-white">Community</h2>
           <SongComments artist={artist} title={title} />
         </div>
-
-        {/* Footer */}
-        <footer className="pt-8 border-t text-center text-sm text-muted-foreground">
-          <p>© {new Date().getFullYear()} HEADY Radio. All transmissions received and logged.</p>
-        </footer>
       </div>
+
+      {/* Footer */}
+      <footer className="container mx-auto px-4 py-12 border-t border-white/10 text-center text-sm text-white/50">
+        <p>© {new Date().getFullYear()} HEADY Radio. All transmissions received and logged.</p>
+      </footer>
     </div>
   );
 };

@@ -95,13 +95,46 @@ export const useRelatedArtists = (
         }
       }
 
-      // Sort by priority: featured > producer > co-played, then by play count
+      // 4. Add ListenBrainz data if available
+      try {
+        const { data: listenBrainzData } = await supabase
+          .from('listenbrainz_data')
+          .select('full_data')
+          .ilike('artist_name', currentArtist)
+          .single();
+
+        if (listenBrainzData?.full_data?.similar_artists) {
+          listenBrainzData.full_data.similar_artists.forEach((artist: any) => {
+            const artistKey = artist.artist_name.toLowerCase();
+            // Don't overwrite if existing, unless it's just 'co-played' (ListenBrainz is higher quality)
+            // But 'featured' and 'producer' from Genius are very high relevance, so keep those.
+            if (!relatedArtistsMap.has(artistKey) || relatedArtistsMap.get(artistKey)?.source === 'co-played') {
+              // Only add if not already present or if we want to upgrade the source
+              // Actually, keeping co-played is good because it's local station data.
+              // Let's add if not present.
+              if (!relatedArtistsMap.has(artistKey)) {
+                relatedArtistsMap.set(artistKey, {
+                  name: artist.artist_name,
+                  playCount: 0,
+                  source: 'genre' // Using 'genre' or a new type 'listenbrainz'
+                });
+              }
+            }
+          });
+        }
+      } catch (err) {
+        console.log('Error fetching ListenBrainz data for related artists:', err);
+      }
+
+      // Sort by priority: featured > producer > co-played > genre, then by play count
       const sourceOrder = { featured: 0, producer: 1, 'co-played': 2, genre: 3 };
       return Array.from(relatedArtistsMap.values())
         .sort((a, b) => {
           if (sourceOrder[a.source] !== sourceOrder[b.source]) {
             return sourceOrder[a.source] - sourceOrder[b.source];
           }
+          // For genre/ListenBrainz, we might want to use score if available, but here we stick to playCount which might be 0 for new ones
+          // If playCount is 0 for both, they are equal.
           return b.playCount - a.playCount;
         })
         .slice(0, 8);

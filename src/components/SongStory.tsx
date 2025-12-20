@@ -1,5 +1,3 @@
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { BookOpen, ExternalLink, Sparkles } from "lucide-react";
 import { FormattedText } from "./FormattedText";
 
@@ -13,13 +11,13 @@ export const SongStory = ({ description, geniusUrl, isFromGenius }: SongStoryPro
   if (!description) return null;
 
   return (
-    <Card className="p-6">
+    <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-xl font-semibold flex items-center gap-2">
-          <BookOpen className="w-5 h-5" />
+        <h3 className="text-lg font-bold text-white flex items-center gap-2">
+          <BookOpen className="w-4 h-4 text-primary" />
           Song Meaning & Story
         </h3>
-        <Badge variant="secondary" className="gap-1">
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-white/70 text-xs border border-white/10">
           {isFromGenius ? (
             <>
               <ExternalLink className="w-3 h-3" />
@@ -31,11 +29,11 @@ export const SongStory = ({ description, geniusUrl, isFromGenius }: SongStoryPro
               AI Generated
             </>
           )}
-        </Badge>
+        </span>
       </div>
 
-      <div className="prose prose-sm dark:prose-invert max-w-none">
-        <div className="text-muted-foreground leading-relaxed">
+      <div className="prose prose-sm prose-invert max-w-none">
+        <div className="text-white/80 leading-relaxed">
           <FormattedText text={description} className="mb-4 last:mb-0" />
         </div>
       </div>
@@ -45,12 +43,12 @@ export const SongStory = ({ description, geniusUrl, isFromGenius }: SongStoryPro
           href={geniusUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 text-sm text-primary hover:underline mt-4"
+          className="inline-flex items-center gap-2 text-sm text-primary hover:text-primary/80 mt-4 font-medium"
         >
           Read annotations and more on Genius
           <ExternalLink className="w-4 h-4" />
         </a>
       )}
-    </Card>
+    </div>
   );
 };

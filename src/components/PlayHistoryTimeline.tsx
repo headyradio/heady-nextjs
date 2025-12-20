@@ -1,7 +1,6 @@
-import { Card } from "@/components/ui/card";
-import { History, Radio, User, Calendar } from "lucide-react";
+import { History, Radio, User, Calendar, Clock } from "lucide-react";
 import { Link } from "react-router-dom";
-import { format } from "date-fns";
+import { format, formatDistanceToNow } from "date-fns";
 
 interface Transmission {
   id: string;
@@ -22,60 +21,65 @@ export const PlayHistoryTimeline = ({ transmissions }: PlayHistoryTimelineProps)
 
   return (
     <div className="space-y-6">
-      <h2 className="text-3xl font-bold flex items-center gap-2">
-        <History className="w-8 h-8" />
-        Play History on HEADY
-      </h2>
+      <div className="flex items-center gap-3">
+        <div className="p-2 rounded-xl bg-white/5 border border-white/10">
+          <History className="w-5 h-5 text-primary" />
+        </div>
+        <h2 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tight">Play History</h2>
+      </div>
 
-      <Card className="p-6">
-        <div className="space-y-4">
+      <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden">
+        <div className="divide-y divide-white/10">
           {transmissions.map((transmission, index) => (
             <div 
               key={transmission.id}
-              className="flex items-start gap-4 pb-4 border-b last:border-b-0 last:pb-0"
+              className="flex items-center gap-4 p-4 md:p-5 hover:bg-white/5 transition-colors"
             >
-              <div className="flex-shrink-0 w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                <Radio className="w-6 h-6 text-primary" />
-              </div>
-
               <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-1">
-                  <Calendar className="w-4 h-4 text-muted-foreground" />
-                  <p className="text-sm font-medium">
-                    {format(new Date(transmission.play_started_at), 'PPP')}
-                  </p>
-                  <span className="text-muted-foreground">•</span>
-                  <p className="text-sm text-muted-foreground">
-                    {format(new Date(transmission.play_started_at), 'p')}
-                  </p>
+                {/* Date & Time */}
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mb-1">
+                  <div className="flex items-center gap-1.5 text-white">
+                    <Calendar className="w-3.5 h-3.5 text-white/50" />
+                    <span className="text-sm font-medium">
+                      {format(new Date(transmission.play_started_at), 'MMM d, yyyy')}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1.5 text-white/60">
+                    <Clock className="w-3.5 h-3.5" />
+                    <span className="text-sm">
+                      {format(new Date(transmission.play_started_at), 'h:mm a')}
+                    </span>
+                  </div>
                 </div>
 
-                {transmission.show_name && (
-                  <Link 
-                    to={`/archives?show=${encodeURIComponent(transmission.show_name)}`}
-                    className="text-primary hover:underline font-medium"
-                  >
-                    {transmission.show_name}
-                  </Link>
-                )}
+                {/* Show & DJ */}
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                  {transmission.show_name && (
+                    <Link 
+                      to={`/archives?show=${encodeURIComponent(transmission.show_name)}`}
+                      className="text-primary hover:text-primary/80 font-medium text-sm transition-colors"
+                    >
+                      {transmission.show_name}
+                    </Link>
+                  )}
 
-                {transmission.dj_name && (
-                  <div className="flex items-center gap-2 mt-1">
-                    <User className="w-3 h-3 text-muted-foreground" />
-                    <p className="text-sm text-muted-foreground">
-                      DJ {transmission.dj_name}
-                    </p>
-                  </div>
-                )}
+                  {transmission.dj_name && (
+                    <div className="flex items-center gap-1.5 text-white/50 text-sm">
+                      <User className="w-3 h-3" />
+                      <span>DJ {transmission.dj_name}</span>
+                    </div>
+                  )}
+                </div>
               </div>
 
-              <div className="text-sm text-muted-foreground">
-                #{transmissions.length - index}
+              {/* Time ago - Desktop only */}
+              <div className="hidden md:block text-sm text-white/40">
+                {formatDistanceToNow(new Date(transmission.play_started_at), { addSuffix: true })}
               </div>
             </div>
           ))}
         </div>
-      </Card>
+      </div>
     </div>
   );
 };

@@ -177,7 +177,7 @@ const Navigation = () => {
               
               {volumeOpen && (
                 <div
-                  className="absolute top-full right-0 mt-2 p-4 bg-card border-2 border-border rounded-xl shadow-lg w-48"
+                  className="absolute top-full right-0 mt-2 p-4 bg-gray-900 border border-white/20 rounded-xl shadow-lg w-48"
                   onMouseEnter={() => setVolumeOpen(true)}
                   onMouseLeave={() => setVolumeOpen(false)}
                 >
@@ -217,15 +217,15 @@ const Navigation = () => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent 
                   align="end" 
-                  className="w-64 bg-popover border-2 border-border shadow-xl z-[100]"
+                  className="w-64 bg-gray-900 border border-white/20 shadow-xl z-[100]"
                   sideOffset={8}
                 >
-                  <div className="px-4 py-3 bg-primary/5 border-b-2 border-border">
-                    <p className="text-sm font-bold text-foreground">
+                  <div className="px-4 py-3 bg-white/5 border-b border-white/10">
+                    <p className="text-sm font-bold text-white">
                       @{profile?.username || 'user'}
                     </p>
                     {profile?.display_name && (
-                      <p className="text-xs text-muted-foreground mt-0.5">
+                      <p className="text-xs text-white/60 mt-0.5">
                         {profile.display_name}
                       </p>
                     )}
@@ -233,24 +233,24 @@ const Navigation = () => {
                   <div className="py-2">
                     <DropdownMenuItem 
                       onClick={() => navigate('/saved-songs')}
-                      className="cursor-pointer px-4 py-3 focus:bg-primary/10 focus:text-primary"
+                      className="cursor-pointer px-4 py-3 text-white hover:bg-white/10 focus:bg-white/10 focus:text-white"
                     >
                       <Heart className="mr-3 h-5 w-5" />
                       <span className="font-semibold">Saved Songs</span>
                     </DropdownMenuItem>
                     <DropdownMenuItem 
                       onClick={() => navigate('/profile')}
-                      className="cursor-pointer px-4 py-3 focus:bg-primary/10 focus:text-primary"
+                      className="cursor-pointer px-4 py-3 text-white hover:bg-white/10 focus:bg-white/10 focus:text-white"
                     >
                       <User className="mr-3 h-5 w-5" />
                       <span className="font-semibold">Profile</span>
                     </DropdownMenuItem>
                   </div>
-                  <DropdownMenuSeparator className="bg-border" />
+                  <DropdownMenuSeparator className="bg-white/10" />
                   <div className="py-2">
                     <DropdownMenuItem 
                       onClick={handleSignOut}
-                      className="cursor-pointer px-4 py-3 focus:bg-destructive/10 focus:text-destructive"
+                      className="cursor-pointer px-4 py-3 text-white hover:bg-red-500/20 focus:bg-red-500/20 focus:text-red-400"
                     >
                       <LogOut className="mr-3 h-5 w-5" />
                       <span className="font-semibold">Sign Out</span>

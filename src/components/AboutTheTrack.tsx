@@ -1,6 +1,6 @@
 import { TrackInformation } from "./TrackInformation";
 import { SongStory } from "./SongStory";
-import { Credits } from "./Credits";
+import { Info } from "lucide-react";
 
 interface AboutTheTrackProps {
   geniusData?: {
@@ -27,14 +27,21 @@ export const AboutTheTrack = ({ geniusData, aiContent, duration }: AboutTheTrack
 
   return (
     <div className="space-y-6">
-      <h2 className="text-3xl font-bold">About the Track</h2>
+      <div className="flex items-center gap-3">
+        <div className="p-2 rounded-xl bg-white/5 border border-white/10">
+          <Info className="w-5 h-5 text-primary" />
+        </div>
+        <h2 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tight">About the Track</h2>
+      </div>
       
-      <div className="grid md:grid-cols-[300px_1fr] gap-6">
+      <div className="grid md:grid-cols-[320px_1fr] gap-6">
         <TrackInformation
           releaseDate={geniusData?.release_date}
           album={geniusData?.album}
           duration={duration}
           featuredArtists={geniusData?.featured_artists}
+          producers={geniusData?.producer_artists}
+          writers={geniusData?.writer_artists}
         />
         
         <SongStory
@@ -43,11 +50,6 @@ export const AboutTheTrack = ({ geniusData, aiContent, duration }: AboutTheTrack
           isFromGenius={isFromGenius}
         />
       </div>
-
-      <Credits
-        producers={geniusData?.producer_artists}
-        writers={geniusData?.writer_artists}
-      />
     </div>
   );
 };

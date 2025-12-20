@@ -151,15 +151,42 @@ serve(async (req) => {
         );
       }
 
-      // Get artist ID from first hit
-      const artistId = hits[0].result?.primary_artist?.id;
+      // Find the best matching artist by name (case-insensitive exact match)
+      const artistLower = artist.toLowerCase().trim();
+      let bestMatch = null;
+      let bestMatchScore = 0;
+
+      for (const hit of hits) {
+        const primaryArtist = hit.result?.primary_artist;
+        if (!primaryArtist) continue;
+
+        const candidateName = primaryArtist.name.toLowerCase().trim();
+        
+        // Exact match (highest priority)
+        if (candidateName === artistLower) {
+          bestMatch = primaryArtist;
+          bestMatchScore = 100;
+          break;
+        }
+        
+        // Contains match (lower priority)
+        if (candidateName.includes(artistLower) && bestMatchScore < 50) {
+          bestMatch = primaryArtist;
+          bestMatchScore = 50;
+        }
+      }
+
+      const artistId = bestMatch?.id;
 
       if (!artistId) {
+        console.log(`No matching artist found for: ${artist}`);
         return new Response(
           JSON.stringify({ data: null, source: 'api' }),
           { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         );
       }
+
+      console.log(`Found artist match: ${bestMatch.name} (ID: ${artistId}) with score ${bestMatchScore}`);
 
       // Fetch detailed artist data
       const artistUrl = `https://api.genius.com/artists/${artistId}`;
