@@ -53,14 +53,20 @@ export const FeaturedCard = () => {
           <div className="flex items-center gap-4">
             <div className="flex -space-x-3">
               <img 
-                src={rouxbaisImage} 
+                src="/assets/card1-rouxbais.webp" 
                 alt="Rouxbais"
                 className="w-14 h-14 rounded-full border-3 border-white object-cover shadow-lg"
+                loading="lazy"
+                width="56"
+                height="56"
               />
               <img 
-                src={daleImage} 
+                src="/assets/card2-dale.webp" 
                 alt="Dale"
                 className="w-14 h-14 rounded-full border-3 border-white object-cover shadow-lg"
+                loading="lazy"
+                width="56"
+                height="56"
               />
             </div>
             <div className="flex items-center gap-2 text-white/80">
