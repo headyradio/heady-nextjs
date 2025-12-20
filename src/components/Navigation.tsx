@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Play, Square, Volume2, VolumeX, Menu, X, Heart, User, LogOut, Radio } from 'lucide-react';
+import { Play, Square, Volume2, VolumeX, Menu, X, Heart, User, LogOut, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { useGlobalAudioPlayer } from '@/contexts/AudioPlayerContext';
@@ -44,68 +44,198 @@ const Navigation = () => {
     navigate('/');
   };
 
-  const scrollToId = (id: string) => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  };
-
-  const goToSection = (id: string) => {
-    if (location.pathname !== '/') {
-      navigate('/');
-      setTimeout(() => scrollToId(id), 300);
-      return;
-    }
-    scrollToId(id);
-  };
+  const isActiveLink = (path: string) => location.pathname === path;
 
   return (
-    <nav className="sticky top-0 z-50 w-full border-b-4 border-secondary shadow-lg" style={{ backgroundColor: '#4a148c' }}>
-      <div className="container mx-auto px-4">
-        <div className="relative flex h-20 items-center justify-between md:justify-start gap-4">
-          {/* Logo - Absolutely centered on mobile, normal flow on desktop */}
-          <div className="absolute left-1/2 -translate-x-1/2 md:static md:transform-none flex items-center gap-3">
-            <Link 
-              to="/" 
-              onClick={() => {
-                // If already on home page, scroll to top and trigger custom event to reset mobile tab
-                if (location.pathname === '/') {
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                  // Dispatch custom event that Index.tsx can listen to
-                  window.dispatchEvent(new CustomEvent('resetMobileTab'));
-                }
-              }}
-            >
-              <img src={headyLogo} alt="HEADY Radio" className="h-16 w-auto cursor-pointer hover:opacity-80 transition-opacity" />
-            </Link>
-          </div>
+    <nav className="sticky top-0 z-50 w-full shadow-xl">
+      {/* Main Navigation Bar */}
+      <div className="bg-[#1a0a2e]">
+        <div className="container mx-auto px-4">
+          <div className="flex h-14 items-center justify-between">
+            {/* Left: Navigation Links */}
+            <div className="hidden md:flex items-center gap-1">
+              <Link to="/playlist">
+                <button 
+                  className={`px-4 py-2 text-sm font-medium transition-colors hover:text-white ${
+                    isActiveLink('/playlist') ? 'text-white' : 'text-white/70'
+                  }`}
+                >
+                  Playlist
+                </button>
+              </Link>
+              <Link to="/hot-40">
+                <button 
+                  className={`px-4 py-2 text-sm font-medium transition-colors hover:text-white ${
+                    isActiveLink('/hot-40') ? 'text-white' : 'text-white/70'
+                  }`}
+                >
+                  Hot 40
+                </button>
+              </Link>
+              <Link to="/shows">
+                <button 
+                  className={`px-4 py-2 text-sm font-medium transition-colors hover:text-white ${
+                    isActiveLink('/shows') ? 'text-white' : 'text-white/70'
+                  }`}
+                >
+                  Shows
+                </button>
+              </Link>
+              <button 
+                className="px-4 py-2 text-sm font-medium text-white/70 transition-colors hover:text-white"
+                onClick={() => {
+                  const event = new CustomEvent('open-live-chat');
+                  window.dispatchEvent(event);
+                }}
+              >
+                Live Chat
+              </button>
+            </div>
 
-          {/* Center: Audio Player & Track Info (Desktop) */}
-          <div className="hidden md:flex flex-1 items-center justify-center gap-4 max-w-2xl">
-            {/* Circular Play/Stop Button */}
-            <Button
-              onClick={audioPlayer.togglePlay}
-              size="icon"
-              variant="default"
-              aria-label={audioPlayer.isPlaying ? "Stop audio stream" : "Play audio stream"}
-              className="relative overflow-hidden w-14 h-14 rounded-full border-2 shadow-lg hover:opacity-90 transition"
-              style={{ backgroundColor: '#288b5a', borderColor: '#288b5a' }}
-              disabled={audioPlayer.isBuffering}
-            >
-              {audioPlayer.isPlaying ? (
-                <Square className="h-6 w-6 text-white fill-white" aria-hidden="true" />
+            {/* Center: Logo */}
+            <div className="absolute left-1/2 -translate-x-1/2 md:static md:transform-none md:flex-1 md:flex md:justify-center">
+              <Link 
+                to="/" 
+                onClick={() => {
+                  if (location.pathname === '/') {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    window.dispatchEvent(new CustomEvent('resetMobileTab'));
+                  }
+                }}
+                className="flex items-center"
+              >
+                <img src={headyLogo} alt="HEADY Radio" className="h-10 w-auto cursor-pointer hover:opacity-80 transition-opacity" />
+              </Link>
+            </div>
+
+            {/* Right: Actions */}
+            <div className="flex items-center gap-2">
+              {/* Listen Live Button - Desktop */}
+              <Button
+                onClick={audioPlayer.togglePlay}
+                className="hidden md:inline-flex items-center gap-2 bg-transparent border border-white/30 hover:bg-white/10 text-white font-medium px-4 h-9"
+                disabled={audioPlayer.isBuffering}
+              >
+                {audioPlayer.isPlaying ? (
+                  <Square className="h-4 w-4 fill-current" />
+                ) : (
+                  <Play className="h-4 w-4 fill-current" />
+                )}
+                <span className="text-sm">Listen Live</span>
+              </Button>
+
+              {/* Support/Donate Button - Desktop */}
+              <Button
+                onClick={() => setSupportDialogOpen(true)}
+                className="hidden md:inline-flex items-center gap-2 bg-[#e53935] hover:bg-[#c62828] text-white font-medium px-4 h-9"
+              >
+                <Heart className="h-4 w-4" />
+                <span className="text-sm">Donate</span>
+              </Button>
+
+              {/* User Menu / Auth - Desktop */}
+              {user ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="hidden md:inline-flex text-white hover:bg-white/10 h-9 w-9"
+                    >
+                      <Avatar className="h-7 w-7">
+                        <AvatarImage src={profile?.avatar_url || ''} />
+                        <AvatarFallback className="bg-primary text-primary-foreground text-xs font-bold">
+                          <User className="h-4 w-4" />
+                        </AvatarFallback>
+                      </Avatar>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent 
+                    align="end" 
+                    className="w-56 bg-[#1a0a2e] border border-white/20 shadow-xl z-[100]"
+                    sideOffset={8}
+                  >
+                    <div className="px-3 py-2 border-b border-white/10">
+                      <p className="text-sm font-semibold text-white">
+                        @{profile?.username || 'user'}
+                      </p>
+                      {profile?.display_name && (
+                        <p className="text-xs text-white/60">{profile.display_name}</p>
+                      )}
+                    </div>
+                    <div className="py-1">
+                      <DropdownMenuItem 
+                        onClick={() => navigate('/saved-songs')}
+                        className="cursor-pointer px-3 py-2 text-white/80 hover:bg-white/10 hover:text-white focus:bg-white/10 focus:text-white"
+                      >
+                        <Heart className="mr-2 h-4 w-4" />
+                        <span>Saved Songs</span>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem 
+                        onClick={() => navigate('/profile')}
+                        className="cursor-pointer px-3 py-2 text-white/80 hover:bg-white/10 hover:text-white focus:bg-white/10 focus:text-white"
+                      >
+                        <User className="mr-2 h-4 w-4" />
+                        <span>Profile</span>
+                      </DropdownMenuItem>
+                    </div>
+                    <DropdownMenuSeparator className="bg-white/10" />
+                    <div className="py-1">
+                      <DropdownMenuItem 
+                        onClick={handleSignOut}
+                        className="cursor-pointer px-3 py-2 text-white/80 hover:bg-red-500/20 hover:text-red-400 focus:bg-red-500/20 focus:text-red-400"
+                      >
+                        <LogOut className="mr-2 h-4 w-4" />
+                        <span>Sign Out</span>
+                      </DropdownMenuItem>
+                    </div>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               ) : (
-                <Play className="h-6 w-6 text-white fill-white" aria-hidden="true" />
+                <Link to="/auth" className="hidden md:block">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-white/70 hover:text-white hover:bg-white/10 h-9 px-3"
+                  >
+                    Sign In
+                  </Button>
+                </Link>
               )}
-              {audioPlayer.connectionStatus === 'streaming' && (
-                <div className="absolute inset-0 bg-[rgba(40,139,90,0.24)] animate-pulse rounded-full" aria-hidden="true" />
-              )}
-            </Button>
 
-            {/* Current Track */}
+              {/* Mobile Menu Toggle */}
+              <Button
+                variant="ghost"
+                size="icon"
+                className="md:hidden text-white hover:bg-white/10"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+              >
+                {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Now Playing Ticker Bar - Desktop */}
+      <div className="hidden md:block bg-[#2d1b4e] border-t border-white/10">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center h-11 gap-4">
+            {/* ON AIR Badge */}
+            <div className="flex items-center gap-2 pr-4 border-r border-white/20">
+              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-[#e53935] text-white text-[10px] font-bold uppercase tracking-wider">
+                <span className="relative flex h-1.5 w-1.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-white"></span>
+                </span>
+                On Air
+              </span>
+            </div>
+
+            {/* Now Playing Info */}
             {nowPlaying ? (
-              <div className="flex-1 min-w-0 border-l-2 border-white/30 pl-6 flex items-center gap-3">
+              <div className="flex items-center gap-3 flex-1 min-w-0">
                 <AlbumArtImage
                   key={`nav-${nowPlaying.title}-${nowPlaying.artist}`}
                   url={nowPlaying.album_art_url}
@@ -113,79 +243,58 @@ const Navigation = () => {
                   artist={nowPlaying.artist}
                   title={nowPlaying.title}
                   alt={`${nowPlaying.title} album art`}
-                  className="w-12 h-12 rounded-md flex-shrink-0"
+                  className="w-8 h-8 rounded flex-shrink-0"
                 />
-                <div className="min-w-0 flex-1">
-                  <div className="mb-1">
-                    <div className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full bg-green-500/20 border border-green-500">
-                      <span className="relative flex h-2 w-2">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                      </span>
-                      <span className="text-green-500 font-bold text-[10px] uppercase tracking-wider">LIVE</span>
-                    </div>
-                  </div>
-                  <div className="text-sm font-bold text-white truncate">
-                    {nowPlaying.title}
-                  </div>
-                  <div className="text-xs text-white truncate" style={{ opacity: 0.9 }}>
-                    {nowPlaying.artist}
-                  </div>
+                <div className="min-w-0 flex items-center gap-2">
+                  <span className="text-white font-medium text-sm truncate">{nowPlaying.artist}</span>
+                  <span className="text-white/50">—</span>
+                  <span className="text-white/80 text-sm truncate">{nowPlaying.title}</span>
                 </div>
-                <SaveSongButton
-                  artist={nowPlaying.artist}
-                  title={nowPlaying.title}
-                  album={nowPlaying.album}
-                  albumArtUrl={nowPlaying.album_art_url}
-                  artworkId={nowPlaying.artwork_id}
-                  variant="ghost"
-                  size="icon"
-                />
-                
+                <div className="flex items-center gap-1 ml-2">
+                  <SaveSongButton
+                    artist={nowPlaying.artist}
+                    title={nowPlaying.title}
+                    album={nowPlaying.album}
+                    albumArtUrl={nowPlaying.album_art_url}
+                    artworkId={nowPlaying.artwork_id}
+                    variant="ghost"
+                    size="icon"
+                    className="h-7 w-7 text-white/60 hover:text-white"
+                  />
+                  <Link 
+                    to={`/song/${encodeURIComponent(nowPlaying.artist)}/${encodeURIComponent(nowPlaying.title)}`}
+                    className="text-white/60 hover:text-white transition-colors"
+                  >
+                    <ChevronRight className="h-4 w-4" />
+                  </Link>
+                </div>
               </div>
             ) : (
-              <div className="flex-1 min-w-0 border-l-2 border-white/30 pl-6 flex items-center gap-3">
-                <div className="w-12 h-12 rounded-md bg-white/10 animate-pulse flex-shrink-0" aria-hidden="true" />
-                <div className="min-w-0 flex-1">
-                  <div className="mb-1">
-                    <div className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full bg-white/15 border border-white/20">
-                      <span className="relative flex h-2 w-2">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-50"></span>
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
-                      </span>
-                      <span className="text-white/80 font-bold text-[10px] uppercase tracking-wider">Loading</span>
-                    </div>
-                  </div>
-                  <div className="space-y-1.5">
-                    <Skeleton className="h-4 w-40 bg-white/20" />
-                    <Skeleton className="h-3 w-28 bg-white/20" />
-                  </div>
-                </div>
-                <div className="w-9 h-9 rounded-full bg-white/10 animate-pulse" aria-hidden="true" />
+              <div className="flex items-center gap-3 flex-1 min-w-0">
+                <div className="w-8 h-8 rounded bg-white/10 animate-pulse flex-shrink-0" />
+                <Skeleton className="h-4 w-48 bg-white/10" />
               </div>
             )}
 
             {/* Volume Control */}
-            <div className="relative">
+            <div className="relative flex items-center gap-2 pl-4 border-l border-white/20">
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={audioPlayer.toggleMute}
                 onMouseEnter={() => setVolumeOpen(true)}
-                aria-label={audioPlayer.isMuted || audioPlayer.volume === 0 ? "Unmute audio" : "Mute audio"}
-                aria-expanded={volumeOpen}
-                className="text-white hover:bg-white/20"
+                className="text-white/60 hover:text-white hover:bg-white/10 h-7 w-7"
               >
                 {audioPlayer.isMuted || audioPlayer.volume === 0 ? (
-                  <VolumeX className="h-5 w-5" aria-hidden="true" />
+                  <VolumeX className="h-4 w-4" />
                 ) : (
-                  <Volume2 className="h-5 w-5" aria-hidden="true" />
+                  <Volume2 className="h-4 w-4" />
                 )}
               </Button>
               
               {volumeOpen && (
                 <div
-                  className="absolute top-full right-0 mt-2 p-4 bg-gray-900 border border-white/20 rounded-xl shadow-lg w-48"
+                  className="absolute bottom-full right-0 mb-2 p-3 bg-[#1a0a2e] border border-white/20 rounded-lg shadow-xl w-36"
                   onMouseEnter={() => setVolumeOpen(true)}
                   onMouseLeave={() => setVolumeOpen(false)}
                 >
@@ -198,224 +307,22 @@ const Navigation = () => {
                   />
                 </div>
               )}
+
+              <Link to="/playlist" className="text-white/60 hover:text-white text-xs font-medium transition-colors">
+                Schedule
+              </Link>
             </div>
           </div>
-
-          {/* Right: Status & Menu (desktop cleaned) */}
-          <div className="flex items-center gap-4 ml-auto">
-            {/* User Menu / Auth */}
-            {user ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="hidden lg:inline-flex items-center gap-3 rounded-full hover:bg-white/20 px-3 py-2"
-                  >
-                    <Avatar className="h-9 w-9 ring-2 ring-white/30">
-                      <AvatarImage src={profile?.avatar_url || ''} />
-                      <AvatarFallback className="bg-primary text-primary-foreground font-bold">
-                        <User className="h-5 w-5" />
-                      </AvatarFallback>
-                    </Avatar>
-                    <span className="text-white font-semibold truncate max-w-[140px]">
-                      {profile?.display_name || profile?.username || 'User'}
-                    </span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent 
-                  align="end" 
-                  className="w-64 bg-gray-900 border border-white/20 shadow-xl z-[100]"
-                  sideOffset={8}
-                >
-                  <div className="px-4 py-3 bg-white/5 border-b border-white/10">
-                    <p className="text-sm font-bold text-white">
-                      @{profile?.username || 'user'}
-                    </p>
-                    {profile?.display_name && (
-                      <p className="text-xs text-white/60 mt-0.5">
-                        {profile.display_name}
-                      </p>
-                    )}
-                  </div>
-                  <div className="py-2">
-                    <DropdownMenuItem 
-                      onClick={() => navigate('/saved-songs')}
-                      className="cursor-pointer px-4 py-3 text-white hover:bg-white/10 focus:bg-white/10 focus:text-white"
-                    >
-                      <Heart className="mr-3 h-5 w-5" />
-                      <span className="font-semibold">Saved Songs</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem 
-                      onClick={() => navigate('/profile')}
-                      className="cursor-pointer px-4 py-3 text-white hover:bg-white/10 focus:bg-white/10 focus:text-white"
-                    >
-                      <User className="mr-3 h-5 w-5" />
-                      <span className="font-semibold">Profile</span>
-                    </DropdownMenuItem>
-                  </div>
-                  <DropdownMenuSeparator className="bg-white/10" />
-                  <div className="py-2">
-                    <DropdownMenuItem 
-                      onClick={handleSignOut}
-                      className="cursor-pointer px-4 py-3 text-white hover:bg-red-500/20 focus:bg-red-500/20 focus:text-red-400"
-                    >
-                      <LogOut className="mr-3 h-5 w-5" />
-                      <span className="font-semibold">Sign Out</span>
-                    </DropdownMenuItem>
-                  </div>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            ) : (
-              <Link to="/auth">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="hidden sm:flex text-white hover:bg-white/20"
-                >
-                  Sign In / Sign Up
-                </Button>
-              </Link>
-            )}
-
-
-            {/* Mobile Menu Toggle */}
-            <Button
-              variant="ghost"
-              size="icon"
-              className="md:hidden text-white hover:bg-white/20"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              aria-label={mobileMenuOpen ? "Close mobile menu" : "Open mobile menu"}
-              aria-expanded={mobileMenuOpen}
-            >
-              {mobileMenuOpen ? <X className="h-6 w-6" aria-hidden="true" /> : <Menu className="h-6 w-6" aria-hidden="true" />}
-            </Button>
-          </div>
         </div>
+      </div>
 
-        {/* Secondary desktop nav (inspired by KEXP) */}
-        <div className="hidden md:flex items-center gap-6 h-12 text-white border-t border-white/20 mt-2">
-          <Link to="/playlist" aria-label="Go to Playlist">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="px-3 font-semibold hover:bg-white/10"
-            >
-              Playlist
-            </Button>
-          </Link>
-          <Link to="/hot-40" aria-label="Go to HEADY HOT 40">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="px-3 font-semibold hover:bg-white/10"
-            >
-              HOT 40 🔥
-            </Button>
-          </Link>
-          <Link to="/shows" aria-label="Go to Shows page" className="leading-none">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="px-3 font-semibold hover:bg-white/10"
-            >
-              Shows
-            </Button>
-          </Link>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="px-3 font-semibold hover:bg-white/10"
-            onClick={() => setSupportDialogOpen(true)}
-            aria-label="Open support dialog"
-          >
-            Support
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="px-3 font-semibold hover:bg-white/10"
-            onClick={() => {
-              const event = new CustomEvent('open-live-chat');
-              window.dispatchEvent(event);
-            }}
-            aria-label="Open live chat"
-          >
-            Live Chat
-          </Button>
-        </div>
-
-        {/* Mobile Menu */}
-        {mobileMenuOpen && (
-          <div className="md:hidden py-4 border-t-2 border-white/30 space-y-4">
-            {/* User Section Mobile */}
-            {user ? (
-              <div className="space-y-2">
-                <div className="flex items-center gap-3 p-4 bg-white/10 rounded-xl">
-                  <Avatar className="h-10 w-10">
-                    <AvatarImage src={profile?.avatar_url || ''} />
-                    <AvatarFallback className="bg-primary text-primary-foreground">
-                      <User className="h-5 w-5" />
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="text-white font-semibold">
-                    @{profile?.username || 'User'}
-                  </div>
-                </div>
-                <Link to="/saved-songs" onClick={() => setMobileMenuOpen(false)}>
-                  <Button variant="outline" size="lg" className="w-full gap-2">
-                    <Heart className="h-5 w-5" />
-                    Saved Songs
-                  </Button>
-                </Link>
-                <Link to="/profile" onClick={() => setMobileMenuOpen(false)}>
-                  <Button variant="outline" size="lg" className="w-full gap-2">
-                    <User className="h-5 w-5" />
-                    Profile
-                  </Button>
-                </Link>
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="w-full gap-2"
-                  onClick={() => {
-                    handleSignOut();
-                    setMobileMenuOpen(false);
-                  }}
-                >
-                  <LogOut className="h-5 w-5" />
-                  Sign Out
-                </Button>
-              </div>
-            ) : (
-              <Link to="/auth" onClick={() => setMobileMenuOpen(false)}>
-                <Button variant="outline" size="lg" className="w-full">
-                  Sign In / Sign Up
-                </Button>
-              </Link>
-            )}
-
-            <Button
-              onClick={audioPlayer.togglePlay}
-              size="lg"
-              variant="default"
-              className="w-full"
-            >
-              {audioPlayer.isPlaying ? (
-                <>
-                  <Square className="h-5 w-5 mr-2" />
-                  Stop Stream
-                </>
-              ) : (
-                <>
-                  <Play className="h-5 w-5 mr-2" />
-                  Listen Live
-                </>
-              )}
-            </Button>
-
-            {nowPlaying ? (
-              <div className="p-4 bg-white/10 rounded-xl flex items-center gap-3">
+      {/* Mobile Menu */}
+      {mobileMenuOpen && (
+        <div className="md:hidden bg-[#1a0a2e] border-t border-white/10">
+          <div className="container mx-auto px-4 py-4 space-y-3">
+            {/* Now Playing - Mobile */}
+            {nowPlaying && (
+              <div className="p-3 bg-white/5 rounded-lg flex items-center gap-3">
                 <AlbumArtImage
                   key={`nav-mobile-${nowPlaying.title}-${nowPlaying.artist}`}
                   url={nowPlaying.album_art_url}
@@ -423,41 +330,131 @@ const Navigation = () => {
                   artist={nowPlaying.artist}
                   title={nowPlaying.title}
                   alt={`${nowPlaying.title} album art`}
-                  className="w-16 h-16 rounded-md flex-shrink-0"
+                  className="w-12 h-12 rounded flex-shrink-0"
                 />
                 <div className="flex-1 min-w-0">
-                  <div className="mb-2">
-                    <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-500/20 border border-green-500">
-                      <span className="relative flex h-2.5 w-2.5">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-[#e53935] text-white text-[9px] font-bold uppercase">
+                      <span className="relative flex h-1.5 w-1.5">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-white"></span>
                       </span>
-                      <span className="text-green-500 font-bold text-xs uppercase tracking-wider">LIVE</span>
-                    </div>
-                  </div>
-                  <div className="text-sm font-bold text-white">{nowPlaying.title}</div>
-                  <div className="text-xs text-white" style={{ opacity: 0.9 }}>{nowPlaying.artist}</div>
-                </div>
-              </div>
-            ) : (
-              <div className="p-4 bg-white/10 rounded-xl flex items-center gap-3">
-                <div className="w-16 h-16 rounded-md bg-white/10 animate-pulse flex-shrink-0" aria-hidden="true" />
-                <div className="flex-1 min-w-0 space-y-2">
-                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/15 border border-white/20 w-fit">
-                    <span className="relative flex h-2.5 w-2.5">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-50"></span>
-                      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-white"></span>
+                      Live
                     </span>
-                    <span className="text-white/80 font-bold text-xs uppercase tracking-wider">Loading</span>
                   </div>
-                  <Skeleton className="h-4 w-40 bg-white/20" />
-                  <Skeleton className="h-3 w-28 bg-white/20" />
+                  <div className="text-sm font-semibold text-white truncate">{nowPlaying.title}</div>
+                  <div className="text-xs text-white/70 truncate">{nowPlaying.artist}</div>
                 </div>
               </div>
             )}
+
+            {/* Listen Live Button - Mobile */}
+            <Button
+              onClick={audioPlayer.togglePlay}
+              className="w-full h-12 bg-[#288b5a] hover:bg-[#1e6e47] text-white font-semibold gap-2"
+              disabled={audioPlayer.isBuffering}
+            >
+              {audioPlayer.isPlaying ? (
+                <>
+                  <Square className="h-5 w-5 fill-current" />
+                  Stop Stream
+                </>
+              ) : (
+                <>
+                  <Play className="h-5 w-5 fill-current" />
+                  Listen Live
+                </>
+              )}
+            </Button>
+
+            {/* Nav Links - Mobile */}
+            <div className="grid grid-cols-2 gap-2">
+              <Link to="/playlist" onClick={() => setMobileMenuOpen(false)}>
+                <Button variant="outline" className="w-full h-10 text-sm bg-white/5 border-white/20 text-white hover:bg-white/10">
+                  Playlist
+                </Button>
+              </Link>
+              <Link to="/hot-40" onClick={() => setMobileMenuOpen(false)}>
+                <Button variant="outline" className="w-full h-10 text-sm bg-white/5 border-white/20 text-white hover:bg-white/10">
+                  Hot 40
+                </Button>
+              </Link>
+              <Link to="/shows" onClick={() => setMobileMenuOpen(false)}>
+                <Button variant="outline" className="w-full h-10 text-sm bg-white/5 border-white/20 text-white hover:bg-white/10">
+                  Shows
+                </Button>
+              </Link>
+              <Button 
+                variant="outline" 
+                className="w-full h-10 text-sm bg-white/5 border-white/20 text-white hover:bg-white/10"
+                onClick={() => {
+                  const event = new CustomEvent('open-live-chat');
+                  window.dispatchEvent(event);
+                  setMobileMenuOpen(false);
+                }}
+              >
+                Live Chat
+              </Button>
+            </div>
+
+            {/* Support Button - Mobile */}
+            <Button
+              onClick={() => {
+                setSupportDialogOpen(true);
+                setMobileMenuOpen(false);
+              }}
+              className="w-full h-11 bg-[#e53935] hover:bg-[#c62828] text-white font-semibold gap-2"
+            >
+              <Heart className="h-5 w-5" />
+              Support HEADY.FM
+            </Button>
+
+            {/* User Section - Mobile */}
+            {user ? (
+              <div className="pt-2 border-t border-white/10 space-y-2">
+                <div className="flex items-center gap-3 p-2">
+                  <Avatar className="h-8 w-8">
+                    <AvatarImage src={profile?.avatar_url || ''} />
+                    <AvatarFallback className="bg-primary text-primary-foreground text-xs">
+                      <User className="h-4 w-4" />
+                    </AvatarFallback>
+                  </Avatar>
+                  <span className="text-white/80 text-sm font-medium">@{profile?.username || 'User'}</span>
+                </div>
+                <div className="grid grid-cols-3 gap-2">
+                  <Link to="/saved-songs" onClick={() => setMobileMenuOpen(false)}>
+                    <Button variant="ghost" size="sm" className="w-full h-9 text-xs text-white/70 hover:text-white hover:bg-white/10">
+                      <Heart className="h-4 w-4" />
+                    </Button>
+                  </Link>
+                  <Link to="/profile" onClick={() => setMobileMenuOpen(false)}>
+                    <Button variant="ghost" size="sm" className="w-full h-9 text-xs text-white/70 hover:text-white hover:bg-white/10">
+                      <User className="h-4 w-4" />
+                    </Button>
+                  </Link>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="w-full h-9 text-xs text-white/70 hover:text-red-400 hover:bg-red-500/10"
+                    onClick={() => {
+                      handleSignOut();
+                      setMobileMenuOpen(false);
+                    }}
+                  >
+                    <LogOut className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <Link to="/auth" onClick={() => setMobileMenuOpen(false)}>
+                <Button variant="outline" className="w-full h-10 bg-white/5 border-white/20 text-white hover:bg-white/10">
+                  Sign In / Sign Up
+                </Button>
+              </Link>
+            )}
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* Support Dialog */}
       <Dialog open={supportDialogOpen} onOpenChange={setSupportDialogOpen}>
