@@ -211,14 +211,13 @@ const Navigation = () => {
             {/* Play/Stop Button */}
             <Button
               onClick={audioPlayer.togglePlay}
-              size="icon"
-              className="h-8 w-8 rounded-full bg-green-500 hover:bg-green-600 text-white flex-shrink-0"
+              className="h-11 px-6 rounded-none bg-green-500 hover:bg-green-600 text-white flex-shrink-0 border-r border-white/10"
               disabled={audioPlayer.isBuffering}
             >
               {audioPlayer.isPlaying ? (
-                <Square className="h-4 w-4 fill-current" />
+                <Square className="h-5 w-5 fill-current" />
               ) : (
-                <Play className="h-4 w-4 fill-current ml-0.5" />
+                <Play className="h-5 w-5 fill-current ml-0.5" />
               )}
             </Button>
 
