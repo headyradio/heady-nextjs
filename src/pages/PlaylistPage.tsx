@@ -52,7 +52,7 @@ const PlaylistPage = () => {
     })) || [];
 
   return (
-    <div className="min-h-screen bg-background pb-20 md:pb-0">
+    <div className="min-h-screen bg-gradient-to-br from-[#1a0b2e] via-[#2d1b4e] to-[#0f0a1f] pb-20 md:pb-0">
       <SEO
         title="Playlist | Transmission Log | HEADY.FM"
         description="Browse the complete HEADY.FM broadcast history. Search for songs, artists, and explore what we've played recently."
@@ -64,10 +64,10 @@ const PlaylistPage = () => {
       <main className="container mx-auto px-4 py-8 lg:py-12">
         <div className="mb-8 md:mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-tight mb-4">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-tight mb-4 text-white bg-clip-text text-transparent bg-gradient-to-r from-white via-purple-200 to-pink-200">
               PLAYLIST
             </h1>
-            <p className="text-xl opacity-70 max-w-2xl">
+            <p className="text-xl text-white/70 max-w-2xl">
               Complete transmission history. Every track, every artist, every moment.
             </p>
           </div>
@@ -96,7 +96,7 @@ const PlaylistPage = () => {
         </div>
 
         {/* Filters */}
-        <div className="mb-8 md:mb-10 bg-card p-6 rounded-2xl border-2 border-border shadow-sm">
+        <div className="mb-8 md:mb-10 bg-white/5 backdrop-blur-sm p-6 rounded-2xl border-2 border-white/10 shadow-xl">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-1">
               <TransmissionSearch 
@@ -118,8 +118,8 @@ const PlaylistPage = () => {
         {/* Content */}
         {isLoading && transmissions.length === 0 ? (
           <div className="space-y-4">
-            <div className="flex items-center justify-center gap-2 text-primary mb-8">
-              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
+            <div className="flex items-center justify-center gap-2 text-white mb-8">
+              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
               <span className="font-bold">Loading transmission log...</span>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -144,6 +144,7 @@ const PlaylistPage = () => {
 };
 
 export default PlaylistPage;
+
 
 
 

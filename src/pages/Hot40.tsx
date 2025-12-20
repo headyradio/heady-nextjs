@@ -19,7 +19,7 @@ const Hot40 = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background pb-20 md:pb-0">
+    <div className="min-h-screen bg-gradient-to-br from-[#1a0b2e] via-[#2d1b4e] to-[#0f0a1f] pb-20 md:pb-0">
       <SEO
         title="HEADY HOT 40 | Top Tracks | HEADY.FM"
         description="Discover the most played tracks on HEADY.FM this week. The freshest indie rock, alternative, and electronic music chart."
@@ -30,18 +30,18 @@ const Hot40 = () => {
 
       <main className="container mx-auto px-4 py-8 lg:py-12">
         <div className="mb-8 md:mb-12">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-tight mb-4">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-tight mb-4 text-white bg-clip-text text-transparent bg-gradient-to-r from-white via-purple-200 to-pink-200">
             HEADY HOT 40 🔥
           </h1>
-          <p className="text-xl opacity-70 max-w-2xl">
+          <p className="text-xl text-white/70 max-w-2xl">
             The most played tracks on HEADY.FM from the last 7 days. Updated in real-time.
           </p>
         </div>
 
         {isLoading ? (
           <div className="space-y-4">
-            <div className="flex items-center justify-center gap-2 text-primary mb-8">
-              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
+            <div className="flex items-center justify-center gap-2 text-white mb-8">
+              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
               <span className="font-bold">Loading chart data...</span>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -98,17 +98,17 @@ const Hot40 = () => {
             )}
             
             {displayLimit >= 40 && (
-              <div className="mt-16 text-center p-8 bg-card/50 rounded-2xl border-2 border-dashed border-border/50">
-                <p className="text-xl font-bold opacity-60">
+              <div className="mt-16 text-center p-8 bg-white/5 backdrop-blur-sm rounded-2xl border-2 border-dashed border-white/20">
+                <p className="text-xl font-bold text-white/70">
                   That's the top 40! Tune in to hear more.
                 </p>
               </div>
             )}
           </>
         ) : (
-          <div className="border-bold rounded-xl p-16 text-center bg-card">
-            <p className="text-2xl font-bold opacity-60">No chart data available right now.</p>
-            <p className="mt-2 opacity-50">Check back later or tune in live.</p>
+          <div className="border-2 border-white/20 rounded-xl p-16 text-center bg-white/5 backdrop-blur-sm">
+            <p className="text-2xl font-bold text-white/70">No chart data available right now.</p>
+            <p className="mt-2 text-white/50">Check back later or tune in live.</p>
           </div>
         )}
       </main>
