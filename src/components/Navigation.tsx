@@ -206,22 +206,22 @@ const Navigation = () => {
 
       {/* Now Playing Ticker Bar - Desktop */}
       <div className="hidden md:block bg-[#2d1b4e] border-t border-white/10">
-        <div className="container mx-auto">
-          <div className="flex items-center h-11">
-            {/* Play/Stop Button */}
-            <Button
-              onClick={audioPlayer.togglePlay}
-              className="h-11 px-6 rounded-none bg-[#2d5016] hover:bg-[#3a6b1f] text-white flex-shrink-0 border-r border-white/10"
-              disabled={audioPlayer.isBuffering}
-            >
-              {audioPlayer.isPlaying ? (
-                <Square className="h-5 w-5 fill-current" />
-              ) : (
-                <Play className="h-5 w-5 fill-current ml-0.5" />
-              )}
-            </Button>
+        <div className="flex items-center h-11">
+          {/* Play/Stop Button - Extends to very left edge */}
+          <Button
+            onClick={audioPlayer.togglePlay}
+            className="h-11 px-16 rounded-none bg-[#2d5016] hover:bg-[#3a6b1f] text-white flex-shrink-0 border-r border-white/10"
+            disabled={audioPlayer.isBuffering}
+          >
+            {audioPlayer.isPlaying ? (
+              <Square className="h-7 w-7 fill-current" />
+            ) : (
+              <Play className="h-7 w-7 fill-current ml-0.5" />
+            )}
+          </Button>
 
-            {/* Container for rest of content with padding */}
+          {/* Container for rest of content with padding */}
+          <div className="container mx-auto">
             <div className="flex items-center flex-1 px-4 gap-4">
               {/* LIVE Badge */}
               <div className="flex items-center gap-2 pr-4 border-r border-white/20">
