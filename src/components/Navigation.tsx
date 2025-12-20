@@ -87,6 +87,7 @@ const Navigation = () => {
                   const event = new CustomEvent('open-live-chat');
                   window.dispatchEvent(event);
                 }}
+                aria-label="Open live chat"
               >
                 Live Chat
               </button>
@@ -113,10 +114,11 @@ const Navigation = () => {
               {/* Support Button - Desktop */}
               <Button
                 onClick={() => setSupportDialogOpen(true)}
-                className="hidden md:inline-flex items-center gap-2 bg-[#e53935] hover:bg-[#c62828] text-white font-medium px-4 h-9"
+                className="hidden md:inline-flex items-center gap-2 bg-[#e53935] hover:bg-[#c62828] text-white font-bold px-4 h-9"
+                aria-label="Support HEADY.FM"
               >
                 <Heart className="h-4 w-4" />
-                <span className="text-sm">Support</span>
+                <span className="text-sm font-bold">Support</span>
               </Button>
 
               {/* User Menu / Auth - Desktop */}
@@ -212,6 +214,7 @@ const Navigation = () => {
             onClick={audioPlayer.togglePlay}
             className="h-11 px-16 rounded-none bg-[#2d5016] hover:bg-[#3a6b1f] text-white flex-shrink-0 border-r border-white/10"
             disabled={audioPlayer.isBuffering}
+            aria-label={audioPlayer.isPlaying ? "Stop audio stream" : "Play live audio stream"}
           >
             {audioPlayer.isPlaying ? (
               <Square className="h-7 w-7 fill-current" />
@@ -277,6 +280,7 @@ const Navigation = () => {
                   <Link 
                     to={`/song/${encodeURIComponent(nowPlaying.artist)}/${encodeURIComponent(nowPlaying.title)}`}
                     className="text-white/60 hover:text-white transition-colors"
+                    aria-label={`View song details for ${nowPlaying.title} by ${nowPlaying.artist}`}
                   >
                     <ChevronRight className="h-4 w-4" />
                   </Link>
@@ -297,6 +301,7 @@ const Navigation = () => {
                 onClick={audioPlayer.toggleMute}
                 onMouseEnter={() => setVolumeOpen(true)}
                 className="text-white/60 hover:text-white hover:bg-white/10 h-7 w-7"
+                aria-label={audioPlayer.isMuted || audioPlayer.volume === 0 ? "Unmute audio" : "Mute audio"}
               >
                 {audioPlayer.isMuted || audioPlayer.volume === 0 ? (
                   <VolumeX className="h-4 w-4" />
@@ -363,6 +368,7 @@ const Navigation = () => {
               onClick={audioPlayer.togglePlay}
               className="w-full h-12 bg-[#288b5a] hover:bg-[#1e6e47] text-white font-semibold gap-2"
               disabled={audioPlayer.isBuffering}
+              aria-label={audioPlayer.isPlaying ? "Stop audio stream" : "Listen live to HEADY.FM"}
             >
               {audioPlayer.isPlaying ? (
                 <>
@@ -402,6 +408,7 @@ const Navigation = () => {
                   window.dispatchEvent(event);
                   setMobileMenuOpen(false);
                 }}
+                aria-label="Open live chat"
               >
                 Live Chat
               </Button>
@@ -414,6 +421,7 @@ const Navigation = () => {
                 setMobileMenuOpen(false);
               }}
               className="w-full h-11 bg-[#e53935] hover:bg-[#c62828] text-white font-semibold gap-2"
+              aria-label="Support HEADY.FM"
             >
               <Heart className="h-5 w-5" />
               Support HEADY.FM
@@ -433,12 +441,12 @@ const Navigation = () => {
                 </div>
                 <div className="grid grid-cols-3 gap-2">
                   <Link to="/saved-songs" onClick={() => setMobileMenuOpen(false)}>
-                    <Button variant="ghost" size="sm" className="w-full h-9 text-xs text-white/70 hover:text-white hover:bg-white/10">
+                    <Button variant="ghost" size="sm" className="w-full h-9 text-xs text-white/70 hover:text-white hover:bg-white/10" aria-label="View saved songs">
                       <Heart className="h-4 w-4" />
                     </Button>
                   </Link>
                   <Link to="/profile" onClick={() => setMobileMenuOpen(false)}>
-                    <Button variant="ghost" size="sm" className="w-full h-9 text-xs text-white/70 hover:text-white hover:bg-white/10">
+                    <Button variant="ghost" size="sm" className="w-full h-9 text-xs text-white/70 hover:text-white hover:bg-white/10" aria-label="View profile">
                       <User className="h-4 w-4" />
                     </Button>
                   </Link>
@@ -450,6 +458,7 @@ const Navigation = () => {
                       handleSignOut();
                       setMobileMenuOpen(false);
                     }}
+                    aria-label="Sign out"
                   >
                     <LogOut className="h-4 w-4" />
                   </Button>

@@ -181,6 +181,7 @@ export const FloatingChatWidget = () => {
         onClick={handleWidgetClick}
         size="lg"
         className="fixed bottom-20 right-4 md:bottom-6 md:right-6 h-14 md:h-16 rounded-full shadow-xl hover:scale-105 transition-all z-50 px-4 md:px-6 gap-2 md:gap-3"
+        aria-label={hasInteracted ? 'Open live chat' : 'Join live chat'}
       >
         <Radio className="h-5 w-5 md:h-6 md:w-6" />
         <span className="font-bold text-xs md:text-sm">
