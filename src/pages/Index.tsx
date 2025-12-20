@@ -4,8 +4,9 @@ import { useTransmissionHistory } from '@/hooks/useTransmissionHistory';
 import { useHotSongs } from '@/hooks/useHotSongs';
 import Navigation from '@/components/Navigation';
 import { SEO } from '@/components/SEO';
-import { HeroCarousel } from '@/components/HeroCarousel';
-import { FeaturesSection } from '@/components/FeaturesSection';
+import { VideoHero } from '@/components/VideoHero';
+import { FeaturedCard } from '@/components/FeaturedCard';
+import { ExperienceCard } from '@/components/ExperienceCard';
 import { SupportSection } from '@/components/SupportSection';
 import { SupportSidebar } from '@/components/SupportSidebar';
 import { NowPlaying } from '@/components/NowPlaying';
@@ -40,15 +41,15 @@ const Index = () => {
   const [hotSongsDisplayLimit, setHotSongsDisplayLimit] = useState(10);
   const [isLoadingMoreHot, setIsLoadingMoreHot] = useState(false);
   
-  // Data hooks - capped at 20 for initial load as per plan
+  // Data hooks - fetch more data for mobile scrolling
   const { data: historyData, isLoading: historyLoading, isFetching, refetch } = useTransmissionHistory({
-    limit: 20, 
+    limit: 50, // Increased from 20 to allow loading more items
     searchQuery: '',
     selectedDate: 'all',
     selectedHour: 'all',
   });
 
-  const { data: hotSongsData, isLoading: hotSongsLoading } = useHotSongs(20);
+  const { data: hotSongsData, isLoading: hotSongsLoading } = useHotSongs(40); // Increased from 20 to support full Hot 40
 
   // ... rest of the component ...
 
@@ -65,6 +66,18 @@ const Index = () => {
       document.title = 'HEADY.FM - Commercial-Free Indie Rock Radio';
     };
   }, [nowPlaying]);
+
+  // Listen for logo click to reset mobile tab to 'player'
+  useEffect(() => {
+    const handleResetMobileTab = () => {
+      setMobileTab('player');
+    };
+    
+    window.addEventListener('resetMobileTab', handleResetMobileTab);
+    return () => {
+      window.removeEventListener('resetMobileTab', handleResetMobileTab);
+    };
+  }, []);
 
   const handleLoadMore = async () => {
     setIsLoadingMore(true);
@@ -101,7 +114,7 @@ const Index = () => {
     })) || [];
 
   return (
-    <div className="min-h-screen bg-background pb-20 md:pb-0">
+    <div className="min-h-screen bg-black pb-20 md:pb-0">
       <SEO
         title={nowPlaying && nowPlaying.artist && nowPlaying.title 
           ? `${nowPlaying.artist} - ${nowPlaying.title} | HEADY.FM`
@@ -114,9 +127,9 @@ const Index = () => {
       <Navigation />
 
       {/* Mobile: Tab Content */}
-      <div className="md:hidden">
+      <div className="md:hidden bg-black">
         {mobileTab === 'player' && (
-          <section className="px-4 pt-6 pb-4">
+          <section className="px-4 pt-6 pb-4 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
             {isLoading && !nowPlaying ? (
               <NowPlayingSkeleton />
             ) : (
@@ -126,10 +139,10 @@ const Index = () => {
         )}
         
         {mobileTab === 'history' && (
-          <ScrollArea className="h-[calc(100vh-180px)]">
+          <ScrollArea className="h-[calc(100vh-180px)] bg-black">
             <div className="px-4 py-6">
               <div className="flex items-center justify-between mb-4">
-              <h2 className="text-2xl font-black uppercase tracking-tight">PLAYLIST</h2>
+              <h2 className="text-2xl font-black uppercase tracking-tight text-white">PLAYLIST</h2>
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -193,9 +206,10 @@ const Index = () => {
         )}
 
         {mobileTab === 'hot40' && (
-          <div className="px-4 py-6">
-            <h2 className="text-2xl font-black mb-4 uppercase tracking-tight">HEADY HOT 40 🔥</h2>
-            <p className="mb-4 opacity-70">Top tracks from the last 7 days</p>
+          <ScrollArea className="h-[calc(100vh-180px)] bg-black">
+            <div className="px-4 py-6">
+            <h2 className="text-2xl font-black mb-4 uppercase tracking-tight text-white">HEADY HOT 40 🔥</h2>
+            <p className="mb-4 text-white/70">Top tracks from the last 7 days</p>
 
             {/* Content */}
             {hotSongsLoading ? (
@@ -256,30 +270,32 @@ const Index = () => {
                 )}
               </>
             ) : (
-              <div className="border-bold rounded-xl p-12 text-center bg-card">
-                <p className="text-lg opacity-60">No hot tracks available yet</p>
+              <div className="border border-white/20 rounded-xl p-12 text-center bg-gray-900/50">
+                <p className="text-lg text-white/60">No hot tracks available yet</p>
               </div>
             )}
-          </div>
+            </div>
+          </ScrollArea>
         )}
 
         {mobileTab === 'shows' && (
-          <div className="px-4 py-6">
-            <h2 className="text-2xl font-black mb-4 uppercase tracking-tight">Shows</h2>
-            <p className="mb-6 opacity-70">Your guide to HEADY.FM programming</p>
+          <ScrollArea className="h-[calc(100vh-180px)] bg-black">
+            <div className="px-4 py-6">
+            <h2 className="text-2xl font-black mb-4 uppercase tracking-tight text-white">Shows</h2>
+            <p className="mb-6 text-white/70">Your guide to HEADY.FM programming</p>
 
             <div className="space-y-6">
               {/* Night Treats Show */}
-              <div className="border-bold rounded-xl overflow-hidden bg-card">
+              <div className="border border-white/20 rounded-xl overflow-hidden bg-gray-900/80">
                 <div className="p-6 space-y-4">
-                  <h3 className="text-2xl font-bold">Night Treats</h3>
-                  <p className="opacity-80">
+                  <h3 className="text-2xl font-bold text-white">Night Treats</h3>
+                  <p className="text-white/80">
                     Late night electronic music journey featuring deep house, progressive house, tech house, and experimental beats.
                   </p>
 
                   {/* DJs */}
                   <div className="space-y-3">
-                    <h4 className="font-bold uppercase text-sm tracking-wide opacity-60">Featured DJs</h4>
+                    <h4 className="font-bold uppercase text-sm tracking-wide text-white/60">Featured DJs</h4>
                     <div className="flex gap-4">
                       <div className="flex items-center gap-3">
                         <img 
@@ -287,7 +303,7 @@ const Index = () => {
                           alt="Rouxbais"
                           className="w-16 h-16 rounded-full object-cover border-2 border-primary/20"
                         />
-                        <p className="font-bold">Rouxbais</p>
+                        <p className="font-bold text-white">Rouxbais</p>
                       </div>
                       <div className="flex items-center gap-3">
                         <img 
@@ -295,21 +311,21 @@ const Index = () => {
                           alt="Dale"
                           className="w-16 h-16 rounded-full object-cover border-2 border-primary/20"
                         />
-                        <p className="font-bold">Dale</p>
+                        <p className="font-bold text-white">Dale</p>
                       </div>
                     </div>
                   </div>
 
                   {/* Air Time */}
-                  <div className="pt-4 border-t border-border/50">
-                    <p className="text-sm font-bold mb-2 uppercase tracking-wide opacity-60">Air Time</p>
+                  <div className="pt-4 border-t border-white/20">
+                    <p className="text-sm font-bold mb-2 uppercase tracking-wide text-white/60">Air Time</p>
                     <p className="text-lg font-bold text-primary">Friday at 10:00 PM ET</p>
                   </div>
 
                   {/* Replays */}
-                  <div className="pt-4 border-t border-border/50">
-                    <p className="text-sm font-bold mb-2 uppercase tracking-wide opacity-60">Replays</p>
-                    <ul className="space-y-1 text-sm opacity-80">
+                  <div className="pt-4 border-t border-white/20">
+                    <p className="text-sm font-bold mb-2 uppercase tracking-wide text-white/60">Replays</p>
+                    <ul className="space-y-1 text-sm text-white/80">
                       <li>• Fridays: 11:00 PM</li>
                       <li>• Saturdays: 12:00 AM, 1:00 AM, 3:00 AM</li>
                       <li>• Sundays: 1:00 AM</li>
@@ -318,105 +334,116 @@ const Index = () => {
                 </div>
               </div>
             </div>
-          </div>
+            </div>
+          </ScrollArea>
         )}
         
         {mobileTab === 'support' && <MobileSupportTab />}
       </div>
 
-      {/* Hero Section with Carousel and Support Sidebar - Desktop Only */}
-      <section className="relative w-full overflow-hidden hidden md:block">
+      {/* ===== SECTION 1: HERO - Full Width Video ===== */}
+      <section className="relative w-full overflow-visible hidden md:block">
         {/* SEO H1 - Visually hidden but present for SEO */}
         <h1 className="sr-only">HEADY.FM: Commercial-Free Indie Rock Radio</h1>
-        
-        <div className="flex flex-col lg:flex-row">
-          {/* Vertical Carousel - 75% width on desktop */}
-          <div className="w-full lg:w-3/4">
-            <HeroCarousel />
-          </div>
+        <VideoHero />
+      </section>
+
+      {/* ===== SECTION 2: ON AIR NOW (with Experience Card) ===== */}
+      <section className="hidden md:block py-4 lg:py-6">
+        <div className="px-4">
+          {error && (
+            <div className="mb-8 p-6 rounded-xl bg-destructive/10 border-4 border-destructive">
+              <p className="font-bold text-lg mb-1 text-white">Transmission Error</p>
+              <p className="opacity-80 text-white">{error}</p>
+            </div>
+          )}
           
-          {/* Support Sidebar - 25% width on desktop */}
-          <div className="w-full lg:w-1/4 lg:h-[80vh] lg:min-h-[600px] p-4 lg:p-6 bg-background/50">
-            <SupportSidebar />
+          <div className="flex flex-col lg:flex-row gap-4">
+            {/* Experience Card - 25% */}
+            <div className="w-full lg:w-1/4">
+              <ExperienceCard />
+            </div>
+            
+            {/* On Air Now - 75% */}
+            <div className="w-full lg:w-3/4 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-8 rounded-2xl border border-white/10">
+              <div className="flex items-center gap-4 mb-8">
+                <div className="h-px flex-1 bg-white/20 rounded-full" />
+                <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tight text-white">
+                  On Air Now
+                </h2>
+                <div className="h-px flex-1 bg-white/20 rounded-full" />
+              </div>
+              
+              {isLoading && !nowPlaying ? (
+                <NowPlayingSkeleton />
+              ) : (
+                <NowPlaying transmission={nowPlaying} isLive={isLive} />
+              )}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Features Section - Desktop Only */}
-      <div className="hidden md:block">
-        <FeaturesSection />
-      </div>
-
-      {/* Desktop: Main Content with On Air Now */}
-      <main className="container mx-auto px-4 py-8 lg:py-12 hidden md:block">
-        {error && (
-          <div className="mb-8 p-6 rounded-xl bg-destructive/10 border-4 border-destructive">
-            <p className="font-bold text-lg mb-1">Transmission Error</p>
-            <p className="opacity-80">{error}</p>
+      {/* ===== SECTION 3: FEATURED + SUPPORT (75/25 split) ===== */}
+      <section className="hidden md:block py-4 lg:py-6">
+        <div className="px-4">
+          <div className="flex flex-col lg:flex-row gap-4">
+            {/* Featured Card - 75% */}
+            <div className="w-full lg:w-3/4">
+              <FeaturedCard />
+            </div>
+            
+            {/* Support Sidebar - 25% */}
+            <div className="w-full lg:w-1/4 min-h-[500px]">
+              <SupportSidebar />
+            </div>
           </div>
-        )}
+        </div>
+      </section>
 
-        {/* Now Playing Section - Desktop */}
-        <section className="mb-16 bg-gradient-sunrise p-8 rounded-2xl border-bold-primary">
-          <div className="flex items-center gap-4 mb-8">
-            <div className="h-1 flex-1 bg-foreground/20 rounded-full" />
-            <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tight text-foreground">
-              On Air Now
-            </h2>
-            <div className="h-1 flex-1 bg-foreground/20 rounded-full" />
+      {/* ===== SECTION 4: RECENTLY PLAYED ===== */}
+      <section id="transmission-history" className="hidden md:block py-4 lg:py-6">
+        <div className="px-4">
+          <div className="bg-gradient-to-br from-gray-900/80 via-gray-800/60 to-gray-900/80 p-8 rounded-2xl border border-white/10">
+            <SongCarousel
+              title="PLAYLIST"
+              subtitle="Recently played tracks"
+              items={transmissions}
+              isLoading={historyLoading}
+              viewAllLink="/playlist"
+              viewAllText="Browse Full History"
+              limit={20}
+            />
           </div>
-          
-          {isLoading && !nowPlaying ? (
-            <NowPlayingSkeleton />
-          ) : (
-            <NowPlaying transmission={nowPlaying} isLive={isLive} />
-          )}
-        </section>
-      </main>
+        </div>
+      </section>
 
-      {/* Support Section - Desktop Only */}
-      <div className="hidden md:block">
-        <SupportSection />
-      </div>
-
-      {/* Desktop: Main Content with Hot Songs and Transmission History */}
-      <main className="container mx-auto px-4 pb-8 lg:pb-12 hidden md:block">
-        {/* HEADY HOT 40 Section - Desktop Carousel */}
-        <section id="hot-40-section" className="mt-8 md:mt-16">
-          <SongCarousel
-            title="HEADY HOT 40 🔥"
-            subtitle="Top tracks from the last 7 days"
-            items={hotSongsData || []}
-            isLoading={hotSongsLoading}
-            viewAllLink="/hot-40"
-            viewAllText="Browse Full Chart"
-            numbered={true}
-            limit={20}
-          />
-        </section>
-
-        {/* Transmission History Section - Desktop Carousel */}
-        <section id="transmission-history" className="mt-16 md:mt-24">
-          <SongCarousel
-            title="PLAYLIST"
-            subtitle="Recently played tracks"
-            items={transmissions}
-            isLoading={historyLoading}
-            viewAllLink="/playlist"
-            viewAllText="Browse Full History"
-            limit={20}
-          />
-        </section>
-      </main>
+      {/* ===== SECTION 5: HOT 40 ===== */}
+      <section id="hot-40-section" className="hidden md:block py-4 lg:py-6">
+        <div className="px-4">
+          <div className="bg-gradient-to-br from-gray-900/80 via-gray-800/60 to-gray-900/80 p-8 rounded-2xl border border-white/10">
+            <SongCarousel
+              title="HEADY HOT 40 🔥"
+              subtitle="Top tracks from the last 7 days"
+              items={hotSongsData || []}
+              isLoading={hotSongsLoading}
+              viewAllLink="/hot-40"
+              viewAllText="Browse Full Chart"
+              numbered={true}
+              limit={20}
+            />
+          </div>
+        </div>
+      </section>
 
       {/* Footer - Desktop Only */}
-      <footer className="hidden md:block border-t-4 border-primary bg-secondary py-12 mt-16">
+      <footer className="hidden md:block border-t border-white/10 py-12 mt-8">
         <div className="container mx-auto px-4">
           <div className="text-center space-y-4">
-            <h3 className="text-2xl font-black text-secondary-foreground">
+            <h3 className="text-2xl font-black text-white">
               HEADY EXTRATERRESTRIAL RADIO
             </h3>
-            <div className="pt-4 text-sm text-secondary-foreground/60">
+            <div className="pt-4 text-sm text-white/40">
               © {new Date().getFullYear()} HEADY Radio. All transmissions received and logged.
             </div>
           </div>

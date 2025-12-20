@@ -18,7 +18,7 @@ export const MobileBottomNav = ({ onTabChange, activeTab = 'player' }: MobileBot
   };
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-card border-t-2 border-border z-40 shadow-2xl" aria-label="Mobile navigation">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-gray-950 border-t-2 border-white/20 z-40 shadow-2xl backdrop-blur-lg" aria-label="Mobile navigation">
       <div className="flex justify-around items-center h-16 px-1 max-w-lg mx-auto" role="tablist">
         <button
           onClick={() => handleTabClick('player')}
@@ -27,7 +27,7 @@ export const MobileBottomNav = ({ onTabChange, activeTab = 'player' }: MobileBot
           role="tab"
           className={cn(
             "flex flex-col items-center justify-center gap-0.5 flex-1 h-14 transition-all relative rounded-lg",
-            activeTab === 'player' ? "text-primary bg-primary/10" : "text-muted-foreground hover:bg-muted/50"
+            activeTab === 'player' ? "text-primary bg-primary/20" : "text-white/60 hover:bg-white/10 hover:text-white/80"
           )}
         >
           <Radio className={cn("h-4 w-4", activeTab === 'player' && "scale-110")} aria-hidden="true" />
@@ -41,7 +41,7 @@ export const MobileBottomNav = ({ onTabChange, activeTab = 'player' }: MobileBot
           role="tab"
           className={cn(
             "flex flex-col items-center justify-center gap-0.5 flex-1 h-14 transition-all relative rounded-lg",
-            activeTab === 'history' ? "text-primary bg-primary/10" : "text-muted-foreground hover:bg-muted/50"
+            activeTab === 'history' ? "text-primary bg-primary/20" : "text-white/60 hover:bg-white/10 hover:text-white/80"
           )}
         >
           <History className={cn("h-4 w-4", activeTab === 'history' && "scale-110")} aria-hidden="true" />
@@ -55,7 +55,7 @@ export const MobileBottomNav = ({ onTabChange, activeTab = 'player' }: MobileBot
           role="tab"
           className={cn(
             "flex flex-col items-center justify-center gap-0.5 flex-1 h-14 transition-all relative rounded-lg",
-            activeTab === 'hot40' ? "text-primary bg-primary/10" : "text-muted-foreground hover:bg-muted/50"
+            activeTab === 'hot40' ? "text-primary bg-primary/20" : "text-white/60 hover:bg-white/10 hover:text-white/80"
           )}
         >
           <Flame className={cn("h-4 w-4", activeTab === 'hot40' && "scale-110")} aria-hidden="true" />
@@ -69,7 +69,7 @@ export const MobileBottomNav = ({ onTabChange, activeTab = 'player' }: MobileBot
           role="tab"
           className={cn(
             "flex flex-col items-center justify-center gap-0.5 flex-1 h-14 transition-all relative rounded-lg",
-            activeTab === 'shows' ? "text-primary bg-primary/10" : "text-muted-foreground hover:bg-muted/50"
+            activeTab === 'shows' ? "text-primary bg-primary/20" : "text-white/60 hover:bg-white/10 hover:text-white/80"
           )}
         >
           <Mic className={cn("h-4 w-4", activeTab === 'shows' && "scale-110")} aria-hidden="true" />
@@ -83,7 +83,7 @@ export const MobileBottomNav = ({ onTabChange, activeTab = 'player' }: MobileBot
           role="tab"
           className={cn(
             "flex flex-col items-center justify-center gap-0.5 flex-1 h-14 transition-all relative rounded-lg",
-            activeTab === 'support' ? "text-primary bg-primary/10" : "text-muted-foreground hover:bg-muted/50"
+            activeTab === 'support' ? "text-primary bg-primary/20" : "text-white/60 hover:bg-white/10 hover:text-white/80"
           )}
         >
           <Heart className={cn("h-4 w-4", activeTab === 'support' && "scale-110 fill-current")} aria-hidden="true" />

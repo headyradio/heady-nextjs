@@ -58,7 +58,17 @@ const Navigation = () => {
         <div className="relative flex h-20 items-center justify-between md:justify-start gap-4">
           {/* Logo - Absolutely centered on mobile, normal flow on desktop */}
           <div className="absolute left-1/2 -translate-x-1/2 md:static md:transform-none flex items-center gap-3">
-            <Link to="/">
+            <Link 
+              to="/" 
+              onClick={() => {
+                // If already on home page, scroll to top and trigger custom event to reset mobile tab
+                if (location.pathname === '/') {
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                  // Dispatch custom event that Index.tsx can listen to
+                  window.dispatchEvent(new CustomEvent('resetMobileTab'));
+                }
+              }}
+            >
               <img src={headyLogo} alt="HEADY Radio" className="h-16 w-auto cursor-pointer hover:opacity-80 transition-opacity" />
             </Link>
           </div>

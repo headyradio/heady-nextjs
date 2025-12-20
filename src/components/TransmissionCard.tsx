@@ -29,7 +29,7 @@ export const TransmissionCard = ({ transmission, index = 0 }: TransmissionCardPr
   const songPageUrl = `/song/${encodeURIComponent(transmission.artist)}/${encodeURIComponent(transmission.title)}`;
 
   return (
-    <div className={`${borderClass} rounded-xl overflow-hidden bg-card hover-lift cursor-pointer group animate-fade-in`}
+    <div className={`${borderClass} rounded-xl overflow-hidden bg-gray-900/80 border border-white/10 hover-lift cursor-pointer group animate-fade-in`}
          style={{ animationDelay: `${index * 50}ms` }}>
       {/* Album Art */}
       <Link to={songPageUrl}>
@@ -48,38 +48,38 @@ export const TransmissionCard = ({ transmission, index = 0 }: TransmissionCardPr
 
       {/* Track Info */}
       <div className="p-3 md:p-4">
-        <div className="flex items-start justify-between gap-2 mb-1">
-          <Link to={songPageUrl} className="flex-1 min-w-0">
-            <h3 className="font-bold text-base md:text-lg truncate leading-tight hover:text-primary transition-colors">
+        <div className="mb-1">
+          <Link to={songPageUrl} className="block">
+            <h3 className="font-bold text-sm md:text-base truncate leading-tight text-white hover:text-primary transition-colors">
               {transmission.title}
             </h3>
           </Link>
+        </div>
+        
+        {/* Artist Name - Clickable */}
+        <Link 
+          to={`/artist/${encodeURIComponent(transmission.artist)}`}
+          className="font-semibold text-xs md:text-sm text-white/70 mb-2 md:mb-3 truncate hover:text-primary hover:opacity-100 transition-colors cursor-pointer block"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {transmission.artist}
+        </Link>
+
+        <div className="flex items-center gap-2 text-xs text-white/60 mb-2">
+          <Clock className="w-3 h-3" />
+          <span>{playTime} · {playedAgo}</span>
+        </div>
+
+        {/* Music Service Links + Heart Button */}
+        <div className="flex items-center gap-2 mb-2 md:mb-3">
           <SaveSongButton
             artist={transmission.artist}
             title={transmission.title}
             album={transmission.album}
             albumArtUrl={transmission.album_art_url}
             artworkId={transmission.artwork_id}
-            size="default"
+            size="sm"
           />
-        </div>
-        
-        {/* Artist Name - Clickable */}
-        <Link 
-          to={`/artist/${encodeURIComponent(transmission.artist)}`}
-          className="font-semibold text-sm md:text-base opacity-70 mb-2 md:mb-3 truncate hover:text-primary hover:opacity-100 transition-colors cursor-pointer block"
-          onClick={(e) => e.stopPropagation()}
-        >
-          {transmission.artist}
-        </Link>
-
-        <div className="flex items-center gap-2 text-xs opacity-60 mb-2">
-          <Clock className="w-3 h-3" />
-          <span>{playTime} · {playedAgo}</span>
-        </div>
-
-        {/* Music Service Links */}
-        <div className="flex gap-2 mb-2 md:mb-3">
           <a
             href={youtubeUrl}
             target="_blank"

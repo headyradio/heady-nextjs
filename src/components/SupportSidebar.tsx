@@ -63,7 +63,7 @@ export const SupportSidebar = () => {
   };
 
   return (
-    <Card className="h-full border-bold-primary bg-card/95 backdrop-blur-sm p-6 flex flex-col">
+    <Card className="h-full bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 border border-white/10 backdrop-blur-sm p-6 flex flex-col rounded-2xl">
       <TooltipProvider>
       {/* Icon */}
       <div className="flex justify-center mb-4">
@@ -74,13 +74,13 @@ export const SupportSidebar = () => {
       </div>
 
       {/* Heading */}
-      <h2 className="text-2xl md:text-3xl font-black text-center text-foreground mb-3 uppercase tracking-tight">
+      <h2 className="text-2xl md:text-3xl font-black text-center text-white mb-3 uppercase tracking-tight">
         Support HEADY.FM
       </h2>
 
       {/* Description */}
       <div className="text-center mb-6 flex-1">
-        <p className="text-sm text-muted-foreground leading-relaxed mb-3">
+        <p className="text-sm text-white/70 leading-relaxed mb-3">
           If you love what HEADY.FM brings to your day, please consider making a donation.
         </p>
         <p className="text-xs text-accent font-black uppercase">
@@ -143,7 +143,7 @@ export const SupportSidebar = () => {
         </div>
 
         {/* Trust Badge */}
-        <div className="flex items-center justify-center gap-1 text-xs text-muted-foreground">
+        <div className="flex items-center justify-center gap-1 text-xs text-white/50">
           <Shield className="h-3 w-3" />
           <span className="font-bold">Secure via Stripe</span>
         </div>

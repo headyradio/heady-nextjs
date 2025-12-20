@@ -57,7 +57,7 @@ export const MobileSupportTab = () => {
   };
 
   return (
-    <div className="px-4 py-6 pb-24 overflow-y-auto h-full">
+    <div className="px-4 py-6 pb-24 overflow-y-auto h-full bg-black">
       {/* Icon */}
       <div className="flex justify-center mb-6">
         <div className="relative">
@@ -67,12 +67,12 @@ export const MobileSupportTab = () => {
       </div>
 
       {/* Heading */}
-      <h2 className="text-3xl font-black text-center text-foreground mb-4 uppercase tracking-tight">
+      <h2 className="text-3xl font-black text-center text-white mb-4 uppercase tracking-tight">
         Support HEADY.FM
       </h2>
 
       {/* Description */}
-      <p className="text-center text-muted-foreground mb-8 text-sm leading-relaxed">
+      <p className="text-center text-white/70 mb-8 text-sm leading-relaxed">
         Your support keeps us independent, ad-free, and thriving. Every donation directly covers streaming costs.
       </p>
 
@@ -130,7 +130,7 @@ export const MobileSupportTab = () => {
       </div>
 
       {/* Trust Indicators */}
-      <div className="flex items-center justify-center gap-2 mt-6 text-xs text-muted-foreground">
+      <div className="flex items-center justify-center gap-2 mt-6 text-xs text-white/60">
         <Shield className="h-3 w-3" />
         <span className="font-bold">Secure payment powered by Stripe</span>
       </div>

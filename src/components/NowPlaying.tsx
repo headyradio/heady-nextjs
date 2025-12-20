@@ -56,8 +56,8 @@ export const NowPlaying = ({ transmission, isLive = false }: NowPlayingProps) =>
   
   if (!transmission) {
     return (
-      <div className="md:border-bold md:rounded-2xl p-4 md:p-12 bg-card">
-        <div className="flex items-center justify-center h-64 text-muted-foreground">
+      <div className="md:border md:border-white/10 md:rounded-2xl p-4 md:p-12 bg-transparent">
+        <div className="flex items-center justify-center h-64 text-white/50">
           <div className="text-center">
             <Play className="w-16 md:w-24 h-16 md:h-24 mx-auto mb-4 opacity-30" />
             <p className="text-base md:text-lg font-medium">No transmission detected</p>
@@ -73,8 +73,8 @@ export const NowPlaying = ({ transmission, isLive = false }: NowPlayingProps) =>
   const spotifyUrl = getSpotifySearchUrl(transmission.artist, transmission.title);
 
   return (
-    <div className="md:border-bold md:rounded-2xl overflow-hidden">
-      <div className="bg-card">
+    <div className="md:border md:border-white/10 md:rounded-2xl overflow-hidden">
+      <div className="bg-transparent">
         {/* Mobile App-Style Layout */}
         <div className="md:grid md:grid-cols-2 md:gap-8 md:p-8 lg:p-12">
           {/* Album Art with Play Button - Mobile First */}
@@ -147,12 +147,12 @@ export const NowPlaying = ({ transmission, isLive = false }: NowPlayingProps) =>
             </div>
 
             {/* Mobile: Centered Track Info */}
-            <div className="text-center md:text-left mb-4 md:mb-6">
+            <div className="text-center md:text-left mb-4 md:mb-6 overflow-hidden">
               <Link 
                 to={`/song/${encodeURIComponent(transmission.artist)}/${encodeURIComponent(transmission.title)}`}
                 className="group block"
               >
-                <h2 className="text-2xl md:text-4xl lg:text-5xl font-black mb-2 md:mb-3 leading-tight group-hover:text-primary transition-colors">
+                <h2 className="text-xl md:text-2xl lg:text-3xl font-black mb-2 md:mb-3 leading-tight text-white group-hover:text-primary transition-colors break-words">
                   {transmission.title}
                 </h2>
               </Link>
@@ -161,19 +161,19 @@ export const NowPlaying = ({ transmission, isLive = false }: NowPlayingProps) =>
                 to={`/artist/${encodeURIComponent(transmission.artist)}`}
                 className="block hover:text-primary transition-colors"
               >
-                <p className="text-lg md:text-2xl lg:text-3xl font-bold mb-2 md:mb-3 opacity-70">
+                <p className="text-base md:text-xl lg:text-2xl font-bold mb-2 md:mb-3 text-white/80 md:text-white/70">
                   {transmission.artist}
                 </p>
               </Link>
 
               {transmission.album && (
-                <p className="text-sm md:text-base font-semibold mb-2 opacity-60">
+                <p className="text-sm md:text-base font-semibold mb-2 text-white/60">
                   {transmission.album}
                 </p>
               )}
               
               {transmission.year && (
-                <p className="text-sm md:text-base font-semibold mb-3 md:mb-4 opacity-60">
+                <p className="text-sm md:text-base font-semibold mb-3 md:mb-4 text-white/60">
                   {transmission.year}
                 </p>
               )}
@@ -277,7 +277,7 @@ export const NowPlaying = ({ transmission, isLive = false }: NowPlayingProps) =>
             {/* Tags */}
             <div className="flex flex-wrap gap-2 md:gap-3 justify-center md:justify-start">
               {transmission.genre && (
-                <span className="tag-pill bg-accent text-accent-foreground text-xs md:text-sm">
+                <span className="tag-pill bg-white/10 text-white border border-white/20 text-xs md:text-sm">
                   {transmission.genre}
                 </span>
               )}

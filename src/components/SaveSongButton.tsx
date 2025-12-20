@@ -79,9 +79,9 @@ const SaveSongButton = ({
             size={size}
             onClick={handleClick}
             disabled={saveSong.isPending || unsaveSong.isPending}
-            className="hover:scale-110 transition-transform"
+            className="hover:scale-110 transition-transform md:bg-white/10 md:hover:bg-white/20 md:border md:border-white/20"
           >
-            <Heart className={`h-6 w-6 ${saved ? 'fill-primary text-primary' : ''}`} />
+            <Heart className={`${size === 'sm' ? 'h-5 w-5' : 'h-6 w-6'} ${saved ? 'fill-white text-white md:fill-white md:text-white' : 'md:text-white/60'}`} />
           </Button>
         </TooltipTrigger>
         <TooltipContent 

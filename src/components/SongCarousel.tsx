@@ -43,16 +43,19 @@ export const SongCarousel = ({
       {/* Header */}
       <div className="flex items-end justify-between mb-6 md:mb-8">
         <div>
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-black uppercase tracking-tight">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-black uppercase tracking-tight text-foreground md:text-white">
             {title}
           </h2>
           {subtitle && (
-            <p className="mt-2 text-lg opacity-70">{subtitle}</p>
+            <p className="mt-2 text-lg text-foreground/70 md:text-white/70">{subtitle}</p>
           )}
         </div>
         
         <Link to={viewAllLink} className="hidden md:block">
-          <Button variant="ghost" className="font-bold group">
+          <Button 
+            variant="ghost" 
+            className="font-bold group text-white hover:text-white hover:bg-white/20 border border-white/30"
+          >
             {viewAllText}
             <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
           </Button>
@@ -82,8 +85,8 @@ export const SongCarousel = ({
               <CarouselItem key={song.id} className="pl-4 md:pl-6 basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4 xl:basis-1/5">
                 <div className="relative group h-full">
                   {numbered && (
-                    <div className="absolute -top-2 -left-2 z-10 bg-primary text-primary-foreground font-black text-sm px-3 py-1 rounded-full border-2 border-background shadow-lg">
-                      #{index + 1}
+                    <div className="absolute -top-3 -left-3 z-10 bg-primary text-primary-foreground font-black text-lg w-10 h-10 flex items-center justify-center rounded-full border-4 border-background shadow-xl transform group-hover:scale-110 transition-transform">
+                      {index + 1}
                     </div>
                   )}
                   <TransmissionCard transmission={song} index={index} />
@@ -94,13 +97,16 @@ export const SongCarousel = ({
             {/* "View All" Card at the end */}
             <CarouselItem className="pl-4 md:pl-6 basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4 xl:basis-1/5">
               <Link to={viewAllLink} className="block h-full min-h-[300px]">
-                <div className="h-full border-2 border-dashed border-border hover:border-primary rounded-xl flex flex-col items-center justify-center p-8 text-center transition-colors group">
+                <div className="h-full border-2 border-dashed border-border md:border-white/20 hover:border-primary rounded-xl flex flex-col items-center justify-center p-8 text-center transition-colors group">
                   <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                     <ArrowRight className="h-8 w-8 text-primary" />
                   </div>
-                  <h3 className="text-xl font-bold mb-2">View All</h3>
-                  <p className="text-muted-foreground mb-6">See the complete list</p>
-                  <Button variant="default" className="font-bold">
+                  <h3 className="text-xl font-bold mb-2 text-foreground md:text-white">View All</h3>
+                  <p className="text-muted-foreground md:text-white/60 mb-6">See the complete list</p>
+                  <Button 
+                    variant="default" 
+                    className="font-bold bg-white text-black hover:bg-white/90"
+                  >
                     Go to Page
                   </Button>
                 </div>
@@ -109,13 +115,13 @@ export const SongCarousel = ({
           </CarouselContent>
           
           <div className="hidden md:block">
-            <CarouselPrevious className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 opacity-0 group-hover/carousel:opacity-100 transition-opacity bg-background border-2 border-border h-12 w-12" />
-            <CarouselNext className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 opacity-0 group-hover/carousel:opacity-100 transition-opacity bg-background border-2 border-border h-12 w-12" />
+            <CarouselPrevious className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 opacity-0 group-hover/carousel:opacity-100 transition-opacity bg-white/10 border-2 border-white/30 text-white h-12 w-12 hover:bg-white/20 focus:opacity-100" />
+            <CarouselNext className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 opacity-0 group-hover/carousel:opacity-100 transition-opacity bg-white/10 border-2 border-white/30 text-white h-12 w-12 hover:bg-white/20 focus:opacity-100" />
           </div>
         </Carousel>
       ) : (
-        <div className="border-bold rounded-xl p-12 text-center bg-card">
-          <p className="text-lg opacity-60">No tracks available right now</p>
+        <div className="border border-white/10 rounded-xl p-12 text-center bg-gray-900/50">
+          <p className="text-lg text-white/60">No tracks available right now</p>
         </div>
       )}
       
@@ -130,4 +136,9 @@ export const SongCarousel = ({
     </div>
   );
 };
+
+
+
+
+
 

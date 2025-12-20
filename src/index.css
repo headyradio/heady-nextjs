@@ -1,3 +1,13 @@
+/* Unison Pro Custom Font */
+@font-face {
+  font-family: 'Unison Pro';
+  src: url('/fonts/UnisonProBold.woff2') format('woff2'),
+       url('/fonts/UnisonProBold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -79,12 +89,12 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
-    font-family: 'Inter', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
   }
   
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Space Grotesk', sans-serif;
-  font-weight: 900;
+  font-family: 'Unison Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-weight: 700;
   letter-spacing: -0.02em;
 }
 }
