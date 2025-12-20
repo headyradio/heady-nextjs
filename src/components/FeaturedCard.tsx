@@ -7,11 +7,11 @@ import daleImage from '@/assets/dale.png';
 export const FeaturedCard = () => {
   return (
     <div className="relative h-full min-h-[500px] rounded-2xl overflow-hidden group border border-white/10">
-      {/* Background Image with Gradient */}
+      {/* Background Image with Gradient - Using optimized WebP from CDN */}
       <div 
         className="absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-out group-hover:scale-105"
         style={{ 
-          backgroundImage: `url(${rouxbaisImage})`,
+          backgroundImage: `url(/assets/card1-rouxbais.webp)`,
         }}
       />
       

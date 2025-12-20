@@ -54,8 +54,8 @@ const Hot40 = () => {
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
               {hotSongsData.slice(0, displayLimit).map((song, index) => (
-                <div key={song.id} className="relative group">
-                  <div className="absolute -top-3 -left-3 z-10 bg-primary text-primary-foreground font-black text-lg w-10 h-10 flex items-center justify-center rounded-full border-4 border-background shadow-xl transform group-hover:scale-110 transition-transform">
+                <div key={song.id} className="relative group pt-4">
+                  <div className="absolute -top-1 -left-2 z-20 bg-primary text-primary-foreground font-black text-lg w-10 h-10 flex items-center justify-center rounded-full border-4 border-background shadow-xl transform group-hover:scale-110 transition-transform">
                     {index + 1}
                   </div>
                   <TransmissionCard transmission={song} index={index} />

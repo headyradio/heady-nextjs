@@ -86,13 +86,15 @@ export const TransmissionCard = ({ transmission, index = 0 }: TransmissionCardPr
             rel="noopener noreferrer"
             className="p-2 md:p-2.5 hover:opacity-70 transition-opacity"
             onClick={(e) => e.stopPropagation()}
+            aria-label={`Search for ${transmission.title} by ${transmission.artist} on YouTube`}
             title="Search on YouTube"
           >
             <img 
               src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg"
-              alt="YouTube"
+              alt=""
               className="w-5 h-5 md:w-6 md:h-6"
               loading="lazy"
+              aria-hidden="true"
             />
           </a>
           <a
@@ -101,13 +103,15 @@ export const TransmissionCard = ({ transmission, index = 0 }: TransmissionCardPr
             rel="noopener noreferrer"
             className="p-2 md:p-2.5 hover:opacity-70 transition-opacity"
             onClick={(e) => e.stopPropagation()}
+            aria-label={`Search for ${transmission.title} by ${transmission.artist} on Spotify`}
             title="Search on Spotify"
           >
             <img 
               src="https://upload.wikimedia.org/wikipedia/commons/8/84/Spotify_icon.svg"
-              alt="Spotify"
+              alt=""
               className="w-5 h-5 md:w-6 md:h-6"
               loading="lazy"
+              aria-hidden="true"
             />
           </a>
         </div>

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { Eye, EyeOff, SkipForward } from 'lucide-react';
+import { Eye, EyeOff, Shuffle } from 'lucide-react';
 
 // Video sources - Bunny.net CDN optimized videos
 // Using direct MP4 URLs from Bunny Stream
@@ -112,15 +112,17 @@ export const VideoHero = () => {
     });
   };
 
-  // Switch to next video
-  const switchVideo = () => {
-    const currentIndex = VIDEO_SOURCES.findIndex(v => v.id === currentVideo.id);
-    const nextIndex = (currentIndex + 1) % VIDEO_SOURCES.length;
-    const nextVideo = VIDEO_SOURCES[nextIndex];
+  // Shuffle to random video
+  const shuffleVideo = () => {
+    // Get a random video that's different from the current one
+    let newVideo;
+    do {
+      newVideo = getRandomVideo();
+    } while (newVideo.id === currentVideo.id && VIDEO_SOURCES.length > 1);
     
     setIsVideoLoaded(false); // Reset loaded state for smooth transition
-    setCurrentVideo(nextVideo);
-    console.log('Switching to video:', nextVideo.id);
+    setCurrentVideo(newVideo);
+    console.log('Shuffling to video:', newVideo.id);
   };
 
   const showVideo = isVideoEnabled && !prefersReducedMotion;
@@ -200,23 +202,29 @@ export const VideoHero = () => {
       {/* Collapsed State - Show minimal info */}
       {isCollapsed && (
         <div className="relative h-full flex items-center justify-center">
-          <div className="text-white/60 text-sm md:text-base font-bold uppercase tracking-wide">
+          <h1 
+            className="font-black text-white uppercase tracking-tight leading-none drop-shadow-2xl"
+            style={{ 
+              fontSize: 'min(5vw, 3.5rem)',
+              textShadow: '0 4px 40px rgba(0,0,0,0.8)'
+            }}
+          >
             Extraterrestrial Radio
-          </div>
+          </h1>
         </div>
       )}
 
       {/* Button Group - Bottom Right */}
       <div className="absolute bottom-6 right-6 md:bottom-8 md:right-8 flex gap-2 z-10">
-        {/* Switch Video Button */}
+        {/* Shuffle Video Button */}
         {!isCollapsed && (
           <button
-            onClick={switchVideo}
+            onClick={shuffleVideo}
             className="p-3 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white/60 hover:text-white hover:bg-white/20 hover:border-white/30 transition-all duration-300 group focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-black"
-            aria-label="Switch to next video"
-            title="Switch scene"
+            aria-label="Shuffle to random video"
+            title="Shuffle video"
           >
-            <SkipForward className="w-4 h-4 transition-opacity group-hover:opacity-100" />
+            <Shuffle className="w-4 h-4 transition-opacity group-hover:opacity-100" />
           </button>
         )}
         

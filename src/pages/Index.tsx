@@ -228,8 +228,8 @@ const Index = () => {
               <>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {hotSongsData.slice(0, hotSongsDisplayLimit).map((song, index) => (
-                    <div key={song.id} className="relative">
-                      <div className="absolute -top-2 -left-2 z-10 bg-primary text-primary-foreground font-black text-sm px-3 py-1 rounded-full border-2 border-background shadow-lg">
+                    <div key={song.id} className="relative pt-3">
+                      <div className="absolute top-0 -left-1 z-20 bg-primary text-primary-foreground font-black text-sm px-3 py-1 rounded-full border-2 border-background shadow-lg">
                         #{index + 1}
                       </div>
                       <TransmissionCard transmission={song} index={index} />

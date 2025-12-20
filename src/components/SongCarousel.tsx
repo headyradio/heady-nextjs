@@ -83,9 +83,9 @@ export const SongCarousel = ({
           <CarouselContent className="-ml-4 md:-ml-6">
             {displayItems.map((song, index) => (
               <CarouselItem key={song.id} className="pl-4 md:pl-6 basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4 xl:basis-1/5">
-                <div className="relative group h-full">
+                <div className="relative group h-full pt-4">
                   {numbered && (
-                    <div className="absolute -top-3 -left-3 z-10 bg-primary text-primary-foreground font-black text-lg w-10 h-10 flex items-center justify-center rounded-full border-4 border-background shadow-xl transform group-hover:scale-110 transition-transform">
+                    <div className="absolute -top-1 -left-2 z-20 bg-primary text-primary-foreground font-black text-lg w-10 h-10 flex items-center justify-center rounded-full border-4 border-background shadow-xl transform group-hover:scale-110 transition-transform">
                       {index + 1}
                     </div>
                   )}
