@@ -117,20 +117,25 @@ const Navigation = () => {
                 disabled={audioPlayer.isBuffering}
               >
                 {audioPlayer.isPlaying ? (
-                  <Square className="h-4 w-4 fill-current" />
+                  <>
+                    <Square className="h-4 w-4 fill-current" />
+                    <span className="text-sm">Stop</span>
+                  </>
                 ) : (
-                  <Play className="h-4 w-4 fill-current" />
+                  <>
+                    <Play className="h-4 w-4 fill-current" />
+                    <span className="text-sm">Listen Live</span>
+                  </>
                 )}
-                <span className="text-sm">Listen Live</span>
               </Button>
 
-              {/* Support/Donate Button - Desktop */}
+              {/* Support Button - Desktop */}
               <Button
                 onClick={() => setSupportDialogOpen(true)}
                 className="hidden md:inline-flex items-center gap-2 bg-[#e53935] hover:bg-[#c62828] text-white font-medium px-4 h-9"
               >
                 <Heart className="h-4 w-4" />
-                <span className="text-sm">Donate</span>
+                <span className="text-sm">Support</span>
               </Button>
 
               {/* User Menu / Auth - Desktop */}
@@ -196,9 +201,9 @@ const Navigation = () => {
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="text-white/70 hover:text-white hover:bg-white/10 h-9 px-3"
+                    className="text-white/70 hover:text-white hover:bg-white/10 h-9 px-3 font-semibold"
                   >
-                    Sign In
+                    MY HEADY
                   </Button>
                 </Link>
               )}
@@ -222,15 +227,15 @@ const Navigation = () => {
       <div className="hidden md:block bg-[#2d1b4e] border-t border-white/10">
         <div className="container mx-auto px-4">
           <div className="flex items-center h-11 gap-4">
-            {/* ON AIR Badge */}
+            {/* LIVE Badge */}
             <div className="flex items-center gap-2 pr-4 border-r border-white/20">
-              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-[#e53935] text-white text-[10px] font-bold uppercase tracking-wider">
-                <span className="relative flex h-1.5 w-1.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-white"></span>
+              <div className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full bg-green-500/20 border border-green-500">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
                 </span>
-                On Air
-              </span>
+                <span className="text-green-500 font-bold text-[10px] uppercase tracking-wider">LIVE</span>
+              </div>
             </div>
 
             {/* Now Playing Info */}
@@ -250,6 +255,18 @@ const Navigation = () => {
                   <span className="text-white/50">—</span>
                   <span className="text-white/80 text-sm truncate">{nowPlaying.title}</span>
                 </div>
+                
+                {/* Animated Volume Waves - Only show when playing */}
+                {audioPlayer.isPlaying && (
+                  <div className="flex items-center gap-0.5 ml-2 h-4">
+                    <div className="w-0.5 bg-green-500 rounded-full h-full origin-bottom" style={{ animation: 'volume-wave 0.8s ease-in-out infinite' }}></div>
+                    <div className="w-0.5 bg-green-500 rounded-full h-full origin-bottom" style={{ animation: 'volume-wave 0.8s ease-in-out infinite 0.1s' }}></div>
+                    <div className="w-0.5 bg-green-500 rounded-full h-full origin-bottom" style={{ animation: 'volume-wave 0.8s ease-in-out infinite 0.2s' }}></div>
+                    <div className="w-0.5 bg-green-500 rounded-full h-full origin-bottom" style={{ animation: 'volume-wave 0.8s ease-in-out infinite 0.3s' }}></div>
+                    <div className="w-0.5 bg-green-500 rounded-full h-full origin-bottom" style={{ animation: 'volume-wave 0.8s ease-in-out infinite 0.4s' }}></div>
+                  </div>
+                )}
+                
                 <div className="flex items-center gap-1 ml-2">
                   <SaveSongButton
                     artist={nowPlaying.artist}
@@ -277,7 +294,7 @@ const Navigation = () => {
             )}
 
             {/* Volume Control */}
-            <div className="relative flex items-center gap-2 pl-4 border-l border-white/20">
+            <div className="relative flex items-center pl-4 border-l border-white/20">
               <Button
                 variant="ghost"
                 size="icon"
@@ -307,10 +324,6 @@ const Navigation = () => {
                   />
                 </div>
               )}
-
-              <Link to="/playlist" className="text-white/60 hover:text-white text-xs font-medium transition-colors">
-                Schedule
-              </Link>
             </div>
           </div>
         </div>

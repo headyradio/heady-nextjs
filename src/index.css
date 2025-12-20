@@ -250,4 +250,14 @@ h1, h2, h3, h4, h5, h6 {
   .live-room-indicator {
     animation: live-pulse-ring 2s infinite;
   }
+  
+  /* Volume Wave Bars Animation */
+  @keyframes volume-wave {
+    0%, 100% {
+      transform: scaleY(0.3);
+    }
+    50% {
+      transform: scaleY(1);
+    }
+  }
 }
