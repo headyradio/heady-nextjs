@@ -9,6 +9,8 @@ interface SEOProps {
   structuredData?: object;
   noindex?: boolean;
   canonical?: string;
+  imageWidth?: string;
+  imageHeight?: string;
 }
 
 export const SEO = ({
@@ -20,9 +22,14 @@ export const SEO = ({
   structuredData,
   noindex = false,
   canonical,
+  imageWidth = '1200',
+  imageHeight = '630',
 }: SEOProps) => {
   const fullTitle = title.includes('HEADY.FM') ? title : `${title} | HEADY.FM`;
   const canonicalUrl = canonical || url;
+  
+  // Ensure image URL is absolute
+  const absoluteImageUrl = image.startsWith('http') ? image : `https://heady.fm${image}`;
 
   return (
     <Helmet>
@@ -39,17 +46,35 @@ export const SEO = ({
       <meta property="og:url" content={url} />
       <meta property="og:title" content={fullTitle} />
       <meta property="og:description" content={description} />
-      <meta property="og:image" content={image} />
+      <meta property="og:image" content={absoluteImageUrl} />
+      <meta property="og:image:secure_url" content={absoluteImageUrl} />
+      <meta property="og:image:width" content={imageWidth} />
+      <meta property="og:image:height" content={imageHeight} />
       <meta property="og:image:alt" content={title} />
       <meta property="og:site_name" content="HEADY.FM" />
       <meta property="og:locale" content="en_US" />
+
+      {/* Additional Music-specific tags */}
+      {type === 'music.song' && (
+        <>
+          <meta property="music:duration" content="180" />
+          <meta property="music:musician" content={url} />
+        </>
+      )}
 
       {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:url" content={url} />
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={description} />
-      <meta name="twitter:image" content={image} />
+      <meta name="twitter:image" content={absoluteImageUrl} />
+      <meta name="twitter:image:alt" content={title} />
+      <meta name="twitter:site" content="@headyradio" />
+      <meta name="twitter:creator" content="@headyradio" />
+
+      {/* Additional SEO tags */}
+      <meta name="author" content="HEADY.FM" />
+      <meta name="keywords" content="indie music, indie rock, alternative music, underground music, independent radio, commercial-free radio, music streaming" />
 
       {/* Structured Data */}
       {structuredData && (

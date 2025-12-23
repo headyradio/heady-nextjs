@@ -26,13 +26,13 @@ export const TrackInformation = ({
   }
 
   return (
-    <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 h-full">
-      <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
+    <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
+      <h3 className="text-lg font-bold text-white mb-5 flex items-center gap-2">
         <Music className="w-4 h-4 text-primary" />
         Track Info
       </h3>
       
-      <div className="space-y-6">
+      <div className="space-y-4">
         {releaseDate && (
           <div className="flex items-center gap-3">
             <div className="p-2 rounded-lg bg-white/5">
@@ -71,7 +71,7 @@ export const TrackInformation = ({
 
         {featuredArtists && featuredArtists.length > 0 && (
           <div className="pt-2 border-t border-white/10">
-            <p className="text-xs text-white/50 uppercase tracking-wider mb-3 mt-4">Featured Artists</p>
+            <p className="text-xs text-white/50 uppercase tracking-wider mb-3">Featured Artists</p>
             <div className="flex flex-wrap gap-2">
               {featuredArtists.map((artist, index) => (
                 <a 
@@ -92,8 +92,8 @@ export const TrackInformation = ({
         {(producers && producers.length > 0) || (writers && writers.length > 0) ? (
           <div className="pt-2 border-t border-white/10">
             {producers && producers.length > 0 && (
-              <div className="mb-4 mt-4">
-                <p className="text-xs text-white/50 uppercase tracking-wider mb-3">Producers</p>
+              <div className="mb-3">
+                <p className="text-xs text-white/50 uppercase tracking-wider mb-2">Producers</p>
                 <div className="flex flex-wrap gap-2">
                   {producers.map((producer) => (
                     <a 
@@ -111,8 +111,8 @@ export const TrackInformation = ({
             )}
 
             {writers && writers.length > 0 && (
-              <div className="mt-4">
-                <p className="text-xs text-white/50 uppercase tracking-wider mb-3">Writers</p>
+              <div>
+                <p className="text-xs text-white/50 uppercase tracking-wider mb-2">Writers</p>
                 <div className="flex flex-wrap gap-2">
                   {writers.map((writer) => (
                     <a 

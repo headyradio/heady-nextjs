@@ -11,7 +11,7 @@ export const SongStory = ({ description, geniusUrl, isFromGenius }: SongStoryPro
   if (!description) return null;
 
   return (
-    <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
+    <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 h-fit">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-bold text-white flex items-center gap-2">
           <BookOpen className="w-4 h-4 text-primary" />

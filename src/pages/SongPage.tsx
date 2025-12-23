@@ -187,6 +187,9 @@ const SongPage = () => {
       {/* Content Sections */}
       <div className="container mx-auto px-4 py-12 space-y-12">
 
+        {/* Track Diary / Comments - Moved to top priority */}
+        <SongComments artist={artist} title={title} />
+
         {/* About the Track */}
         <AboutTheTrack
           geniusData={geniusSongData.data}
@@ -211,12 +214,6 @@ const SongPage = () => {
 
         {/* Play History Timeline - Last 5 plays only */}
         <PlayHistoryTimeline transmissions={transmissions.slice(0, 5)} />
-
-        {/* Comments Section */}
-        <div className="space-y-6">
-          <h2 className="text-3xl font-bold text-white">Community</h2>
-          <SongComments artist={artist} title={title} />
-        </div>
       </div>
 
       {/* Footer */}
